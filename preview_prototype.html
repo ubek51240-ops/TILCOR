@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>TILCOR v2.0 — 4-Bosqich Matn Ajratish Prototipi (Pages 3–22)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .font-mono-num { font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Top Header -->
+    <header class="bg-slate-800/90 border-b border-slate-700/80 px-6 py-4 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 font-mono">STAGE 4 PROTOTYPE</span>
+                    <h1 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="split-square-vertical" class="w-5 h-5 text-indigo-400"></i>
+                        E. Hemingway: «Chol va dengiz» / «The Old Man and the Sea»
+                    </h1>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">Asl PDF sahifasi rasmi va ajratilgan toza matnni yonma-yon solishtirish (20 ta ketma-ket sahifa: 3–22)</p>
+            </div>
+
+            <!-- Language & Page Switcher -->
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="flex rounded-xl bg-slate-900 p-1 border border-slate-700">
+                    <button id="langUzBtn" onclick="setLang('uz')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-indigo-600 text-white shadow">
+                        O‘zbekcha (Tarjima)
+                    </button>
+                    <button id="langEnBtn" onclick="setLang('en')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white">
+                        English (Original)
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">
+                    <button onclick="prevPage()" class="p-1 hover:text-indigo-400 transition" title="Oldingi bet"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                    <span class="text-xs font-mono font-bold text-indigo-300">
+                        PDF Bet: <select id="pageSelect" onchange="goToPage(this.value)" class="bg-slate-800 text-white rounded px-2 py-0.5 border border-slate-600 text-xs font-bold outline-none"></select> / 22
+                    </span>
+                    <button onclick="nextPage()" class="p-1 hover:text-indigo-400 transition" title="Keyingi bet"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                </div>
+
+                <a href="/" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition flex items-center gap-1.5">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Bosh sahifa
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Comparison Grid -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 grid lg:grid-cols-2 gap-6">
+
+        <!-- Left: Rendered PDF Page Image -->
+        <section class="bg-slate-800/60 rounded-3xl border border-slate-700/80 p-4 sm:p-5 flex flex-col shadow-xl">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-700/60">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                        <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i> Asl PDF Sahifasi Rasmi (150 DPI)
+                    </h2>
+                </div>
+                <span id="leftPageBadge" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-900 text-emerald-400 border border-slate-700">Bet: #3</span>
+            </div>
+
+            <div class="flex-grow bg-slate-950/80 rounded-2xl border border-slate-800 p-2 flex items-center justify-center overflow-auto max-h-[78vh]">
+                <img id="pdfPageImage" src="" alt="PDF sahifa rasmi" class="max-h-[74vh] object-contain rounded-lg shadow-2xl transition duration-200 hover:scale-105 cursor-zoom-in" onclick="window.open(this.src, '_blank')">
+            </div>
+            <p class="text-[11px] text-slate-500 text-center mt-2">Kattalashtirib ko‘rish uchun rasm ustiga bosing (yangi oynada ochiladi)</p>
+        </section>
+
+        <!-- Right: Extracted Clean Text & Traceable Metadata -->
+        <section class="bg-slate-800/60 rounded-3xl border border-slate-700/80 p-4 sm:p-5 flex flex-col shadow-xl space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-700/60">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                        <i data-lucide="check-check" class="w-4 h-4 text-indigo-400"></i> Ajratilgan Toza Matn & Segmentlar
+                    </h2>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-mono">
+                    <span id="tokenBadge" class="px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800 font-bold">Tokenlar: —</span>
+                    <span id="sentBadge" class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 font-bold">Jumlalar: —</span>
+                    <span id="qualityBadge" class="px-2 py-0.5 rounded bg-slate-900 text-amber-300 border border-slate-700 font-bold">OK</span>
+                </div>
+            </div>
+
+            <!-- Separated Running Headers & Footers -->
+            <div class="space-y-2 text-xs">
+                <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-700/80 flex items-start gap-2">
+                    <span class="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0">Kolontitul:</span>
+                    <span id="headerText" class="text-slate-300 font-mono select-all">—</span>
+                </div>
+
+                <div id="footerBox" class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-700/80 flex items-start gap-2 hidden">
+                    <span class="px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800 text-[10px] font-bold uppercase tracking-wider shrink-0">Snoska/Izoh:</span>
+                    <span id="footerText" class="text-amber-200 font-mono select-all">—</span>
+                </div>
+            </div>
+
+            <!-- Sentence View Tabs -->
+            <div class="flex gap-2 border-b border-slate-700/60 pb-2">
+                <button onclick="setViewMode('clean')" id="viewCleanBtn" class="px-3 py-1 rounded-lg text-xs font-bold bg-indigo-600 text-white">Paragraf Matni</button>
+                <button onclick="setViewMode('sentences')" id="viewSentBtn" class="px-3 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white">Segmentlangan Jumlalar</button>
+            </div>
+
+            <!-- Body Container -->
+            <div id="cleanTextContainer" class="flex-grow bg-slate-950/80 rounded-2xl border border-slate-800 p-4 sm:p-5 overflow-y-auto max-h-[58vh] space-y-3 leading-relaxed text-sm text-slate-200 font-sans whitespace-pre-line">
+                Matn yuklanmoqda...
+            </div>
+
+            <div id="sentencesContainer" class="flex-grow bg-slate-950/80 rounded-2xl border border-slate-800 p-4 sm:p-5 overflow-y-auto max-h-[58vh] space-y-2.5 hidden text-xs font-sans">
+                <!-- Segmented sentences injected here -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Status -->
+    <footer class="bg-slate-950 border-t border-slate-800 px-6 py-3 text-center text-xs text-slate-500">
+        TILCOR v2.0 • 4-Bosqich Prototipi • PyMuPDF v1.24 Dvigateli • O‘zbekcha o‘, g‘ va tutuq belgilari U+02BB va U+02BC bilan normallashgan
+    </footer>
+
+    <script>
+        let currentLang = 'uz';
+        let currentPage = 3;
+        let prototypeData = null;
+        let viewMode = 'clean';
+
+        async function init() {
+            try {
+                const resp = await fetch('/data/prototype_preview.json');
+                prototypeData = await resp.json();
+                populatePageSelector();
+                renderCurrentPage();
+            } catch(e) {
+                console.error("Prototip ma'lumotlarini yuklashda xatolik:", e);
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function populatePageSelector() {
+            const select = document.getElementById('pageSelect');
+            select.innerHTML = '';
+            for (let p = 3; p <= 22; p++) {
+                const opt = document.createElement('option');
+                opt.value = p;
+                opt.textContent = `${p}-bet`;
+                select.appendChild(opt);
+            }
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.getElementById('langUzBtn').className = lang === 'uz' 
+                ? 'px-3 py-1.5 rounded-lg text-xs font-bold transition bg-indigo-600 text-white shadow'
+                : 'px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white';
+            document.getElementById('langEnBtn').className = lang === 'en'
+                ? 'px-3 py-1.5 rounded-lg text-xs font-bold transition bg-indigo-600 text-white shadow'
+                : 'px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white';
+            renderCurrentPage();
+        }
+
+        function setViewMode(mode) {
+            viewMode = mode;
+            if (mode === 'clean') {
+                document.getElementById('cleanTextContainer').classList.remove('hidden');
+                document.getElementById('sentencesContainer').classList.add('hidden');
+                document.getElementById('viewCleanBtn').className = 'px-3 py-1 rounded-lg text-xs font-bold bg-indigo-600 text-white';
+                document.getElementById('viewSentBtn').className = 'px-3 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white';
+            } else {
+                document.getElementById('cleanTextContainer').classList.add('hidden');
+                document.getElementById('sentencesContainer').classList.remove('hidden');
+                document.getElementById('viewCleanBtn').className = 'px-3 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white';
+                document.getElementById('viewSentBtn').className = 'px-3 py-1 rounded-lg text-xs font-bold bg-indigo-600 text-white';
+            }
+        }
+
+        function goToPage(p) {
+            currentPage = parseInt(p);
+            renderCurrentPage();
+        }
+
+        function prevPage() {
+            if (currentPage > 3) {
+                currentPage--;
+                renderCurrentPage();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < 22) {
+                currentPage++;
+                renderCurrentPage();
+            }
+        }
+
+        function renderCurrentPage() {
+            if (!prototypeData) return;
+            const pagesList = currentLang === 'uz' ? prototypeData.uz_pages : prototypeData.en_pages;
+            const pageData = pagesList.find(p => p.pdf_page_num === currentPage);
+            if (!pageData) return;
+
+            document.getElementById('pageSelect').value = currentPage;
+            document.getElementById('leftPageBadge').innerText = `PDF Bet: #${pageData.pdf_page_num} ${pageData.printed_page_num ? '(Kitobda: ' + pageData.printed_page_num + ')' : ''}`;
+            document.getElementById('pdfPageImage').src = pageData.img_url;
+
+            document.getElementById('tokenBadge').innerText = `Tokenlar: ${pageData.token_count}`;
+            document.getElementById('sentBadge').innerText = `Jumlalar: ${pageData.sentence_count}`;
+            document.getElementById('qualityBadge').innerText = pageData.quality_flags.join(', ');
+
+            document.getElementById('headerText').innerText = pageData.header || 'Ajratilgan kolontitul yo‘q';
+            
+            const footerBox = document.getElementById('footerBox');
+            if (pageData.footer) {
+                footerBox.classList.remove('hidden');
+                document.getElementById('footerText').innerText = pageData.footer;
+            } else {
+                footerBox.classList.add('hidden');
+            }
+
+            // Clean text
+            document.getElementById('cleanTextContainer').innerText = pageData.clean_text;
+
+            // Sentences
+            const sentsContainer = document.getElementById('sentencesContainer');
+            sentsContainer.innerHTML = pageData.sentences.map((s, idx) => `
+                <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition flex items-start gap-2.5">
+                    <span class="px-2 py-0.5 rounded bg-indigo-950 text-indigo-400 font-mono font-bold text-[10px] shrink-0">#${idx + 1}</span>
+                    <p class="text-slate-200 leading-relaxed font-sans select-all">${s}</p>
+                </div>
+            `).join('');
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "suite_name": "PhD Research Quality Assurance & Validation Test Suite",
+  "total_tests": 6,
+  "passed_tests": 5,
+  "failed_tests": 1,
+  "details": [
+    {
+      "test_name": "Database Integrity & FK Check",
+      "status": "PASSED",
+      "message": "Integrity: ok, FK violations: 0",
+      "metrics": {}
+    },
+    {
+      "test_name": "Stratified Sample Verification",
+      "status": "PASSED",
+      "message": "Verified 100/100 sample alignment pairs have valid source and target textual correspondence.",
+      "metrics": {
+        "sampled": 100,
+        "valid": 100,
+        "total_alignments": 1963
+      }
+    },
+    {
+      "test_name": "Collocation Detection Reference Evaluation",
+      "status": "FAILED",
+      "message": "Reference evaluation result: Precision=1.0, Recall=0.667, F1=0.8 (TP=10, FP=0, FN=5).",
+      "metrics": {
+        "precision": 1.0,
+        "recall": 0.667,
+        "f1": 0.8,
+        "test_set_size": 15
+      }
+    },
+    {
+      "test_name": "Uzbek Apostrophe Invariance",
+      "status": "PASSED",
+      "message": "Apostrophe variants (o‘, o', o’, g‘, g', g’) normalized reversibly.",
+      "metrics": {}
+    },
+    {
+      "test_name": "Boundary Case Handling",
+      "status": "PASSED",
+      "message": "Zero empty segments, 0 abnormally long segments detected.",
+      "metrics": {}
+    },
+    {
+      "test_name": "Full Provenance Traceability",
+      "status": "PASSED",
+      "message": "All 20 sampled occurrences trace back to valid alignment, book and PDF page entities.",
+      "metrics": {}
+    }
+  ]
+}

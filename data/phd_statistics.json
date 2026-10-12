@@ -1,0 +1,162 @@
+{
+  "total_candidates": 6439,
+  "total_occurrences": 469,
+  "pattern_breakdown": {
+    "Sifat + Ot (Adj + Noun)": 366,
+    "Feʼl + Ot (Verb + Noun)": 97,
+    "Ravish + Sifat (Adv + Adj)": 3,
+    "Feʼl + Ravish (Verb + Adv)": 2,
+    "Ot + Feʼl (Noun + Verb)": 1
+  },
+  "semantic_breakdown": {
+    "Tabiat, muhit va borliq hodisalari": 159,
+    "Ijtimoiy munosabatlar va jamiyat": 139,
+    "Ilmiy-akademik va mantiqiy munosabatlar": 69,
+    "Hissiyot va ruhiy kechinmalar": 45,
+    "Harakat va jismoniy holat": 33,
+    "Nutq, muloqot va tafakkur": 22,
+    "Tana a’zolari va tashqi koʻrinish": 2
+  },
+  "equivalence_breakdown": {
+    "Mos ekvivalent (Toʻliq ekvivalent)": 406,
+    "Transformatsiya (Leksik-grammatik almashtirish)": 61,
+    "Toʻliq ekvivalent": 2
+  },
+  "top_collocations": [
+    {
+      "surface_form_en": "a big",
+      "surface_form_uz": "katta",
+      "grammatical_pattern": "Sifat + Ot (Adj + Noun)",
+      "mi_score": 10.747,
+      "t_score": 3.603,
+      "log_dice": 12.746,
+      "log_likelihood": 181.057
+    },
+    {
+      "surface_form_en": "but a",
+      "surface_form_uz": "lekin",
+      "grammatical_pattern": "Sifat + Ot (Adj + Noun)",
+      "mi_score": 10.425,
+      "t_score": 2.448,
+      "log_dice": 11.752,
+      "log_likelihood": 79.239
+    },
+    {
+      "surface_form_en": "have ~ to",
+      "surface_form_uz": "have ~ to",
+      "grammatical_pattern": "Feʼl + Ot (Verb + Noun)",
+      "mi_score": 10.01,
+      "t_score": 5.094,
+      "log_dice": 12.893,
+      "log_likelihood": 338.149
+    },
+    {
+      "surface_form_en": "have access to",
+      "surface_form_uz": "kirish huquqiga ega",
+      "grammatical_pattern": "Feʼl + Ot (Verb + Noun)",
+      "mi_score": 10.01,
+      "t_score": 5.094,
+      "log_dice": 12.893,
+      "log_likelihood": 338.149
+    },
+    {
+      "surface_form_en": "to fro and",
+      "surface_form_uz": "oldinga va",
+      "grammatical_pattern": "Sifat + Ot (Adj + Noun)",
+      "mi_score": 9.83,
+      "t_score": 5.825,
+      "log_dice": 13.0,
+      "log_likelihood": 437.054
+    },
+    {
+      "surface_form_en": "turn his thoughts to",
+      "surface_form_uz": "fikrlarini",
+      "grammatical_pattern": "Sifat + Ot (Adj + Noun)",
+      "mi_score": 9.747,
+      "t_score": 3.159,
+      "log_dice": 11.93,
+      "log_likelihood": 121.812
+    },
+    {
+      "surface_form_en": "stock market losing money",
+      "surface_form_uz": "fond bozori pul yo'qotish",
+      "grammatical_pattern": "Sifat + Ot (Adj + Noun)",
+      "mi_score": 9.688,
+      "t_score": 5.471,
+      "log_dice": 12.83,
+      "log_likelihood": 375.378
+    },
+    {
+      "surface_form_en": "turn something upside down",
+      "surface_form_uz": "biror narsani teskari burish",
+      "grammatical_pattern": "Sifat + Ot (Adj + Noun)",
+      "mi_score": 9.669,
+      "t_score": 6.157,
+      "log_dice": 13.0,
+      "log_likelihood": 480.021
+    },
+    {
+      "surface_form_en": "faint smells strong smells",
+      "surface_form_uz": "zaif hidlar kuchli hidlar",
+      "grammatical_pattern": "Sifat + Ot (Adj + Noun)",
+      "mi_score": 9.669,
+      "t_score": 6.157,
+      "log_dice": 13.0,
+      "log_likelihood": 480.021
+    },
+    {
+      "surface_form_en": "pay attention commit crime",
+      "surface_form_uz": "e'tibor jinoyat sodir",
+      "grammatical_pattern": "Feʼl + Ot (Verb + Noun)",
+      "mi_score": 9.669,
+      "t_score": 6.157,
+      "log_dice": 13.0,
+      "log_likelihood": 480.021
+    },
+    {
+      "surface_form_en": "good friends close friends",
+      "surface_form_uz": "yaxshi do'stlar yaqin do'stlar",
+      "grammatical_pattern": "Sifat + Ot (Adj + Noun)",
+      "mi_score": 9.525,
+      "t_score": 6.156,
+      "log_dice": 12.926,
+      "log_likelihood": 469.698
+    },
+    {
+      "surface_form_en": "remind someone strongly of",
+      "surface_form_uz": "kimgadir qattiq eslatib",
+      "grammatical_pattern": "Sifat + Ot (Adj + Noun)",
+      "mi_score": 9.425,
+      "t_score": 6.155,
+      "log_dice": 12.873,
+      "log_likelihood": 462.808
+    },
+    {
+      "surface_form_en": "launch an offensive storm",
+      "surface_form_uz": "hujumkor bo'ronni boshlash",
+      "grammatical_pattern": "Sifat + Ot (Adj + Noun)",
+      "mi_score": 9.425,
+      "t_score": 5.469,
+      "log_dice": 12.678,
+      "log_likelihood": 361.765
+    },
+    {
+      "surface_form_en": "reach a compromise heated",
+      "surface_form_uz": "qizg'in murosaga erishish",
+      "grammatical_pattern": "Feʼl + Ot (Verb + Noun)",
+      "mi_score": 9.425,
+      "t_score": 5.469,
+      "log_dice": 12.707,
+      "log_likelihood": 360.761
+    },
+    {
+      "surface_form_en": "partly oppressively record",
+      "surface_form_uz": "qisman zulm bilan qayd",
+      "grammatical_pattern": "Ravish + Sifat (Adv + Adj)",
+      "mi_score": 9.425,
+      "t_score": 6.155,
+      "log_dice": 12.873,
+      "log_likelihood": 462.808
+    }
+  ]
+}

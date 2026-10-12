@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loyiha Haqida | TILCOR Parallel Korpusi</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/design-tokens.css">
+  <style>
+    .about-container {
+      max-width: 960px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+    .profile-card {
+      background: white;
+      border: 1px solid var(--tilcor-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .profile-card h2 {
+      font-size: 1.35rem;
+      color: var(--tilcor-primary);
+      margin-bottom: 8px;
+    }
+    .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 0.9rem;
+    }
+    .meta-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--tilcor-border);
+    }
+    .meta-table td.field {
+      width: 35%;
+      color: var(--tilcor-text-muted);
+      font-weight: 500;
+      background: #F8FAFC;
+    }
+    .meta-table td.val {
+      font-weight: 600;
+      color: var(--tilcor-text);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="tilcor-header">
+    <div class="brand">
+      <h1>TILCOR — O‘zbek–ingliz parallel korpusi</h1>
+      <p>Kollokatsiyalar tarjimasi tadqiqoti uchun · Loyiha Haqida</p>
+    </div>
+    <nav class="tilcor-nav">
+      <a href="index.html">Bosh sahifa</a>
+      <a href="kwic_concordance.html">Qidiruv & KWIC</a>
+      <a href="annotation_workspace.html">Annotatsiya</a>
+      <a href="methodology_statistics.html">Statistika</a>
+      <a href="sources_rights.html">Manbalar va huquqlar</a>
+      <a href="about_project.html" class="active">Loyiha haqida</a>
+    </nav>
+  </header>
+
+  <div class="about-container">
+    <div class="profile-card">
+      <h2>Doktorlik Tadqiqoti Pasporti (PhD Project Passport)</h2>
+      <p style="color:var(--tilcor-text-muted); font-size:0.9rem; line-height:1.6;">
+        Mazkur platforma o‘zbek va ingliz tillari parallel korpusi bazasida o‘zaro faol birikuvchi so‘zlarni (kollokatsiyalarni) aniqlash, ularning tarjima transformatsiyalarini taksonomik annotatsiyalash va matematik-statistik mezonlar (Mutual Information, Student's t-score, Dunning Log-Likelihood) asosida chuqur ilmiy tahlil qilish uchun ishlab chiqilgan.
+      </p>
+
+      <table class="meta-table">
+        <tr>
+          <td class="field">Dissertatsiya Mavzusi:</td>
+          <td class="val">«TARJIMA VA TENG MATNLAR PARALLEL KORPUSIDA O‘ZARO FAOL BIRIKUVCHI (KOLLOKATSION) SO‘ZLAR TADQIQI (o‘zbek va ingliz tillari misolida)»</td>
+        </tr>
+        <tr>
+          <td class="field">Tadqiqotchi (Izlanuvchi):</td>
+          <td class="val">Voxitov Ibrohim Sodiq o‘g‘li</td>
+        </tr>
+        <tr>
+          <td class="field">Ilmiy Rahbar:</td>
+          <td class="val">Filologiya fanlari doktori (DSc), professor</td>
+        </tr>
+        <tr>
+          <td class="field">Ixtisoslik Shifri:</td>
+          <td class="val">10.02.20 — Qiyosiy-tarixiy, qiyosiy va chog‘ishtirma tilshunoslik, tarjimashunoslik</td>
+        </tr>
+        <tr>
+          <td class="field">Muassasa va Shahar:</td>
+          <td class="val">Buxoro davlat universiteti (BuxDU) / BIU, Buxoro</td>
+        </tr>
+        <tr>
+          <td class="field">Platforma Versiyasi:</td>
+          <td class="val">TILCOR v2.0 (PhD Defence Release, 2026)</td>
+        </tr>
+        <tr>
+          <td class="field">Texnologik Asos:</td>
+          <td class="val">Python 3.12, SQLite 3 (Relyatsion 12-entitili ACID arxitektura), O‘zbek morfologik analizatori v1.0, Unicode U+02BB/U+02BC</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</body>
+</html>

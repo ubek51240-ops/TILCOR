@@ -1,0 +1,837 @@
+=== PAGE 1 ===
+TILCOR  ·  ANTIGRAVITY AI UCHUN PROMPTLAR TOʻPLAMI  ·  VERSIYA 2.0
+TILCOR saytini
+PhD himoyasiga tayyorlash
+Bosqichma-bosqich tuzatish va qayta qurish promptlari:
+toʻgʻri tekislash, haqiqiy statistika, tarjima mutanosibligi va akademik dizayn
+12.10.2026  ·  tilcor.uz auditi asosida  ·  13 ta prompt, har birida tasdiqlash bosqichi
+Tadqiqot mavzusi
+TARJIMA VA TENG MATNLAR PARALLEL KORPUSIDA OʻZARO FAOL BIRIKUVCHI (KOLLOKATSION)
+SOʻZLAR TADQIQI (oʻzbek va ingliz tillari misolida)
+Bu hujjat nima uchun kerak
+tilcor.uz sayti tekshirilganda jiddiy kamchiliklar topildi: juftliklar bir-biriga mos kelmaydi,
+«Xazinalar oroli»ning oʻzbekcha matni yoʻq, statistik raqamlar qoʻlda yozilgan yoki bir xil,
+dissertatsiya natijalari toʻqilgan va himoyadagi kitob matnlari ochiq turibdi.
+Quyidagi promptlar Antigravity AIʼga bu kamchiliklarni bosqichma-bosqich tuzatishni buyuradi.
+Har bir bosqich oxirida Antigravity toʻxtaydi, hisobot beradi va sizning tasdigʻingizni kutadi.
+Asosiy tamoyil
+Saytda koʻrsatiladigan har bir raqam, juftlik va belgi bazadan hisoblanishi va manbagacha (PDF
+sahifasigacha) kuzatilishi kerak. Nomaʼlum qiymat «—» boʻlib koʻrinadi, hech qachon taxminiy
+raqam bilan toʻldirilmaydi.
+
+
+=== PAGE 2 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+2
+1. Qanday foydalanish kerak
+1. 0-promptni birinchi yuboring. Antigravity qoidalarni 5 qatorda tasdiqlaydi va hech narsani
+oʻzgartirmaydi. Keyinchalik yangi chat ochsangiz, 0-promptni qayta yuboring.
+2. Bosqich promptlarini bittadan, tartib bilan yuboring. 1-bosqichdan boshlang. Bir vaqtda
+ikki bosqichni yubormang.
+3. Hisobotni oʻqing. Har bosqichdan keyin Antigravity oʻzbek tilida 7 bandli hisobot beradi. Shu
+bosqichdagi «Tekshiruv varaqasi»dan oʻting.
+4. Tasdiqlang. Hammasi joyida boʻlsa, «Tasdiqlayman» deb yozing va keyingi promptni yuboring.
+Muammo boʻlsa, 7-boʻlimdagi favqulodda buyruqlardan foydalaning.
+5. Zaxira nusxani tekshiring. Har bosqichdan oldin zaxira olinganiga ishonch hosil qiling.
+6. Ikkilansangiz, hisobotni ilmiy rahbaringizga yoki menga koʻrsating.
+Muhim
+Antigravity bergan «tayyor», «100% aniq» kabi daʼvolarga emas, oʻzingiz koʻrgan natijaga
+ishoning. Promptlar inglizcha yozilgan, chunki kod agentlari texnik koʻrsatmalarni shu tilda
+aniqroq bajaradi. Antigravity sizga hisobotni oʻzbekcha beradi, sayt interfeysi ham oʻzbekcha
+boʻladi.
+Vaqtni toʻgʻri rejalashtiring: oltin namunani qoʻlda tekislash (5-bosqich) va kollokatsiyalarni
+belgilash (7-bosqich) sizning shaxsiy ilmiy ishingiz, ular bir necha hafta olishi mumkin. Buni hech
+qaysi AI siz uchun bajarib bera olmaydi va bermasligi kerak.
+2. Bosqichlar xaritasi
+D1–D14 belgilari tashqi auditda topilgan kamchiliklarga, R1–R10 esa buzib boʻlmaydigan qoidalarga ishora qiladi
+(ikkala roʻyxat ham 0-promptning ichida).
+#
+Bosqich
+Nima hal qilinadi
+Boblar
+0
+Umumiy qoidalar va kontekst
+Qoidalar, boblar, kamchiliklar D1–D14
+Barcha boblar
+1
+Audit (faqat oʻqish)
+Haqiqiy holatni dalil bilan aniqlash
+—
+2
+Favqulodda choralar
+Soxta va ruxsatsiz kontentni yopish, staging
+—
+3
+Maʼlumotlar poydevori
+Toza maʼlumotlar modeli, zaxira, Unicode
+2.1, 2.2
+4
+Matnni PDFdan ajratish va sifat
+nazorati
+PDFdan toza matn va sahifa raqamlari
+2.1, 2.2
+5
+Tekislashni qayta qurish
+Toʻgʻri juftliklar, oltin namuna, aniqlik oʻlchovi
+2.2, 3.2
+6
+Kollokatsiyalar: lugʻat va korpus
+uchrashlari
+Lugʻat va korpusni ajratish, nomzodlar
+1.1, 3.1
+7
+Tarjima mutanosibligi va annotatsiya
+Ekvivalentlik, strategiya, lingvomadaniyat
+1.2, 3.1, 3.2,
+3.3
+8
+Statistika: haqiqiy hisob-kitob
+Haqiqiy MI, t-score, LL va III bob jadvallari
+2.2, III bob,
+Xulosa
+9
+Qidiruv, KWIC va eksport
+KWIC, filtrlar, manbali eksport
+2.3
+10
+Mualliflik huquqi, kirish huquqlari va
+xavfsizlik
+Rollar, cheklangan koʻrinish, HTTPS
+—
+11
+Dizayn tizimi va interfeys
+Professional akademik interfeys
+2.3
+12
+Validatsiya, hujjatlar va himoyaga
+tayyorgarlik
+Validatsiya, hujjatlar, himoya uchun namoyish
+2.3, Ilovalar
+
+
+=== PAGE 3 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+3
+0
+UMUMIY KONTEKST
+Umumiy qoidalar va kontekst
+Bogʻliq boblar: Barcha boblar
+Maqsad. Antigravity loyihani, boblaringizni, maʼlum kamchiliklarni va buzib boʻlmaydigan
+qoidalarni bilib olsin. Bu prompt hech narsani oʻzgartirmaydi. Uni birinchi boʻlib yuboring, yangi
+chat ochganda esa qayta yuboring.
+PROMPT 0 · to‘liq nusxalab Antigravity chatiga yuboring
+ROLE AND MISSION
+You are the lead software engineer, corpus-linguistics engineer, QA engineer and UI designer for TILCOR (tilcor.uz), a
+research-grade Uzbek–English parallel corpus platform that supports a PhD dissertation. Your task is to REPAIR and
+REBUILD the existing site so that every number, pair, label and chart it shows is real, traceable and defensible before a
+dissertation council.
+Priorities, in order: (1) correctness and traceability, (2) data safety, (3) usability and design, (4) extra features.
+The user is a researcher, not a programmer: explain every decision briefly and plainly in Uzbek.
+FIXED RESEARCH TITLE AND OUTLINE (approved; do not rename, reorder, merge or rewrite)
+TITLE: TARJIMA VA TENG MATNLAR PARALLEL KORPUSIDA O‘ZARO FAOL BIRIKUVCHI (KOLLOKATSION) SO‘ZLAR TADQIQI
+(o‘zbek va ingliz tillari misolida)
+KIRISH
+I BOB. KOLLOKATSIYA TUSHUNCHASINING NAZARIY ASOSLARI
+1.1. Kollokatsiya va uning erkin birikma, frazeologik birlikdan farqlovchi mezonlari
+1.2. Kollokatsion birikmalar va yondosh lisoniy hodisalar tarjimasining o‘ziga xos xususiyatlari
+1.3. Parallel korpuslar yaratish ahamiyati va uning tarjimashunoslikdagi o‘rni
+Bob bo‘yicha xulosalar
+II BOB. TADQIQOT METODOLOGIYASI VA PARALLEL KORPUS YARATISH JARAYONI TAVSIFI
+2.1. O‘zbekcha va inglizcha tarjima matnlar parallel korpusini yaratishning metodoligik uzviyligi
+2.2. O‘zbekcha va inglizcha tarjima matnlar parallel korpusining lingvistik va dasturiy ta‘minotini ishlab chiqish
+2.3. Parallel korpus dezayni va ichki imkoniyatlari tavsifining tarjimashunoslikka tatbiqi
+Bob bo‘yicha xulosalar
+III BOB. PARALLEL KORPUS BAZASI TARJIMA MATNLARIDA O‘ZARO FAOL BIRIKUVCHI (KOLLOKATSION)
+SO‘ZLARNING QIYOSIY TAHLILI
+3.1. Parallel korpus bazasida aniqlangan kollokatsiyalarning semantik-struktur tasnifi
+3.2. O‘zbekcha va inglizcha parallel korpusida kollokatsion birliklar tarjimasi va ekvivalentlik tadqiqi
+3.3. Tarjima matnlar parallel korpusida o‘zaro faol birikuvchi (kollokatsion) so‘zlarning lingvomadaniy xususiyatlari
+tahlili
+Bob bo‘yicha xulosalar
+XULOSA
+FOYDALANILGAN ADABIYOTLAR RO‘YXATI
+ILOVALAR
+Two possible spelling issues are known ("metodoligik" → "metodologik" in 2.1; "dezayni" → "dizayni" in 2.3). Do not
+change them anywhere unless the user explicitly approves.
+CORPUS SOURCES (as reported by the user; verify against the actual files)
+1. Abdulhamid Cho‘lpon, "Kecha va kunduz" (Uzbek original) ↔ "Night and Day", tr. Christopher Fort. Direction: UZ →
+EN.
+2. Ernest Hemingway, "The Old Man and the Sea" (English original) ↔ "Chol va dengiz", tr. Ibrohim G‘afurov. Direction:
+EN → UZ.
+3. R. L. Stevenson, "Treasure Island" (English original) ↔ "Xazinalar oroli", tr. Sharif Rizo. Direction: EN → UZ. The Uzbek
+text is currently MISSING from the database.
+The corpus is bidirectional. Every text, segment and statistic must carry its translation direction. Never describe the
+corpus as "English originals with Uzbek translations" only.
+
+
+=== PAGE 4 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+4
+PROMPT 0 · to‘liq nusxalab Antigravity chatiga yuboring
+KNOWN DEFECTS FROM AN EXTERNAL REVIEW (leads to verify with evidence, then fix)
+D1. Misalignment: many Hemingway and Cho‘lpon "pairs" do not correspond in meaning (e.g., hem-420, hem-760).
+Likely cause: positional 1:1 pairing that drifts.
+D2. Treasure Island "Uzbek" side is the English sentence prefixed with "Sarguzasht parchasi:" (placeholder, not a
+translation).
+D3. Hard-coded statistics: corpus.js assigns MI "5.40" and T "7.80" to every search result and alignmentScore fallback
+"0.96"/0.95; collocations.js displays f=25 and LL=24.5 when values are missing; /api/collocations returns identical MI
+8.08, T 10.6, f=137, LL 70.26 for many entries.
+D4. Contradictory totals: sentences 5,157 / 8,870+ / 12,450; collocations 1,220 / 1,520+ / 6,533 / 6,546;
+"alignmentAccuracy 98.4%" with no evaluation behind it.
+D5. Collocation DB quality: entries such as "nice nice nice", "good good good", "adhere economy" (verb tagged
+Adj+Noun), "bitter enemies → achchiq dushmanlar" labeled full equivalent; template cultural notes; reference-list
+entries (attributed to "Cambridge Collocations") mixed with corpus occurrences and given corpus-style frequencies;
+invented author/translator/publisher metadata for that list.
+D6. Synthetic/DEMO content mixed with research data: "O‘tkan kunlar", "Ilmiy matn", "Qonunchilik hujjatlari"
+sentences; generic examples ("The committee made a decision"); template sentences ("The term '...' plays a vital
+semantic role...").
+D7. The public "PhD Boblar" section publishes dissertation text with invented results (46/38/16 %, 38/31/18/13 %,
+"1,220 collocations", "534 pages fully annotated", "Gale-Church + Hunalign applied") and paraphrased examples
+presented as quotations.
+D8. Copyright/access: full texts are public through /api/search without authentication; the labels "Fair Use" and "Open
+Access" are inaccurate. Fort's and G‘afurov's translations and Hemingway's original are under copyright in
+Uzbekistan (author's life + 70 years).
+D9. /api/ai and /api/collocations/ai-analyze (DeepSeek) appear open to anonymous requests with arbitrary prompts
+(cost/abuse risk); the AI is asked to produce MI/T-scores and its output is labeled "PhD Ilmiy Standarti".
+D10. No PDF page numbers anywhere; provenance cannot be traced.
+D11. Uzbek apostrophe variants are mixed in the data (ʻ U+02BB, ‘ U+2018, ' U+0027, ` U+0060, ’ U+2019) and
+search does not normalize them.
+D12. No real KWIC view; the "add sentence" form calls corpusManager.addCustomSentence, which is not defined in
+corpus.js; the "Excel" export is TSV renamed .xls and only exports rows already loaded; user and AI text are inserted
+with innerHTML without escaping.
+D13. Presentation: duplicated navigation; three project names (KORPUS.LINGVO / ParallelColloc / UZ–EN Collocation
+Corpus); section numbers out of order (1, 2, 3, 8, 6, 5); bibliographic data differ between pages (publisher/year);
+footer says "Toshkent".
+D14. Specialty code shown as "10.02.20". The user must verify the correct code with the supervisor. Do not change it
+without approval.
+NON-NEGOTIABLE RULES
+R1. Never invent texts, translations, alignments, collocations, frequencies, scores, percentages, citations, bibliographic
+data or conclusions. Unknown value → show "—" with the reason ("hisoblanmagan", "tekshirilmagan"). No default
+numbers, ever.
+R2. Every number shown must be computed from the database (or a versioned, reproducible computation) and be
+traceable to its query and settings. No number may be typed into HTML, JS or templates.
+R3. Keep three layers separate: raw data / automatic suggestion / human-confirmed annotation. Only
+human-confirmed items count in research statistics.
+R4. Back up before any change. Original PDFs, original databases and the current site version stay read-only. Prefer
+reversible migrations.
+R5. Do not claim anything works until you have run it. In every report mark each item: ISHLAYDI (sinovdan o‘tgan) /
+QISMAN / REJADA.
+R6. Work in gated stages. After each stage STOP, report, and wait for the user's explicit approval ("Tasdiqlayman").
+Silence is not approval. Never start the next stage on your own.
+R7. No new paid service, external API, telemetry or upload of book text to third parties without explaining cost, privacy
+and alternatives and getting approval. Prefer local processing.
+R8. Store Uzbek text exactly as in the source; normalization lives only in separate search fields.
+
+
+=== PAGE 5 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+5
+PROMPT 0 · to‘liq nusxalab Antigravity chatiga yuboring
+R9. Report to the user in clear Uzbek (Latin script). Code and technical docs may be in English.
+R10. Keep CHANGELOG.md, TESTLOG.md, DATA_DICTIONARY.md, METHODS.md and LIMITATIONS.md updated at
+every stage.
+REPORT FORMAT AT EVERY GATE (in Uzbek)
+1) Nima o‘zgardi 2) O‘zgargan fayllar 3) Bajarilgan buyruqlar 4) Testlar va natijalari 5) Qolgan xavflar 6) Mendan talab
+qilinadigan qarorlar 7) Keyingi eng kichik qadam
+FIRST RESPONSE
+Confirm in Uzbek, in at most 5 lines, that you understood the mission, the fixed outline, the bidirectional corpus and
+rules R1–R10. Do not inspect or change anything yet. Wait for the Stage 1 prompt.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ Antigravity javobni oʻzbek tilida, qisqa tasdiq shaklida berdimi?
+☐ U hech qanday fayl ochmadi va oʻzgartirmadimi?
+☐ Korpus ikki yoʻnalishli ekanini (UZ→EN va EN→UZ) toʻgʻri takrorladimi?
+
+
+=== PAGE 6 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+6
+1
+1-BOSQICH
+Audit (faqat oʻqish)
+Bogʻliq boblar: —
+Maqsad. Saytning haqiqiy holatini dalillar bilan aniqlash. Bu bosqichda hech narsa oʻzgartirilmaydi.
+PROMPT 1 · to‘liq nusxalab Antigravity chatiga yuboring
+Start Stage 1 — READ-ONLY AUDIT. Do not modify files, install packages, migrate data or deploy anything.
+Inspect the real codebase, server and database behind tilcor.uz and report in Uzbek:
+A. Architecture: directory tree, entry points, framework, server language, database type and location; how /api/search,
+/api/collocations, /api/ai and /api/collocations/ai-analyze are implemented; hosting, domain, HTTPS status;
+environment variable NAMES only (never print secret values).
+B. Defects D1–D14: for each, TASDIQLANDI / TASDIQLANMADI / QISMAN, with evidence (file + line, or query + result).
+C. Data inventory: every table/file, record counts computed by query (not copied from the UI), duplicates, empty fields,
+encodings, count of each apostrophe variant per table, and which records are DEMO/synthetic or placeholders.
+D. Source files: locate the original PDFs or texts of all six books (3 originals + 3 translations). For each: file name,
+language, page count, text layer vs scanned, edition evidence (title page, year, publisher), and whether the Uzbek
+text of "Xazinalar oroli" exists anywhere.
+E. Alignment diagnosis: for Hemingway and for Cho‘lpon take 30 pairs (10 from the beginning, 10 from the middle, 10
+from the end) and judge each as MOS / QISMAN / MOS EMAS. Explain how pairs were created and where drift starts.
+F. Collocation database: entry count, sources, how freq/MI/T/LL were produced (computed, copied, generated or
+AI-written), number of repeated-token entries and POS-pattern mismatches.
+G. A prioritized fix plan mapped to Stages 2–12, with risks and the decisions you need from me.
+List explicitly everything you could not verify. Stop after the report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ D1–D14 har biri dalil (fayl, qator yoki soʻrov natijasi) bilan baholanganmi?
+☐ Sanoqlar sayt sahifasidan koʻchirilmay, bazaga soʻrov orqali olinganmi?
+☐ «Xazinalar oroli»ning oʻzbekcha matni topildimi yoki yoʻqligi aniq yozilganmi?
+☐ 30 juftlik bahosi bormi va siljish qayerdan boshlangani koʻrsatilganmi?
+☐ Hech qanday fayl oʻzgartirilmaganmi?
+
+
+=== PAGE 7 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+7
+2
+2-BOSQICH
+Favqulodda choralar
+Bogʻliq boblar: —
+Maqsad. Soxta, tekshirilmagan yoki ruxsatsiz kontent ommaga koʻrinmay qolsin. Faqat kichik va
+qaytariladigan oʻzgarishlar.
+PROMPT 2 · to‘liq nusxalab Antigravity chatiga yuboring
+Audit approved. Start Stage 2 — EMERGENCY CONTAINMENT. Goal: by the end of this stage nothing false, unverified or
+unlicensed is publicly visible. Small, reversible changes only.
+1. Full backup of code, database and current deployment; record checksums; test a restore on a separate copy.
+2. Create a STAGING copy of the site. From now on all development happens on staging; production is updated only
+after my approval at each gate.
+3. Put production behind authentication (propose the simplest secure option first) or a maintenance page. Only the
+researcher (admin) and the supervisor (reviewer) may enter. Add noindex.
+4. Disable /api/ai and /api/collocations/ai-analyze, or restrict them to authenticated admin with rate limiting and a
+server-side key. Remove every request that asks an AI to produce MI, t-score or other statistics.
+5. Unpublish the "PhD Boblar" dissertation content and remove the dissertationData object from client code.
+6. Remove all hard-coded numbers and defaults (D3, D4): replace with live database counts or "—". Remove
+researchStats and the numeric claims in literaryCorporaMeta.
+7. Remove the labels "Fair Use", "Open Access", "erkin ochiq korpus". Insert this neutral notice: "Korpusdagi matnlar
+mualliflik huquqi egalariga tegishli. Ular faqat ilmiy tadqiqot maqsadida, cheklangan parchalar ko‘rinishida
+ko‘rsatiladi. Nusxa ko‘chirish va tarqatish taqiqlanadi."
+8. Quarantine DEMO/synthetic records (D6) and the Treasure Island placeholder pairs (D2): set status = excluded with
+a reason. Do not delete. Exclude them from all counts and searches.
+9. Until Stage 5 is complete, show this banner above Hemingway and Cho‘lpon pairs: "Tekislash qayta ko‘rib
+chiqilmoqda — tahlil uchun foydalanmang".
+Acceptance: an anonymous visitor cannot read corpus text (show the test); no page contains a hard-coded number
+(show a code search of templates and scripts); AI endpoints are not reachable anonymously (show the test); restore
+from backup tested.
+Stop and report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ Saytni boshqa brauzerda, login qilmasdan oching: korpus matnlari koʻrinmasligi kerak.
+☐ Bosh sahifadagi raqamlar bazadan olinganmi yoki «—» koʻrinishida turibdimi?
+☐ «PhD Boblar» boʻlimi va «Fair Use / Open Access» yozuvlari olib tashlanganmi?
+☐ Zaxira nusxa qayerda saqlangani va staging manzili sizga aytilganmi?
+
+
+=== PAGE 8 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+8
+3
+3-BOSQICH
+Maʼlumotlar poydevori
+Bogʻliq boblar: 2.1, 2.2
+Maqsad. Toza, hujjatlashtirilgan maʼlumotlar modeli: har bir segmentning manbasi, sahifasi va
+tarjima yoʻnalishi saqlanadi. Eski jadvallar faqat taqqoslash uchun qoladi.
+PROMPT 3 · to‘liq nusxalab Antigravity chatiga yuboring
+Stage 2 approved. Start Stage 3 — DATA FOUNDATION (on staging). Design and migrate to a clean, documented data
+model. Old tables stay read-only for comparison.
+Minimum entities:
+• work: title, author, original language, year.
+• edition: publisher, place, year, ISBN if known, print pages, PDF pages, source file name + checksum.
+• text: work + edition + role (original / translation), language, translator, direction (UZ→EN or EN→UZ).
+• page: PDF page number, printed page number (only if verified).
+• segment: stable ID (e.g., TI-EN-p012-s004), order, raw text, normalized text, page reference(s), paragraph ID,
+extraction method, quality flags.
+• alignment: source segment IDs ↔ target segment IDs; type 1:1 / 1:2 / 2:1 / 1:0 / 0:1 / n:m; method; raw score + its
+meaning; status auto / needs_review / confirmed / rejected; reviewer; timestamp; note.
+• lexicon_entry: the reference collocation list, with honest provenance ("user-supplied reference list" + original file
+name); no invented publisher or author.
+• occurrence: lexicon entry or candidate ↔ segment, token span offsets, surface form, lemma form.
+• equivalent: occurrence ↔ target segment span, equivalence type, translation strategy.
+• annotation: field, value, guideline version, annotator, status, history.
+• taxonomy: versioned category sets with definitions and examples.
+• audit_log: who changed what and when.
+Unicode: store raw text exactly. In separate search fields map the variants ʻ ‘ ' ` ’ used for o‘/g‘ to one canonical
+character (U+02BB) and the tutuq belgisi to U+02BC; case-fold; document the mapping. If Cyrillic text exists, keep it;
+never transliterate silently.
+Deliver: reversible migration scripts, DATA_DICTIONARY.md describing every field, an ER diagram, and a validation
+script that checks referential integrity and prints counts.
+Acceptance: migration and rollback tested on a copy; counts reconcile with the Stage 1 audit; no original data altered.
+Stop and report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ ER diagramma va maʼlumotlar lugʻati (DATA_DICTIONARY) berilganmi?
+☐ Har bir segmentda sahifa va tarjima yoʻnalishi maydoni bormi?
+☐ Orqaga qaytarish (rollback) sinab koʻrilganmi?
+☐ Sanoqlar 1-bosqich audit natijalari bilan mos kelganmi?
+
+
+=== PAGE 9 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+9
+4
+4-BOSQICH
+Matnni PDFdan ajratish va sifat nazorati
+Bogʻliq boblar: 2.1, 2.2
+Maqsad. Oltita matnni asl PDF fayllardan qayta, toza va sahifa raqamlari bilan ajratish. Eski
+segmentlar haqiqat manbasi sifatida ishlatilmaydi.
+PROMPT 4 · to‘liq nusxalab Antigravity chatiga yuboring
+Stage 3 approved. Start Stage 4 — TEXT EXTRACTION AND QUALITY CONTROL. Rebuild all texts from the original source
+files. Do not treat the old segment table as truth.
+1. Prototype first: one book, 20 consecutive pages (I will choose; if I do not, propose a range from "Chol va dengiz").
+Show a page-by-page preview: PDF page image next to the extracted text. Wait for my approval before processing
+everything.
+2. Detect the text layer per page; use OCR only where needed (local Tesseract with uzb / uzb_cyrl / eng models or an
+equivalent; report engine and version).
+3. Move running headers, footers and page numbers into separate fields (do not delete them). Join line-break
+hyphenation only when the joined word is attested. Keep paragraph boundaries, dialogue dashes, quotation marks
+and footnotes (footnotes as separate segments flagged "footnote").
+4. Sentence segmentation per language with documented rules (Uzbek abbreviations, initials, dialogue). Record every
+rule in METHODS.md.
+5. Quality flags: empty page, low OCR confidence, suspicious characters, duplicated paragraph, broken hyphenation.
+6. After prototype approval, process all six texts. Report per text: pages, segments, tokens (tokenizer stated), flagged
+pages, and a stratified manual check of 10 pages per text with error counts.
+If the Uzbek "Xazinalar oroli" text is not available, record it as missing. Never generate, machine-translate or paraphrase
+it.
+Acceptance: re-running the pipeline gives identical output (idempotent); every segment links to its PDF page.
+Stop and report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ Koʻrinishda (preview) 5 ta sahifani oʻzingiz PDF bilan solishtiring.
+☐ Oʻzbekcha oʻ, gʻ va tutuq belgisi toʻgʻri chiqqanmi?
+☐ Sarlavhalar va sahifa raqamlari matn ichiga aralashib ketmaganmi?
+☐ Har bir matn uchun xatolar soni koʻrsatilgan hisobot bormi?
+
+
+=== PAGE 10 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+10
+5
+5-BOSQICH
+Tekislashni qayta qurish
+Bogʻliq boblar: 2.2, 3.2
+Maqsad. Juftliklar maʼno jihatidan bir-biriga mos boʻlsin. Bu III bobning asosi: 3.2 boʻlimi faqat
+toʻgʻri juftliklar ustida yoziladi.
+PROMPT 5 · to‘liq nusxalab Antigravity chatiga yuboring
+Stage 4 approved. Start Stage 5 — REBUILD ALIGNMENT. Replace positional pairing with a proper, measurable
+alignment workflow.
+1. Gold standard first: build an alignment screen and let me align a gold sample manually (target: 150 segment groups
+per book, spread across beginning, middle and end; 1:n allowed). Freeze it as gold_v1.
+2. Implement and compare at least two local methods on gold_v1, for example:
+(a) a length-based method (Gale-Church or Hunalign) seeded with our Uzbek–English dictionary (about 24,554
+entries; verify it first);
+(b) a sentence-embedding method (e.g., Bertalign or Vecalign with LaBSE), only if it runs locally and its Uzbek
+support is verified.
+Report precision, recall and F1 per book, with the counting rule explained. I choose the method.
+3. Run the chosen method chapter by chapter, with chapter boundaries as hard anchors, so drift cannot spread.
+4. Review queue: side-by-side view with the ORIGINAL always on the left (Cho‘lpon: Uzbek left; Hemingway and
+Stevenson: English left); ±2 neighbouring segments; links to both PDF pages; actions confirm / split / merge / re-link /
+mark untranslated (1:0) / mark addition (0:1); undo; keyboard shortcuts.
+5. Scores: show the method name and the raw score. Never display it as "% moslik". Low-score and n:m groups go to
+needs_review automatically. Nothing is auto-confirmed.
+6. Report: counts by alignment type and status per book, measured accuracy on gold_v1, and the chapters with the
+most problems.
+Acceptance: any confirmed pair traces back to both PDF pages; edits persist after restart and are logged; Treasure
+Island stays excluded until the real Uzbek text is supplied.
+Stop and report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ Oltin namunani (gold_v1) oʻzingiz tekislab chiqdingizmi?
+☐ Ikki usulning aniqlik natijalari (precision, recall, F1) koʻrsatilganmi?
+☐ Tasdiqlangan juftliklardan 20 tasini tasodifiy tanlab oʻqing: siljish yoʻqmi?
+☐ «Moslik 96%» kabi foiz yozuvlari butunlay yoʻqolganmi?
+
+
+=== PAGE 11 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+11
+6
+6-BOSQICH
+Kollokatsiyalar: lugʻat va korpus uchrashlari
+Bogʻliq boblar: 1.1, 3.1
+Maqsad. Lugʻatdagi yozuv bilan kitobda haqiqatan uchragan birikmani ajratish, bazani tozalash va
+korpusdan nomzodlarni topish.
+PROMPT 6 · to‘liq nusxalab Antigravity chatiga yuboring
+Stage 5 approved. Start Stage 6 — COLLOCATIONS: REFERENCE LIST VS CORPUS OCCURRENCES.
+1. Split the current collocation table into (a) lexicon_entry: the reference list, with honest provenance; (b) occurrence:
+actual matches in the corpus. One lexicon entry has 0..n occurrences. Never present a lexicon entry as if it was found
+in the books.
+2. Clean-up queue (do not delete): repeated-token entries, POS-pattern mismatches, word-for-word calque
+"equivalents", template notes, invented metadata. I decide each batch.
+3. Candidate extraction, only from CONFIRMED parallel segments:
+• English: local lemmatization + POS + dependency parsing (e.g., spaCy). Patterns: V+N(object), Adj+N,
+N+V(subject), Adv+V, V+Adv, N+of+N, V+Prep+N. Document window or dependency settings.
+• Uzbek: a documented morphological analyzer (evaluate options such as apertium-uzb; otherwise rule-based suffix
+stripping). Report its error rate on a 200-token sample. Patterns: Ot+Fe’l, Sifat+Ot, Ravish+Fe’l, Ot+Ot (izofa /
+qaratqich), Fe’l+Fe’l (ko‘makchi fe’l). Record the analyzer's limitations in LIMITATIONS.md.
+• Candidates remain SUGGESTIONS until I confirm them as collocations under my criteria (Chapter 1.1).
+4. Lemma-aware, apostrophe-insensitive search over occurrences (e.g., the query "yurak urmoq" must also find "yuragi
+duk-duk urardi").
+Acceptance: a 50-candidate sample per language reviewed by me with precision reported; no candidate counted in any
+statistic before confirmation.
+Stop and report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ Lugʻat yozuvlari va kitobdagi uchrashlar endi alohida koʻrinyaptimi?
+☐ «nice nice nice» kabi yozuvlar tozalash navbatiga tushganmi?
+☐ 50 ta nomzodni oʻzingiz koʻrib chiqib, aniqlik foizini oldingizmi?
+☐ Lemma boʻyicha qidiruv ishlayaptimi (masalan, «yurak urmoq»)?
+
+
+=== PAGE 12 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+12
+7
+7-BOSQICH
+Tarjima mutanosibligi va annotatsiya
+Bogʻliq boblar: 1.2, 3.1, 3.2, 3.3
+Maqsad. III bobning yuragi: har bir kollokatsiya uchrashini uning haqiqiy tarjimasi bilan bogʻlash va
+ekvivalentlik, strategiya hamda lingvomadaniy belgilarni siz qoʻyadigan ish joyi.
+PROMPT 7 · to‘liq nusxalab Antigravity chatiga yuboring
+Stage 6 approved. Start Stage 7 — TRANSLATION CORRESPONDENCE AND ANNOTATION WORKSPACE. This is the core of
+Chapter III.
+Workflow per occurrence:
+1. The source collocation is highlighted in its segment (source = the ORIGINAL language of that work). The aligned
+target segment(s) appear beside it.
+2. I select the target span that renders it, or mark "to‘g‘ridan-to‘g‘ri ekvivalenti yo‘q".
+3. I assign fields from a configurable, versioned taxonomy. Initial draft below; I must approve it before first use:
+• Birlik turi (1.1): kollokatsiya / erkin birikma / frazeologik birlik / noaniq
+• Struktur qolip (3.1): Fe’l+Ot, Sifat+Ot, Ot+Fe’l, Ravish+Fe’l, Ot+Ot, boshqa
+• Semantik guruh (3.1): a list I define
+• Ekvivalentlik turi (3.2): to‘liq ekvivalent / qisman ekvivalent / strukturaviy transformatsiya / boshqa obraz bilan
+almashtirish / tasviriy (izohli) tarjima / bir so‘zga siqilgan / tushirib qoldirilgan / tarjimada qo‘shilgan
+• Tarjima strategiyasi (1.2, 3.2): kalka, modulyatsiya, generalizatsiya, konkretizatsiya, kompensatsiya, izoh, boshqa
+• Lingvomadaniy (3.3): ha/yo‘q + realiya turi + my note
+• Ishonch darajasi + dalil izohi
+4. Correspondence views ("tarjima mutanosibligi"): a matrix of source pattern × target realization, kept separate per
+book and per direction (UZ→EN vs EN→UZ); every cell drills down to the exact occurrences and their PDF pages.
+5. Annotation guideline page: definitions and examples taken ONLY from confirmed corpus occurrences; guideline
+versioning; full history; optional second annotator with Cohen's kappa if a second annotator is available.
+6. AI (only if I keep it): a clearly labeled "taklif" for a single occurrence, admin-only, never writes statistics or confirmed
+labels, never receives full book text; switched off by default.
+Acceptance: every label traces to a guideline version and an annotator; changing the taxonomy keeps old labels with
+their version; only confirmed annotations feed Chapter III tables.
+Stop and report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ Taksonomiya loyihasini koʻrib, oʻzgartirib, keyin tasdiqladingizmi?
+☐ Har bir uchrash uchun asl matn chapda, tarjima oʻngda chiqyaptimi?
+☐ Matritsa katagidan aniq misollar va PDF sahifalariga oʻtish mumkinmi?
+☐ AI takliflari alohida belgilangan va standart holatda oʻchirilganmi?
+
+
+=== PAGE 13 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+13
+8
+8-BOSQICH
+Statistika: haqiqiy hisob-kitob
+Bogʻliq boblar: 2.2, III bob, Xulosa
+Maqsad. Barcha koʻrsatkichlar formulasi, kirish sonlari va sozlamalari bilan bazadan hisoblansin. III
+bob jadvallari faqat siz tasdiqlagan maʼlumotlardan tuzilsin.
+PROMPT 8 · to‘liq nusxalab Antigravity chatiga yuboring
+Stage 7 approved. Start Stage 8 — TRANSPARENT STATISTICS computed from the database.
+1. Corpus size per text and language: tokens and types (tokenizer and rules stated). Normalized frequency per 10,000
+tokens (small corpus); always state the denominator.
+2. Association measures for (node, collocate) candidates from the 2×2 contingency table O11, O12, O21, O22; N;
+window or syntactic relation stated; minimum frequency threshold (default f ≥ 3, configurable).
+MI = log2( O11 · N / (R1 · C1) ), stating whether a span correction is applied.
+t = (O11 − E11) / √O11, where E11 = R1 · C1 / N.
+Log-likelihood G² = 2 · Σ Oij · ln(Oij / Eij) (Dunning 1993).
+Store inputs together with outputs. Never compute a score when inputs are missing. Explain on the page that MI favours
+rare pairs and that no score by itself proves collocation status (this supports Chapter 1.1).
+3. Chapter III tables generated only from confirmed annotations: counts and percentages with denominators (n = …),
+per book and per direction; dispersion across books.
+4. Unit tests with hand-computable examples. A "Metodologiya / Formulalar" page showing formulas, parameters and
+software versions.
+5. Every table exportable together with a settings snapshot (JSON) for reproducibility.
+Acceptance: the hand-computed test cases pass; every percentage on screen shows its n; changing a threshold updates
+results and is logged.
+Stop and report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ Qoʻlda hisoblangan test misollari dastur natijasi bilan mos keldimi?
+☐ Har bir foiz yonida n = … (umumiy son) koʻrsatilganmi?
+☐ Formulalar sahifasi bor va tushunarlimi?
+☐ Jadvallarda faqat siz tasdiqlagan annotatsiyalar hisobga olinganmi?
+
+
+=== PAGE 14 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+14
+9
+9-BOSQICH
+Qidiruv, KWIC va eksport
+Bogʻliq boblar: 2.3
+Maqsad. 2.3 boʻlimida tasvirlanadigan imkoniyatlar haqiqatan ishlasin: konkordans, filtrlar va
+manbasi koʻrsatilgan eksport.
+PROMPT 9 · to‘liq nusxalab Antigravity chatiga yuboring
+Stage 8 approved. Start Stage 9 — SEARCH, KWIC AND EXPORT.
+1. Real KWIC: the node word centred, configurable left/right context in words, sorting by left or right context, and links
+to the aligned pair and to the PDF page.
+2. Search by word, lemma, phrase, collocation, pattern, book, direction, language, alignment status and annotation
+fields; apostrophe-insensitive; pagination; server-side queries with indexes; state and measure a response-time
+target.
+3. Parallel view: original on the left, translation on the right; the source collocation and its confirmed equivalent
+highlighted in matching colours.
+4. Export: a real .xlsx (server-side library) and UTF-8 CSV with BOM; export ALL filtered rows (subject to Stage 10 limits
+for protected texts). Columns: record ID, work, edition, direction, language, source segment, target segment(s),
+matched span, equivalent span, PDF page(s), alignment type / status / method, annotation fields + guideline version,
+annotator, export timestamp, query and settings. Missing values stay empty with a status column; never invent
+them.
+5. Fix D12: replace unsafe innerHTML with escaping or safe rendering; either remove the "add sentence" form or
+implement it properly with validation and an audit log.
+Acceptance: export round-trip test (export → re-import → identical); KWIC verified on 3 queries I give you; no XSS with
+test payloads.
+Stop and report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ KWIC koʻrinishida soʻz markazda, chap va oʻng kontekst alohida turibdimi?
+☐ Eksport faylini Excelda oching: oʻzbekcha harflar va sahifa ustuni toʻgʻrimi?
+☐ Eksport ekrandagi qatorlarni emas, barcha filtrlangan natijalarni olganmi?
+☐ Antigravityga 3 ta oʻz qidiruv soʻzingizni bering va natijani tekshiring.
+
+
+=== PAGE 15 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+15
+10
+10-BOSQICH
+Mualliflik huquqi, kirish huquqlari va xavfsizlik
+Bogʻliq boblar: —
+Maqsad. Himoyadagi matnlar faqat cheklangan parchalar koʻrinishida chiqsin, toʻliq kirish faqat
+sizda va rahbaringizda boʻlsin, sayt xavfsiz ishlasin.
+PROMPT 10 · to‘liq nusxalab Antigravity chatiga yuboring
+Stage 9 approved. Start Stage 10 — COPYRIGHT, ACCESS CONTROL AND SECURITY.
+1. Roles: admin (researcher), reviewer (supervisor), guest (council members / visitors, optional).
+2. Per-text licence status field: public_domain / permission_granted / protected. Current proposal (to be verified by me):
+Cho‘lpon original and Stevenson original = public_domain; Fort translation, Hemingway original and G‘afurov
+translation = protected; Sharif Rizo translation = unknown → treat as protected.
+3. Guest mode for protected texts: at most 50 results per query, one sentence of context, no sequential browsing (the
+book must not be reconstructable), no full export, rate limiting. Full access only for admin and reviewer.
+Public-domain texts may be shown in full.
+4. If I obtain a permission letter, store it admin-only, switch the status and log the change.
+5. Security: HTTPS with redirect, secure cookies, CSRF protection, parameterized queries, input validation, secrets only
+in environment variables, restricted CORS, dependency audit, logs without personal data, daily automatic backup
+with a tested restore.
+6. Page "Manbalar va huquqlar": a bibliographic passport for each text (author, translator, edition actually used, year,
+publisher, print and PDF pages) using only data verified in Stage 4; licence status; the neutral notice from Stage 2.
+Acceptance: each role tested; a bulk download attempt as guest is blocked; security checklist reported item by item.
+Stop and report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ Mehmon (guest) sifatida kirib koʻring: bir qidiruvda 50 tadan ortiq natija chiqmasligi kerak.
+☐ Har bir matnning huquqiy holati («protected», «public_domain») toʻgʻri belgilanganmi?
+☐ Sayt https:// orqali ochilyaptimi?
+☐ Bibliografik maʼlumotlar barcha sahifada bir xilmi?
+
+
+=== PAGE 16 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+16
+11
+11-BOSQICH
+Dizayn tizimi va interfeys
+Bogʻliq boblar: 2.3
+Maqsad. Sayt himoyada koʻrsatishga loyiq, sokin va akademik koʻrinishga ega boʻlsin: universitet
+raqamli kutubxonasi kabi, reklama sahifasi kabi emas.
+PROMPT 11 · to‘liq nusxalab Antigravity chatiga yuboring
+Stage 10 approved. Start Stage 11 — DESIGN SYSTEM AND INTERFACE. Give TILCOR a professional, calm, scholarly
+design suitable for presenting at a dissertation defence.
+BRAND
+One name everywhere: "TILCOR — O‘zbek–ingliz parallel korpusi", subtitle "Kollokatsiyalar tarjimasi tadqiqoti uchun"
+(unless I choose another). Remove the KORPUS.LINGVO / ParallelColloc / UZ–EN Collocation Corpus variants.
+VISUAL DIRECTION
+Like a university digital library, not a marketing landing page. No fake counters, no decorative gradients behind data, no
+emoji in data views.
+• Colour tokens (light and dark themes): primary deep indigo #1F2A5A; teal #0F766E for Uzbek text highlights; amber
+#B45309 for English highlights; neutral greys. Check WCAG AA contrast for every text/background pair.
+• Typography: fonts with full support for o‘ g‘ ’ glyphs (e.g., Inter or Noto Sans for the interface, Noto Serif for long
+passages). Test the rendering of "O‘zbekiston, g‘alaba, ta’lim".
+• Spacing scale and grid; components: header, filter sidebar, data table, KWIC line, parallel pair card, annotation panel,
+status badges (avtomatik / ko‘rib chiqilmoqda / tasdiqlangan / chiqarilgan), empty / loading / error states, toast,
+confirmation modal for destructive actions.
+INFORMATION ARCHITECTURE (one navigation bar)
+Bosh sahifa · Korpus · Kollokatsiyalar · Tahlil (annotatsiya, faqat admin) · Statistika · Metodologiya · Manbalar va
+huquqlar · Loyiha haqida
+• Bosh sahifa: one-paragraph project description; live corpus figures from the database with "oxirgi yangilangan" date;
+three entry cards (Korpusda qidirish, Kollokatsiyalar, Metodologiya); no dissertation conclusions.
+• Metodologiya: corpus design and directions, extraction, alignment method with measured accuracy, annotation
+scheme and guideline version, formulas, limitations, all generated from METHODS.md and live settings.
+• Loyiha haqida: researcher, institution, supervisor, city, year, filled in from my answers (placeholders until I confirm).
+• Section numbering consistent and in order on every page.
+QUALITY
+Uzbek interface by default with an English toggle; responsive down to 360 px; keyboard navigation and visible focus
+states; print styles for Metodologiya and Statistika pages.
+Deliver: a design-tokens file, an admin-only component gallery page, and before/after screenshots of every page at 360
+px and 1440 px.
+Acceptance: Lighthouse accessibility score ≥ 90 on the main pages; no hard-coded numbers anywhere.
+Stop and report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ Saytda faqat bitta nom va bitta menyu qolganmi?
+☐ Telefonda (360 px) va kompyuterda skrinshotlar berilganmi?
+☐ «Oʻzbekiston, gʻalaba, taʼlim» soʻzlari barcha shriftda toʻgʻri chiqyaptimi?
+☐ «Loyiha haqida» sahifasidagi maʼlumotlarni oʻzingiz tasdiqladingizmi?
+
+
+=== PAGE 17 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+17
+12
+12-BOSQICH
+Validatsiya, hujjatlar va himoyaga tayyorgarlik
+Bogʻliq boblar: 2.3, Ilovalar
+Maqsad. Platforma sifatini oʻlchash, hujjatlarni yakunlash va himoya kuni uchun ishonchli
+namoyish toʻplamini tayyorlash.
+PROMPT 12 · to‘liq nusxalab Antigravity chatiga yuboring
+Stage 11 approved. Start Stage 12 — VALIDATION, DOCUMENTATION AND DEFENCE READINESS.
+1. Validation report (Uzbek and English): extraction error rates; alignment precision / recall / F1 on gold_v1 per book;
+candidate extraction precision per language; inter-annotator agreement if available; boundary tests (apostrophe
+variants, very long texts, 1:n groups, untranslated segments, empty input); backup restore test; performance
+measurements.
+2. Reproducible example for Chapter 2.3 and the Ilovalar: one collocation traced from PDF page → segment → aligned
+pair → occurrence → annotation → statistics table row → export row, with screenshots of each step.
+3. Documentation: an Uzbek user guide with screenshots, METHODS.md, DATA_DICTIONARY.md, LIMITATIONS.md, a
+backup/restore guide and an architecture diagram.
+4. Defence kit:
+• a 5-minute demo script (what to click, in what order, what each screen shows);
+• a read-only guest account for council members;
+• an offline local copy that runs without internet, in case the venue network fails;
+• a printable one-page "Platforma haqida" fact sheet whose figures are generated from the database on the day of
+export.
+5. Final audit: search all code and pages for any hard-coded number, placeholder text, DEMO record or unverified
+claim; list every remaining limitation honestly.
+Do not write thesis conclusions. Provide figures and tables only; any prose must separate measured results from
+interpretation.
+Acceptance: I can run the demo script end to end on the offline copy; all reports delivered.
+Stop and report.
+Tekshiruv varaqasi — keyingi bosqichdan oldin oʻzingiz tekshiring
+☐ Namoyish ssenariysini oflayn nusxada boshidan oxirigacha oʻzingiz bajarib koʻrdingizmi?
+☐ PDF sahifasidan eksport qatorigacha boʻlgan namunaviy zanjir skrinshotlari bormi?
+☐ Cheklovlar roʻyxati (LIMITATIONS) halol va toʻliq yozilganmi?
+☐ Hisobotlarni ilmiy rahbaringizga koʻrsatdingizmi?
+
+
+=== PAGE 18 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+18
+3. Toʻldirish kerak boʻlgan maʼlumotlar
+Antigravity bu maʼlumotlarni oʻzi bilmaydi va toʻqib chiqarmasligi kerak. Tegishli bosqichda
+soʻralganda bering.
+Maʼlumot
+Taklif / izoh
+Qachon kerak
+Loyiha nomi
+TILCOR — Oʻzbek–ingliz parallel korpusi (yoki oʻzingiz
+tanlang)
+11-bosqich
+Tadqiqotchi
+Voxitov Ibrohim Sodiq oʻgʻli — tasdiqlang
+11-bosqich
+Muassasa va shahar
+BIU, Buxoro — rasmiy oʻzbekcha nomini yozing
+11-bosqich
+Ilmiy rahbar
+F.I.Sh. va ilmiy darajasi
+11-bosqich
+Ixtisoslik shifri
+Rahbaringiz bilan aniqlang (saytdagi 10.02.20 shubhali)
+11-bosqich
+«Xazinalar oroli»
+oʻzbekcha matni
+PDF yoki skan; topilmasa asar korpusdan vaqtincha
+chiqariladi
+4-bosqich
+Lugʻat fayli (taxminan 24
+554 soʻz)
+Asl manbasi va formati
+5-bosqich
+Kollokatsiyalar roʻyxati
+Asl manbasi (kitob, sayt, oʻzingiz tuzganmisiz)
+6-bosqich
+Ruxsat xatlari
+Academic Studies Press; Gʻafurov va Sharif Rizo tarjimalari
+huquq egalari
+10-bosqich
+Taksonomiya
+Ekvivalentlik turlari, strategiyalar, semantik guruhlar
+roʻyxati
+7-bosqich
+4. Mualliflik huquqi boʻyicha qisqa eslatma
+Oʻzbekistonda mualliflik huquqi muallif hayoti davomida va vafotidan keyin 70 yil amal qiladi;
+tarjima alohida asar sifatida himoyalanadi. Shu sababli:
+• Choʻlpon (v. 1938) va Stivenson (v. 1894) asl matnlari ochiq mulk.
+• Fort tarjimasi, Xeminguey asl matni (v. 1961, 2031-yil oxirigacha) va Gʻafurov tarjimasi
+himoyada.
+• Sharif Rizo tarjimasining holati tarjimonning vafot yiliga bogʻliq; aniqlanmaguncha himoyada deb
+hisoblang.
+• Men huquqshunos emasman: yakuniy qarordan oldin BIU yuristi yoki intellektual mulk
+mutaxassisi bilan maslahatlashing.
+
+
+=== PAGE 19 ===
+TILCOR — PhD himoyasiga tayyorlash promptlari · v2.0
+Antigravity AI uchun
+Promptlarni tartib bilan, bittadan yuboring. Har bosqichdan keyin tekshiring va tasdiqlang.
+19
+5. Ilmiy eslatmalar
+• Platforma ilmiy natija emas, vosita. Ilmiy hissa korpus tarkibi, mezonlar, siz tasdiqlagan
+tasnif va asoslangan tahlilda boʻladi. Sayt buni koʻrsatish va tekshirish imkonini beradi.
+• III bobdagi foizlar faqat annotatsiyadan keyin paydo boʻladi. Saytdagi eski 46/38/16% va
+38/31/18/13% raqamlarini dissertatsiyada ishlatmang: ular hech qanday tahlilga asoslanmagan.
+• Statistika mezonlardan biri, isbot emas. MI yoki t-score qiymati birikmaning kollokatsiya
+ekanini oʻz-oʻzidan isbotlamaydi. Bu fikr 1.1 boʻlimingiz uchun ham muhim argument.
+• Yoʻnalishlarni aralashtirmang. Choʻlpon asari UZ→EN, qolganlari EN→UZ. Ekvivalentlik va
+strategiya statistikasi har bir yoʻnalish uchun alohida hisoblanadi.
+• Misollarni manba bilan keltiring. Dissertatsiyadagi har bir misol uchun muallif, nashr, yil va
+sahifa koʻrsatilsin; sahifa raqami endi saytdan olinadi.
+• Rejadagi imlo: 2.1 da «metodoligik» → «metodologik», 2.3 da «dezayni» → «dizayni» boʻlishi
+kerak. Rahbaringiz bilan kelishib tuzating.
+6. Himoya kuni uchun tayyor boʻlishi kerak
+• 5 daqiqalik namoyish ssenariysi va uni oflayn nusxada bir necha marta mashq qilish;
+• kengash aʼzolari uchun faqat oʻqish huquqli mehmon akkaunti;
+• internet uzilsa ishlaydigan oflayn nusxa;
+• bazadan himoya kuni yangilangan bir sahifalik «Platforma haqida» maʼlumotnomasi;
+• PDF sahifasidan eksport qatorigacha boʻlgan namunaviy zanjir skrinshotlari (2.3 va Ilovalar
+uchun).
+7. Favqulodda buyruqlar
+Antigravity notoʻgʻri yoʻlga ketsa, quyidagi qatorlardan birini nusxalab yuboring.
+Antigravity bosqichdan
+chiqib ketsa yoki ruxsatsiz
+oʻzgartirsa
+STOP. Stay in the current stage. Do not change anything else. Report in Uzbek exactly
+what you have changed so far.
+Saytda bazadan olinmagan
+raqam yoki matn koʻrsangiz
+Rule R1 violated: a number or text on the site is not computed from the database. Find
+and remove every such value, show me the code search, then report.
+Oxirgi oʻzgarish narsalarni
+buzgan boʻlsa
+Revert the last change from the backup on staging, confirm the restore works, and
+explain in Uzbek what went wrong.
+«Tayyor», «ishlaydi» deb
+tekshirmasdan aytsa
+Rule R5: do not mark this as working until you run it. Run the test now and show me the
+actual output.
+Yangi chat ochganingizda
+Re-send Prompt 0 first, then: "We are continuing at Stage N. Read CHANGELOG.md and
+TESTLOG.md, summarize the current state in Uzbek, and wait."

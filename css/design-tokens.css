@@ -1,0 +1,205 @@
+/**
+ * TILCOR PhD Parallel Corpus - Design Tokens (Stage 11)
+ * Compliant with WCAG AA contrast, academic visual identity,
+ * and canonical Uzbek typography (o‘, g‘, ’).
+ */
+
+:root {
+  /* Brand Palette */
+  --tilcor-primary: #1F2A5A;        /* Deep Academic Indigo */
+  --tilcor-primary-hover: #2B3A78;
+  --tilcor-primary-light: #EEF2FF;
+  
+  --tilcor-uzbek: #0F766E;          /* Scholarly Teal (Uzbek highlights) */
+  --tilcor-uzbek-bg: #F0FDFA;
+  --tilcor-uzbek-border: #99F6E4;
+
+  --tilcor-english: #B45309;        /* Scholarly Amber (English highlights) */
+  --tilcor-english-bg: #FFFBEB;
+  --tilcor-english-border: #FDE68A;
+
+  /* Neutrals */
+  --tilcor-bg: #F8FAFC;
+  --tilcor-surface: #FFFFFF;
+  --tilcor-surface-alt: #F1F5F9;
+  --tilcor-border: #E2E8F0;
+  --tilcor-border-strong: #CBD5E1;
+
+  --tilcor-text: #0F172A;           /* High contrast body text */
+  --tilcor-text-muted: #475569;     /* WCAG AA >= 4.5:1 on light bg */
+  --tilcor-text-subtle: #64748B;
+
+  /* Status Badges */
+  --badge-auto-bg: #F1F5F9;
+  --badge-auto-text: #475569;
+  --badge-auto-border: #CBD5E1;
+
+  --badge-review-bg: #FEF3C7;
+  --badge-review-text: #92400E;
+  --badge-review-border: #FCD34D;
+
+  --badge-confirmed-bg: #DCFCE7;
+  --badge-confirmed-text: #166534;
+  --badge-confirmed-border: #86EFAC;
+
+  --badge-excluded-bg: #FEE2E2;
+  --badge-excluded-text: #991B1B;
+  --badge-excluded-border: #FCA5A5;
+
+  /* Typography */
+  --font-ui: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Noto Serif', Georgia, Cambria, "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+}
+
+/* Dark Mode Tokens */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tilcor-bg: #0B0F19;
+    --tilcor-surface: #111827;
+    --tilcor-surface-alt: #1F2937;
+    --tilcor-border: #374151;
+    --tilcor-border-strong: #4B5563;
+    --tilcor-text: #F9FAFB;
+    --tilcor-text-muted: #9CA3AF;
+    --tilcor-text-subtle: #6B7280;
+    --tilcor-primary-light: #1E293B;
+  }
+}
+
+/* Global Reset & Base */
+body {
+  font-family: var(--font-ui);
+  background-color: var(--tilcor-bg);
+  color: var(--tilcor-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header & Nav */
+.tilcor-header {
+  background: var(--tilcor-primary);
+  color: #FFFFFF;
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid var(--tilcor-uzbek);
+}
+
+.tilcor-header .brand h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.tilcor-header .brand p {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin-top: 2px;
+}
+
+.tilcor-nav {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.tilcor-nav a {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.08);
+  transition: all 0.15s ease;
+}
+
+.tilcor-nav a:hover, .tilcor-nav a.active {
+  background: rgba(255, 255, 255, 0.24);
+  font-weight: 600;
+}
+
+/* Status Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  line-height: 1.2;
+}
+
+.badge-auto {
+  background: var(--badge-auto-bg);
+  color: var(--badge-auto-text);
+  border: 1px solid var(--badge-auto-border);
+}
+
+.badge-review {
+  background: var(--badge-review-bg);
+  color: var(--badge-review-text);
+  border: 1px solid var(--badge-review-border);
+}
+
+.badge-confirmed {
+  background: var(--badge-confirmed-bg);
+  color: var(--badge-confirmed-text);
+  border: 1px solid var(--badge-confirmed-border);
+}
+
+.badge-excluded {
+  background: var(--badge-excluded-bg);
+  color: var(--badge-excluded-text);
+  border: 1px solid var(--badge-excluded-border);
+}
+
+/* Print Styles */
+@media print {
+  .tilcor-header, .tilcor-nav, .no-print, button, .btn {
+    display: none !important;
+  }
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    font-size: 10pt;
+  }
+  .container, main {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+  th, td {
+    border: 1px solid #333333 !important;
+    padding: 4px 6px !important;
+  }
+}

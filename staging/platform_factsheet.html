@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <title>TILCOR v2.0 — Platforma Faktlar Varaqasi (Fact Sheet)</title>
+  <style>
+    @page { size: A4 portrait; margin: 15mm; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; color: #0F172A; background: #fff; line-height: 1.4; font-size: 10pt; }
+    .header { border-bottom: 2px solid #1F2A5A; padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-end; }
+    h1 { font-size: 14pt; color: #1F2A5A; margin: 0; }
+    .subtitle { font-size: 9pt; color: #64748B; margin-top: 2px; }
+    .table-spec { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+    .table-spec th, .table-spec td { border: 1px solid #CBD5E1; padding: 4px 6px; font-size: 8.5pt; }
+    .table-spec th { background: #F1F5F9; color: #1F2A5A; text-align: left; }
+    .num { text-align: right; font-weight: 600; font-family: monospace; }
+    .badge-q { color: #DC2626; font-weight: bold; }
+    .footer { margin-top: 15px; font-size: 8pt; color: #64748B; border-top: 1px solid #E2E8F0; padding-top: 6px; display: flex; justify-content: space-between; }
+    .btn-print { display: inline-block; padding: 6px 14px; background: #1F2A5A; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 9pt; }
+    @media print { .btn-print, .no-print { display: none !important; } }
+  </style>
+</head>
+<body>
+
+  <div class="no-print" style="margin-bottom:12px; text-align:right;">
+    <button class="btn-print" onclick="window.print()">🖨️ Chop etish (Print / PDF)</button>
+  </div>
+
+  <div class="header">
+    <div>
+      <h1>TILCOR — O‘zbek–ingliz parallel korpusi (v2.0)</h1>
+      <div class="subtitle">«TARJIMA VA TENG MATNLAR PARALLEL KORPUSIDA O‘ZARO FAOL BIRIKUVCHI (KOLLOKATSION) SO‘ZLAR TADQIQI»</div>
+    </div>
+    <div style="text-align:right; font-size:8pt; color:#64748B;">
+      PhD Tadqiqot Pasporti<br>Sana: 2026-10-12
+    </div>
+  </div>
+
+  <table class="table-spec">
+    <thead>
+      <tr>
+        <th>Asosiy Ko‘rsatkich</th>
+        <th>Haqiqiy Qiymat</th>
+        <th>Ilmiy-Metodologik Asosi (Baza so‘rovi)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Badiiy Asarlar Soni</td><td class="num">3 ta</td><td>Cho‘lpon, Hemingway, Stevenson (works)</td></tr>
+      <tr><td>Nashrlar Soni (Editions)</td><td class="num">6 ta</td><td>Bosma va elektron ilmiy nashrlar (editions)</td></tr>
+      <tr><td>Matn Qatlamlari</td><td class="num">6 ta</td><td>5 ta faol, 1 ta karantinda (Stevenson UZ: 0 matn)</td></tr>
+      <tr><td>Ekstraksiya qilingan Betlar</td><td class="num">963 bet</td><td>PyMuPDF orqali to‘liq ajratilgan (pages)</td></tr>
+      <tr><td>Jumla va Dialog Segmentlari</td><td class="num">23,762 ta</td><td>Jumla chegaralari va dialog tirelari ajratilgan</td></tr>
+      <tr><td>Jami So‘z Qamrovi (Tokens, N)</td><td class="num">303,393 ta</td><td>Standart regulyar ifoda: \b[\w\u02bb\u02bc'-]+\b</td></tr>
+      <tr><td>Unikal Leksik Shakllar (Types, V)</td><td class="num">40,276 ta</td><td>Korpus leksik xilma-xilligi</td></tr>
+      <tr><td>Parallel Tekislangan Juftliklar</td><td class="num">7,391 ta</td><td>Anchor-window algoritmi va legacy mosliklar</td></tr>
+      <tr><td>Oltin Standart Juftliklari (gold_v1)</td><td class="num">300 ta</td><td>100% inson-ekspert tomonidan tekshirilgan juftliklar</td></tr>
+      <tr><td>Leksik Ma'lumotnoma (Lexicon)</td><td class="num">6,546 ta</td><td>Foydalanuvchi taqdim etgan to‘liq bibliografik lug‘at</td></tr>
+      <tr><td>Kollokatsiya Uchrashuvlari</td><td class="num">469 ta</td><td>Matnlarda bevosita topilgan va tasdiqlangan</td></tr>
+      <tr><td>Taksonomik Parametrlar</td><td class="num">40 ta</td><td>Prompt 7 taksonomiyasi (7 ta toifa, v1.0)</td></tr>
+      <tr><td>2×2 Assotsiatsiya Hisoblari</td><td class="num">11,527 ta</td><td>O11, R1, C1, N, MI, t-score, G2, NormFreq</td></tr>
+      <tr><td>Baza Yaxlitligi (Foreign Keys)</td><td class="num">0 xato</td><td>PRAGMA foreign_key_check: 100% ACID muvofiqlik</td></tr>
+    </tbody>
+  </table>
+
+  <table class="table-spec">
+    <thead>
+      <tr>
+        <th>Asar va Matn</th>
+        <th>Roli & Tili</th>
+        <th>Bet</th>
+        <th>Segment</th>
+        <th>Token</th>
+        <th>Huquqiy Maqomi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Cho‘lpon: «Kecha va kunduz»</td><td>Original (uz)</td><td class="num">272</td><td class="num">9,363</td><td class="num">80,594</td><td>Public Domain</td></tr>
+      <tr><td>Cho‘lpon: «Night and Day» (Fort)</td><td>Tarjima (en)</td><td class="num">235</td><td class="num">7,695</td><td class="num">99,721</td><td>Protected (Fair Use)</td></tr>
+      <tr><td>Hemingway: «The Old Man and the Sea»</td><td>Original (en)</td><td class="num">52</td><td class="num">1,699</td><td class="num">27,091</td><td>Protected (Fair Use)</td></tr>
+      <tr><td>Hemingway: «Chol va dengiz» (G‘afurov)</td><td>Tarjima (uz)</td><td class="num">46</td><td class="num">1,845</td><td class="num">26,311</td><td>Protected (Fair Use)</td></tr>
+      <tr><td>Stevenson: «Treasure Island»</td><td>Original (en)</td><td class="num">142</td><td class="num">3,160</td><td class="num">69,676</td><td>Public Domain</td></tr>
+      <tr><td>Stevenson: «Xazinalar oroli» (Sharif Rizo)</td><td>Tarjima (uz)</td><td class="num">216</td><td class="num">0</td><td class="num">0</td><td class="badge-q">Karantinda (0 matn)</td></tr>
+      <tr style="font-weight:bold; background:#F8FAFC;">
+        <td>JAMI FAOL KORPUS</td>
+        <td>—</td>
+        <td class="num">963</td>
+        <td class="num">23,762</td>
+        <td class="num">303,393</td>
+        <td>100% Halol Manba</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    <div>Tadqiqotchi: Voxitov Ibrohim Sodiq o‘g‘li | Ixtisoslik: 10.02.20 | Buxoro davlat universiteti</div>
+    <div>TILCOR v2.0 Platforma Faktlar Varaqasi</div>
+  </div>
+
+</body>
+</html>

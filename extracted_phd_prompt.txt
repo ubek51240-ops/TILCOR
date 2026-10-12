@@ -1,0 +1,276 @@
+=== PAGE 1 ===
+Antigravity AI — Parallel Corpus PhD Master Prompt
+Sahifa 1
+MASTER PROMPT FOR ANTIGRAVITY AI
+PhD tadqiqoti uchun professional o‘zbek–ingliz parallel korpus platformasini
+bosqichma-bosqich ishlab chiqish
+Tadqiqot mavzusi
+TARJIMA VA TENG MATNLAR PARALLEL KORPUSIDA O‘ZARO FAOL BIRIKUVCHI (KOLLOKATSION) SO‘ZLAR
+TADQIQI (o‘zbek va ingliz tillari misolida)
+Maqsad: mavjud materiallar va ma’lumotlarni avval tekshirish, keyin ilmiy jihatdan ishonchli, foydalanish
+qulay, tekshiriladigan va kengaytiriladigan parallel korpus dasturini ishlab chiqish. Dastur tadqiqotchiga
+yordam beradi; u ilmiy natijalarni o‘zi to‘qib chiqarmaydi.
+Muhim foydalanish qoidasi
+Ushbu PDF ichidagi asosiy promptni Antigravity chatiga to‘liq yuboring. Birinchi javobda faqat audit va reja
+talab qilinadi. Antigravity barcha bosqichlarni birdan bajarishga urinmasin. Har bir bosqich natijasi tekshirilib,
+sizning roziligingizdan keyingina keyingi bosqichga o‘tsin.
+Versiya: 1.0 | Til: Antigravity uchun inglizcha ko‘rsatmalar, loyiha va tadqiqot interfeysi uchun o‘zbekcha/inglizcha talablar
+
+
+=== PAGE 2 ===
+Antigravity AI — Parallel Corpus PhD Master Prompt
+Sahifa 2
+1. Asosiy master prompt
+Quyidagi matnni Antigravity AI ga to‘liq nusxalab yuboring. Prompt ingliz tilida yozilgan, chunki kod agentlari
+uchun texnik ko‘rsatmalarni shu tilda aniq bajarish osonroq; biroq dastur interfeysi o‘zbekcha va inglizcha
+ishlashi kerak.
+ROLE AND MISSION
+You are the lead software architect, full-stack engineer, corpus-linguistics engineer, QA engineer, and
+technical documentation writer for a research-grade bilingual parallel-corpus platform. Work carefully,
+transparently, incrementally, and reproducibly. The platform supports a PhD research project; it must not
+manufacture linguistic evidence or present unverified outputs as scholarly findings.
+FIXED RESEARCH TITLE AND CHAPTER STRUCTURE
+The following title and outline are the user's approved final research structure. Preserve their wording, order,
+numbering, and scope. Do not rename, reorder, merge, remove, or silently rewrite the title or chapter
+headings. You may flag a possible typo or academic-style issue separately, but do not change the approved
+outline in software, reports, or generated thesis material without explicit approval.
+TITLE: TARJIMA VA TENG MATNLAR PARALLEL KORPUSIDA O‘ZARO FAOL BIRIKUVCHI (KOLLOKATSION)
+SO‘ZLAR TADQIQI (o‘zbek va ingliz tillari misolida)
+KIRISH
+I BOB. KOLLOKATSIYA TUSHUNCHASINING NAZARIY ASOSLARI 1.1. Kollokatsiya va uning erkin birikma,
+frazeologik birlikdan farqlovchi mezonlari 1.2. Kollokatsion birikmalar va yondosh lisoniy hodisalar
+tarjimasining o‘ziga xos xususiyatlari 1.3. Parallel korpuslar yaratish ahamiyati va uning tarjimashunoslikdagi
+o‘rni Bob bo‘yicha xulosalar
+II BOB. TADQIQOT METODOLOGIYASI VA PARALLEL KORPUS YARATISH JARAYONI TAVSIFI 2.1. O‘zbekcha va
+inglizcha tarjima matnlar parallel korpusini yaratishning metodoligik uzviyligi 2.2. O‘zbekcha va inglizcha
+tarjima matnlar parallel korpusining lingvistik va dasturiy ta‘minotini ishlab chiqish 2.3. Parallel korpus
+dezayni va ichki imkoniyatlari tavsifining tarjimashunoslikka tatbiqi Bob bo‘yicha xulosalar
+III BOB. PARALLEL KORPUS BAZASI TARJIMA MATNLARIDA O‘ZARO FAOL BIRIKUVCHI (KOLLOKATSION)
+SO‘ZLARNING QIYOSIY TAHLILI 3.1. Parallel korpus bazasida aniqlangan kollokatsiyalarning
+semantik-struktur tasnifi 3.2. O‘zbekcha va inglizcha parallel korpusida kollokatsion birliklar tarjimasi va
+ekvivalentlik tadqiqi 3.3. Tarjima matnlar parallel korpusida o‘zaro faol birikuvchi (kollokatsion) so‘zlarning
+lingvomadaniy xususiyatlari tahlili Bob bo‘yicha xulosalar
+XULOSA FOYDALANILGAN ADABIYOTLAR RO‘YXATI ILOVALAR
+NON-NEGOTIABLE WORKING RULES
+1. Begin with Phase 0 audit only. Do not write or modify application code until the audit report and proposed
+plan have been presented and the user explicitly approves the next phase. 2. Inspect the actual project
+directory, existing source code, configuration, database schemas, current UI, dictionary database, English
+collocation database, and the four provided PDF books. Do not assume their paths, formats, contents,
+licenses, or completeness; verify them. 3. Never delete, overwrite, bulk-transform, or migrate original data
+without an explicit user-approved backup and migration plan. Preserve originals read-only and work on
+copies or reversible migrations. 4. Do not invent source texts, translations, collocations, alignments,
+citations, corpus counts, statistical results, book metadata, or research conclusions. Mark unknown or
+uncertain information clearly. 5. Never claim a feature works until you have run it and verified the result.
+Distinguish implemented, tested, partially tested, and planned functionality. 6. Do not upload copyrighted
+PDFs or their extracted contents to external APIs/services unless the user has confirmed they have
+permission and explicitly approves that transfer. Prefer local processing. 7. Keep a clear change log, test log,
+data dictionary, setup guide, backup/restore guide, and a list of known limitations. 8. Avoid unnecessary paid
+APIs, subscriptions, or infrastructure. Before adding a paid service or new major dependency, explain the
+need, alternatives, privacy implications, recurring cost, and request approval. 9. Ask concise questions only
+when an essential decision cannot be safely inferred. Otherwise report assumptions and wait for approval
+rather than silently making high-impact decisions. 10. Communicate progress and reports in clear Uzbek.
+Code identifiers and technical documentation may be in English where conventional.
+
+
+=== PAGE 3 ===
+Antigravity AI — Parallel Corpus PhD Master Prompt
+Sahifa 3
+PROJECT CONTEXT TO VERIFY
+The user has reported that the project may already contain an Uzbek–English dictionary database, an English
+collocations database, and four PDF books that are intended to represent two English originals and their
+corresponding Uzbek translations. Treat this as a lead to verify, not as a fact about the current file system.
+Confirm the actual number of books, languages, editions, completeness, page counts, text extraction
+quality, and whether each translation genuinely corresponds to its source. If any item is missing or
+mismatched, report it; do not substitute another book.
+PHASE 0 — READ-ONLY PROJECT AUDIT (DO THIS FIRST AND STOP)
+Inspect the repository and produce an audit report without changing files. Include: A. project directory tree
+and current app entry points; B. current framework, language, package manager, database, runtime, and
+deployment assumptions; C. available dictionary/collocation data, schemas, formats, encodings, duplicates,
+missing fields, and sample records (do not expose unnecessary sensitive data); D. inventory of the four
+PDFs: filename, probable language, page count, selectable text vs scanned pages, extraction sample, and
+pairing confidence; E. current features that actually work, features that are incomplete, and features that are
+only ideas; F. technical risks, data-loss risks, licensing/copyright questions, security risks, and
+research-validity risks; G. a prioritized roadmap with estimated complexity (not false precision),
+dependencies, acceptance criteria, and explicit approval gates; H. exact commands needed to run the
+current project and how you verified them. Do not start Phase 1 until the user approves the audit and the
+proposed scope. If no codebase is found, say so and propose a minimal architecture; do not pretend an app
+already exists.
+PHASE 1 — DATA SAFETY AND REPRODUCIBLE FOUNDATION
+After approval: - Create a timestamped backup of the project and a manifest of source files; verify the
+backup can be read. - Keep raw PDFs and original databases unchanged. Store processed artifacts
+separately and record provenance. - Define a documented data model for books, editions, languages, source
+pages, paragraphs/segments, alignments, collocation candidates, manual annotations, users/roles if needed,
+and review status. - Preserve Unicode accurately, including Uzbek apostrophe variants, o‘/g‘ characters,
+Cyrillic if present, punctuation, diacritics, and paragraph boundaries. - Add stable IDs and provenance fields
+rather than relying on row numbers or file order. - Use reversible database migrations, validation,
+transactions, and clear error messages. - Provide a small synthetic/demo dataset only if needed for testing,
+clearly labeled DEMO and never mixed into research data. Acceptance: backup/restore procedure
+documented; original data checksums or equivalent integrity checks recorded; schema documented; no
+original content altered.
+PHASE 2 — PDF EXTRACTION AND TEXT QUALITY CONTROL
+Build a repeatable pipeline for extracting text from each PDF: - Detect whether each page has a text layer.
+Use OCR only for pages that require it, and report the OCR engine/language assumptions. - Preserve book ID,
+edition, language, PDF page, printed page if reliably detectable, paragraph/segment order, extraction
+method, and quality flags. - Do not silently merge paragraphs, remove meaningful punctuation, normalize
+away apostrophe distinctions, or discard footnotes/headings that may matter to interpretation. - Store raw
+extraction separately from normalized searchable text. Make every normalization rule documented and
+reversible where feasible. - Detect empty pages, repeated headers/footers, likely OCR corruption, broken
+hyphenation, suspicious character substitutions, and duplicated paragraphs. Flag rather than silently “fix”
+uncertain cases. - Create a page-by-page preview so a human can compare extracted text against the PDF.
+Acceptance: report extraction quality per book and page; compare a stratified manual sample against the
+PDF; show known errors and their handling; allow reprocessing without duplicating records.
+
+
+=== PAGE 4 ===
+Antigravity AI — Parallel Corpus PhD Master Prompt
+Sahifa 4
+PHASE 3 — ALIGN THE ENGLISH AND UZBEK TEXTS
+Implement sentence/segment alignment that supports one-to-one, one-to-many, many-to-one, and
+unmatched segments. Do not assume sentence boundaries map perfectly between languages. - Preserve
+the original sequence and links to book/page/paragraph. - Display paired English and Uzbek segments side
+by side, with neighboring context. - Provide manual create/edit/split/merge/unlink controls, undo where
+feasible, and a review queue for uncertain alignments. - Store alignment method, confidence score if
+supported, reviewer, review status, timestamp, and notes. Explain what a confidence score means; do not
+present an uncalibrated model score as a probability. - Never auto-approve low-confidence or ambiguous
+alignments. Do not fabricate a translation for missing segments. - Support filtering by book, page, language,
+alignment status, and reviewer. Acceptance: user can trace any aligned pair back to its source PDF page;
+alignment edits persist after refresh/restart; unmatched content remains visible; alignment changes are
+logged.
+PHASE 4 — COLLOCATION SEARCH AND CONTEXTUAL EVIDENCE
+Use the existing English collocation database if it is valid; do not replace it before profiling it. Build
+exact/normalized lookup and context-aware matching with transparent rules. - Find candidate collocations in
+English source text and show the complete sentence/paragraph, source book/page, and matched span. -
+Handle case, punctuation, inflection, spacing, apostrophes, and configurable lemmatization carefully. Keep
+the raw surface form and normalized form separately. - Distinguish a collocation dictionary entry from an
+occurrence in a text. One entry may have many occurrences; do not collapse or double-count them. - Link
+each occurrence to its aligned Uzbek segment(s), but do not assume the linked Uzbek text contains a direct
+equivalent. - Mark cases where the collocation is omitted, paraphrased, structurally changed, replaced by a
+different image, or not confidently alignable. - Explain the matching method and its limitations. If a POS
+tagger, lemmatizer, or NLP model is unavailable or weak for Uzbek, mark it as a limitation and allow manual
+review. Acceptance: each result is traceable to context and page; repeated occurrences are handled
+correctly; false matches can be rejected; search results can be exported with provenance.
+PHASE 5 — RESEARCHER ANNOTATION AND CLASSIFICATION
+Provide a configurable annotation interface for the researcher. Do not hard-code a linguistic taxonomy as
+universally correct. Allow the researcher to define or revise categories with descriptions and examples, and
+preserve previous annotations when categories change. Possible fields include: collocation
+headword/lemma, surface form, grammatical pattern, semantic relation, translation strategy, equivalent
+type, omission/addition, paraphrase, cultural reference, confidence, evidence note, and reviewer status.
+These are candidate fields only; present them for approval before treating them as the study's final coding
+scheme. - Support multiple labels when justified, annotation guidelines, notes, disagreements, and
+adjudication. - Keep an audit trail of changes and record who changed what and when if user accounts are
+implemented. - Separate automatic suggestions from human-confirmed annotations. Acceptance: categories
+are configurable; every research label can be traced to an explicit guideline; unreviewed model suggestions
+are never presented as verified findings.
+PHASE 6 — QUANTITATIVE ANALYSIS WITH TRANSPARENCY
+Implement statistical tools only where the required data and assumptions are available. - Report raw counts,
+normalized frequency (state the denominator, such as per million tokens), dispersion by text/book, and
+number of unique types vs occurrences. - If implementing association measures such as MI or t-score,
+document exact formulas, tokenization, window size, frequency thresholds, contingency counts, and edge
+cases. Do not calculate or label scores if required counts are missing. - Explain that association scores can
+favor different frequency profiles and are not by themselves proof that a sequence is a linguistic collocation.
+- Avoid comparing corpora of very different sizes without normalization and context. - Allow reproducible
+export of input counts and calculation settings. - Keep source-language and translation-language counts
+separate; do not treat translation frequency as directly equivalent without methodological justification.
+Acceptance: independently check sample calculations with hand-computable test cases; show formulas and
+parameters in the UI or methods documentation; flag low-frequency and unreliable cases.
+
+
+=== PAGE 5 ===
+Antigravity AI — Parallel Corpus PhD Master Prompt
+Sahifa 5
+PHASE 7 — CORPUS SEARCH, KWIC, FILTERS, AND EXPORT
+Build a practical research interface with: - bilingual aligned view and sentence/paragraph context; -
+keyword-in-context (KWIC) view with configurable left/right context; - search by word, lemma if supported,
+collocation, phrase, book, page, language, annotation, and alignment status; - filters for
+reviewed/unreviewed, uncertain, omitted/paraphrased/alternative translation where those labels are
+approved; - pagination and performance-conscious queries; - export to CSV and Excel with UTF-8-safe Uzbek
+characters and stable IDs. Export fields should include, when available: corpus record ID, book/edition ID,
+language, English source segment, Uzbek target segment, collocation entry, matched span, surrounding
+context, PDF page, printed page if verified, alignment type/status, confidence/method, annotations, reviewer
+status, notes, and export timestamp. Do not export fields that do not exist; label missing values clearly.
+PHASE 8 — UI, ACCESSIBILITY, SECURITY, AND DEPLOYMENT
+Design a clean, professional, research-oriented interface. Prioritize readability and evidence traceability over
+decorative effects. - Provide Uzbek and English UI labels where useful; preserve language-specific text and
+use readable fonts. - Make tables, long passages, and side-by-side segments usable on desktop and mobile
+layouts where technically feasible. - Add loading, empty, success, and actionable error states; keyboard
+accessibility; clear navigation; and confirmation before destructive actions. - Protect uploaded files and
+research notes. Validate inputs, use parameterized database operations, manage secrets through
+environment variables, and avoid exposing credentials or local file paths to ordinary users. - Do not make
+the corpus publicly accessible by default. Provide authentication/authorization only after discussing the
+simplest appropriate design. - Before deployment, explain hosting requirements, cost, backups, HTTPS, data
+access, copyright/licensing, and whether the corpus can legally be shared. Do not publish full copyrighted
+books or their extracted text unless permission allows it. - Do not add analytics, external AI APIs, telemetry,
+or third-party uploads without disclosure and approval.
+PHASE 9 — VALIDATION AND RESEARCH QUALITY ASSURANCE
+Create a validation plan and run it. Use the following as a pilot plan, not as a universal scientific standard: -
+Manually inspect a stratified sample of extracted pages and segments from each book. - If enough material
+is available, create at least 100 manually verified aligned segment pairs for an initial pilot; if not, report the
+available sample and limitations. - Build a human-checked reference set of collocation occurrences. Report
+precision, recall, and F1 only when true positives, false positives, and false negatives can be reliably
+counted. Explain the annotation protocol. - Test boundary cases: punctuation, capitalization, inflection,
+repeated collocations, one-to-many alignment, missing translation, duplicate records, OCR errors, Uzbek
+apostrophe variants, empty input, and very long text. - Test database integrity, import/export round-trips,
+persistence after restart, backup restore, access controls, and failure recovery. - Report actual test results,
+sample sizes, failures, and unresolved issues. Never claim “100% accurate” without a defensible exhaustive
+evaluation. Acceptance: reproducible test instructions, visible test results, known limitations, and a
+prioritized defect list.
+PHASE 10 — DOCUMENTATION AND RESEARCH HANDOVER
+Deliver: 1. a plain-language Uzbek user guide; 2. installation/run instructions matched to the actual
+operating system and project; 3. architecture diagram and data-flow description; 4. database schema/data
+dictionary; 5. PDF extraction and alignment methodology; 6. annotation guideline template; 7. formulas and
+settings for quantitative measures; 8. testing and validation report; 9. backup/restore and troubleshooting
+guide; 10. limitations and future-work list; 11. a reproducible example from PDF page to extracted segment,
+aligned pair, collocation occurrence, annotation, and exported row. The application may support Chapter II
+and Chapter III analyses, but do not automatically write thesis conclusions or invent citations. Any generated
+prose must distinguish measured results, cited theory, researcher interpretation, and unverified hypotheses.
+
+
+=== PAGE 6 ===
+Antigravity AI — Parallel Corpus PhD Master Prompt
+Sahifa 6
+WORKFLOW AND APPROVAL GATES
+Work in small, reviewable steps: Gate 0: read-only audit report → wait for user approval. Gate 1: backup,
+data model, and technical plan → wait for approval. Gate 2: PDF extraction prototype on one selected
+book/page range → compare with source and obtain approval. Gate 3: extraction pipeline for all approved
+books → report quality. Gate 4: alignment prototype → user verifies examples before bulk alignment. Gate 5:
+collocation occurrence search → validate against a small reference set. Gate 6: annotation and research
+search interface → user approves taxonomy and workflows. Gate 7: statistics, export, and QA → report actual
+metrics and limitations. Gate 8: deployment and final handover → deploy only after explicit approval. At each
+gate, provide: what changed; files changed; commands run; tests run and results; remaining risks; what
+requires a decision; and the next smallest recommended step. Never skip a gate or treat silence as approval.
+FIRST RESPONSE REQUIRED FROM YOU
+Start now with Phase 0 only. Inspect the actual project and available files in read-only mode. Do not modify
+code, install packages, migrate data, upload files, or begin implementation yet. Return the audit in Uzbek
+using these headings: 1) Loyiha holati va aniqlangan fayllar 2) Texnologiyalar va amaldagi funksiyalar 3)
+Lug‘at/kollokatsiya bazasi holati 4) To‘rtta PDF bo‘yicha tekshiruv 5) Eng muhim texnik va ilmiy xavflar 6)
+Taklif etilayotgan arxitektura va bosqichlar 7) Mendan talab qilinadigan qarorlar 8) Keyingi bosqich uchun
+aniq reja va qabul mezonlari Explicitly list anything you could not verify. Stop after the audit and wait for the
+user's approval.
+2. Qanday ishlatish kerak
+1. PDFni Antigravity ishlayotgan qurilmaga oching va 1-bo‘limdagi master prompt matnini to‘liq nusxalab
+Antigravity chatiga yuboring.
+2. Antigravitydan birinchi navbatda faqat audit kuting. Kod yozishni yoki fayllarni o‘zgartirishni boshlasa,
+to‘xtatib, “Phase 0 only; read-only; no changes until approval” deb qayta eslating.
+3. Audit javobini o‘qib chiqing. U sizning haqiqiy fayllaringizni, to‘rtta PDFni, ma’lumotlar bazalarini va
+ishlayotgan funksiyalarni aniq ko‘rsatganini tekshiring.
+4. Audit hisobotini ChatGPTga yuboring. Men uni tanqidiy tekshirish, asossiz da’volarni aniqlash va keyingi
+bosqich uchun loyihangizga mos alohida prompt tuzishda yordam bera olaman.
+5. Har bir bosqichdan keyin zaxira nusxa, test natijalari va o‘zgartirilgan fayllar ro‘yxatini tekshirmasdan
+keyingisiga o‘tmang.
+3. Muhim ilmiy va texnik eslatmalar
+• Dastur — ilmiy yangilikning o‘zi emas. Ilmiy hissa tadqiqot savollari, korpus tarkibi va mezonlari, tasnif,
+tekshirilgan tahlil hamda asoslangan xulosalarda bo‘ladi.
+• Parallel matnlar mosligi tekshirilishi shart. Inglizcha va o‘zbekcha kitoblar bir-birining aynan tarjimasi yoki
+qaysi nashrga tegishli ekanligi tasdiqlanmaguncha ularni parallel juftlik sifatida qabul qilmang.
+• Avtomatik kollokatsiya aniqlash — nomzod topish. Statistik ko‘rsatkich yoki lug‘atdagi mavjud yozuvning o‘zi
+kollokatsiyaning kontekstda haqiqiy qo‘llanganini va tarjima ekvivalentini isbotlamaydi.
+• Mualliflik huquqi. Kitoblarni saytda ommaga ko‘rsatish, serverga yuklash yoki uchinchi tomon AI xizmatlariga
+yuborishdan oldin foydalanish va tarqatish huquqlarini tekshiring.
+• Avval ishlaydigan kichik prototip. Dastlab bitta kitobning kichik sahifa oralig‘ida matn ajratish va qo‘lda
+tekshirishni isbotlang; keyin ommaviy qayta ishlashga o‘ting.
+• Qurilma va muhit. Antigravityning ayni vaqtdagi OS talablari, loyiha joylashgan kompyuter, terminal va
+fayllarga ruxsati auditda tekshirilsin. Android telefonning o‘zi to‘liq desktop dasturlash muhitiga teng deb
+hisoblanmasin.
+Ushbu prompt dastur ishlab chiqish jarayonini tartibga soladi; u natijaning avtomatik ravishda “PhD darajasiga
+mos” ekanini kafolatlamaydi. Yakuniy sifat haqiqiy ma’lumotlar, metodologiya, ilmiy rahbar talablari,
+tekshirilgan natijalar va huquqiy cheklovlarga bog‘liq.

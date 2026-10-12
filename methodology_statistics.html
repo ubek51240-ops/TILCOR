@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TILCOR v2.0 — Metodologiya va Shaffof Statistika (Stage 8)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-hover: #1e40af;
+      --accent: #0284c7;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #15803d;
+      --warning: #b45309;
+      --danger: #b91c1c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .header-title h1 { font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+    .header-title p { font-size: 0.82rem; color: #94a3b8; }
+    .header-actions { display: flex; gap: 12px; align-items: center; }
+    .nav-btn {
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.22); }
+    .container { max-width: 1400px; margin: 24px auto; padding: 0 20px; }
+    
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-title h2 { font-size: 1.15rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+    .card-title p { font-size: 0.82rem; color: var(--text-muted); }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 12px 0; }
+    th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; }
+    th { background: #f8fafc; font-weight: 600; color: #334155; }
+    td.num, th.num { text-align: right; }
+    tr:hover { background: #fcfcfc; }
+
+    .formula-box {
+      background: #f8fafc;
+      border-left: 4px solid var(--primary);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-size: 0.95rem;
+    }
+    .formula-title { font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+
+    /* Interactive Calculator */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      background: #f1f5f9;
+      padding: 18px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+    .calc-field { display: flex; flex-direction: column; gap: 6px; }
+    .calc-field label { font-size: 0.8rem; font-weight: 600; color: #334155; }
+    .calc-field input {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      background: white;
+    }
+    .calc-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background 0.15s;
+    }
+    .calc-btn:hover { background: var(--primary-hover); }
+
+    .calc-results-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .res-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      text-align: center;
+    }
+    .res-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+    .res-val { font-size: 1.3rem; font-weight: 700; color: var(--primary); margin-top: 4px; }
+
+    .badge { padding: 3px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+    .badge-primary { background: #dbeafe; color: #1e40af; }
+    .badge-warning { background: #fef3c7; color: #92400e; }
+    .badge-success { background: #dcfce7; color: #166534; }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: white; border: none; }
+    .btn-secondary { background: #f8fafc; color: #1e293b; }
+    .btn-secondary:hover { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-title">
+      <h1><i class="fa-solid fa-chart-line"></i> TILCOR v2.0 — Metodologiya va Shaffof Statistika (Stage 8)</h1>
+      <p>PhD Ilmiy Tadqiqoti · Kirish parametrlar, Formulalar va III Bob Statistik Jadvallari</p>
+    </div>
+    <div class="header-actions">
+      <a href="annotation_workspace.html" class="nav-btn"><i class="fa-solid fa-layer-group"></i> Annotatsiya Ish Joyi</a>
+      <a href="annotation_guidelines.html" class="nav-btn"><i class="fa-solid fa-book-bookmark"></i> Yo‘riqnoma (v1.0)</a>
+      <a href="index.html" class="nav-btn"><i class="fa-solid fa-arrow-left"></i> Bosh sahifa</a>
+    </div>
+  </header>
+
+  <div class="container">
+    
+    <!-- SECTION 1: KORPUS HAJMI VA LEKSIK BOYLIK -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <h2><i class="fa-solid fa-book"></i> 1. Korpus Hajmi va Leksik Boylik (Tokens & Types)</h2>
+          <p>Har bir asar va til bo‘yicha aniq hisoblangan tokenlar, unikal so‘z shakllari va Type-Token nisbati (TTR)</p>
+        </div>
+        <div>
+          <span class="badge badge-primary">Tokenizer: \b[\w\u02bb\u02bc'-]+\b</span>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table id="corpusSizeTable">
+          <thead>
+            <tr>
+              <th>Asar va Nashr</th>
+              <th>Roli</th>
+              <th>Tili</th>
+              <th class="num">Jami Tokenlar (N)</th>
+              <th class="num">Unikal Shakllar (Types, V)</th>
+              <th class="num">TTR (V / N)</th>
+              <th class="num">Gapaks so‘zlar (Hapax)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="corpusSizeBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="formula-box">
+        <div class="formula-title">Normallashtirilgan Chastota Formulasi (Kichik korpuslar uchun 10,000 tokenga):</div>
+        <p>$$\text{NormFreq} = \frac{\text{RawFreq}}{N} \times 10{,}000$$</p>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:6px;">
+          Barcha chastotalar yonida uning maxraji (<i>denominator $N$</i>) qat'iy ko‘rsatiladi. Bu kichik hajmli badiiy korpuslarda chastotalarni ob'ektiv taqqoslash imkonini beradi.
+        </p>
+      </div>
+    </div>
+
+    <!-- SECTION 2: FORMULALAR VA INTERAKTIV KALKULYATOR -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <h2><i class="fa-solid fa-square-root-variable"></i> 2. Formulalar va 2×2 Kontingentlik Hisoblagichi</h2>
+          <p>Kollokatsiya assotsiatsiya mezonlari: Pointwise Mutual Information ($MI$), Student's $t$-score va Dunning Log-Likelihood ($G^2$)</p>
+        </div>
+        <div>
+          <button class="btn btn-secondary" onclick="loadHandComputedExample()">
+            <i class="fa-solid fa-flask"></i> Qo‘lda hisoblangan test misolini yuklash
+          </button>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="formula-box">
+          <div class="formula-title">Pointwise Mutual Information (MI):</div>
+          <p>$$MI = \log_2 \left( \frac{O_{11} \cdot N}{R_1 \cdot C_1} \right)$$</p>
+          <div class="formula-title" style="margin-top:12px;">Student's t-score:</div>
+          <p>$$t = \frac{O_{11} - E_{11}}{\sqrt{O_{11}}}, \quad \text{bu yerda } E_{11} = \frac{R_1 \cdot C_1}{N}$$</p>
+        </div>
+        <div class="formula-box">
+          <div class="formula-title">Dunning Log-Likelihood (G², 1993):</div>
+          <p>$$G^2 = 2 \sum_{i=1}^2 \sum_{j=1}^2 O_{ij} \ln \left( \frac{O_{ij}}{E_{ij}} \right)$$</p>
+          <p style="font-size:0.82rem; color:var(--text-muted); margin-top:8px;">
+            <b>Akademik izoh (1.1-fasl):</b> $MI$ ko‘rsatkichi kam uchraydigan noyob juftliklarga yuqori ball berishga moyil bo‘lsa, $t$-score esa yuqori chastotali grammatik kollokatsiyalarni afzal ko‘radi. Shu sababli Dunning $G^2$ ko‘rsatkichi kichik korpuslar uchun eng mustahkam mezon hisoblanadi.
+          </p>
+        </div>
+      </div>
+
+      <!-- Live Contingency Calculator Form -->
+      <h3 style="font-size: 1rem; font-weight: 700; margin-top: 18px; color: #1e293b;">Shaffof 2×2 Kontingentlik Kalkulyatori:</h3>
+      <div class="calc-grid">
+        <div class="calc-field">
+          <label>O11 (Birga uchrash soni):</label>
+          <input type="number" id="calcO11" value="10">
+        </div>
+        <div class="calc-field">
+          <label>R1 (1-so‘z jami chastotasi):</label>
+          <input type="number" id="calcR1" value="50">
+        </div>
+        <div class="calc-field">
+          <label>C1 (2-so‘z jami chastotasi):</label>
+          <input type="number" id="calcC1" value="100">
+        </div>
+        <div class="calc-field">
+          <label>N (Korpus jami tokenlari):</label>
+          <input type="number" id="calcN" value="100000">
+        </div>
+      </div>
+      <button class="calc-btn" onclick="runCalculator()"><i class="fa-solid fa-calculator"></i> Ko‘rsatkichlarni Hisoblash</button>
+
+      <!-- Results Grid -->
+      <div class="calc-results-grid" id="calcResults">
+        <div class="res-card">
+          <div class="res-label">Kutilgan (E11)</div>
+          <div class="res-val" id="resE11">0.05</div>
+        </div>
+        <div class="res-card">
+          <div class="res-label">MI Score</div>
+          <div class="res-val" id="resMI">7.6439</div>
+        </div>
+        <div class="res-card">
+          <div class="res-label">t-Score</div>
+          <div class="res-val" id="resT">3.1465</div>
+        </div>
+        <div class="res-card">
+          <div class="res-label">Log-Likelihood (G²)</div>
+          <div class="res-val" id="resG2">89.2209</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: KOLLOKATSIYALAR ASSOTSIATSIYA JADVALI -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <h2><i class="fa-solid fa-list-ol"></i> 3. Korpusdagi Kollokatsiyalar Assotsiatsiya Ko‘rsatkichlari</h2>
+          <p>Barcha hisoblangan birikmalar uchun kirish sonlari (O11, R1, C1, N) va natijaviy mezonlar</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <label for="thresholdSelect" style="font-size:0.85rem; font-weight:600;">Min. chastota (f):</label>
+          <select id="thresholdSelect" onchange="loadAssocMeasures()" style="padding:6px 10px; border-radius:6px; border:1px solid var(--border);">
+            <option value="2">f ≥ 2</option>
+            <option value="3" selected>f ≥ 3 (Standart)</option>
+            <option value="5">f ≥ 5</option>
+          </select>
+          <input type="text" id="assocSearch" placeholder="So‘z qidiruvi..." onkeydown="if(event.key==='Enter') loadAssocMeasures()" style="padding:6px 10px; border-radius:6px; border:1px solid var(--border);">
+          <button class="btn btn-secondary" onclick="loadAssocMeasures()"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table id="assocTable">
+          <thead>
+            <tr>
+              <th>Birlik (Node + Collocate)</th>
+              <th>Tili</th>
+              <th class="num">O11 (f)</th>
+              <th class="num">R1 (f₁)</th>
+              <th class="num">C1 (f₂)</th>
+              <th class="num">N (Korpus)</th>
+              <th class="num">E11</th>
+              <th class="num">MI</th>
+              <th class="num">t-score</th>
+              <th class="num">Log-Likelihood (G²)</th>
+              <th class="num">Norm / 10k</th>
+            </tr>
+          </thead>
+          <tbody id="assocBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+        <span id="assocCountLabel" style="font-size:0.85rem; color:var(--text-muted);">Yuklanmoqda...</span>
+        <div>
+          <button class="btn btn-secondary" onclick="prevAssocPage()"><i class="fa-solid fa-chevron-left"></i></button>
+          <span id="assocPageLabel" style="font-size:0.85rem; font-weight:600; margin:0 8px;">1 / 1</span>
+          <button class="btn btn-secondary" onclick="nextAssocPage()"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: III BOB STATISTIK JADVALLARI (FAQAT TASDIQLANGANLARDAN) -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <h2><i class="fa-solid fa-table"></i> 4. III Bob Statistik Jadvallari (Faqat Tasdiqlangan Annotatsiyalardan)</h2>
+          <p>Har bir foiz yonida uning umumiy soni (denominator $n = \dots$) qat'iy ko‘rsatilgan</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-primary" onclick="exportData('csv')"><i class="fa-solid fa-file-csv"></i> CSV Eksport</button>
+          <button class="btn btn-secondary" onclick="exportData('json')"><i class="fa-solid fa-file-code"></i> JSON Snapshot Eksport</button>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
+          3.1-Jadval. Struktur Qoliplar Taqsimoti (Asarlar va Yo‘nalishlar Kesimida)
+        </h3>
+        <table id="table31">
+          <thead>
+            <tr>
+              <th>Struktur Qolip</th>
+              <th class="num">Cho‘lpon (UZ ➔ EN)</th>
+              <th class="num">Hemingway (EN ➔ UZ)</th>
+              <th class="num">Jami (n)</th>
+            </tr>
+          </thead>
+          <tbody id="body31"></tbody>
+        </table>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
+          3.3-Jadval. Tarjima Ekvivalentligi Turlari Taqsimoti
+        </h3>
+        <table id="table33">
+          <thead>
+            <tr>
+              <th>Ekvivalentlik Turi</th>
+              <th class="num">Cho‘lpon (UZ ➔ EN)</th>
+              <th class="num">Hemingway (EN ➔ UZ)</th>
+              <th class="num">Jami (n)</th>
+            </tr>
+          </thead>
+          <tbody id="body33"></tbody>
+        </table>
+      </div>
+
+      <div>
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
+          3.4-Jadval. Tarjima Strategiyalari Taqsimoti
+        </h3>
+        <table id="table34">
+          <thead>
+            <tr>
+              <th>Tarjima Strategiyasi</th>
+              <th class="num">Cho‘lpon (UZ ➔ EN)</th>
+              <th class="num">Hemingway (EN ➔ UZ)</th>
+              <th class="num">Jami (n)</th>
+            </tr>
+          </thead>
+          <tbody id="body34"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentAssocPage = 1;
+    let totalAssocPages = 1;
+
+    async function loadCorpusSizes() {
+      try {
+        const res = await fetch('/api/stage8/corpus-sizes');
+        const data = await res.json();
+        if (data.success) {
+          const tbody = document.getElementById('corpusSizeBody');
+          tbody.innerHTML = "";
+          data.texts.forEach(t => {
+            const tr = document.createElement('tr');
+            const isActive = t.total_tokens > 0;
+            tr.innerHTML = `
+              <td><b>${t.title}</b> (${t.book_id})</td>
+              <td>${t.role === 'source' ? 'Asl nusxa' : 'Tarjima'}</td>
+              <td><span class="badge ${t.language==='uz'?'badge-primary':'badge-warning'}">${t.language.toUpperCase()}</span></td>
+              <td class="num">${t.total_tokens.toLocaleString()}</td>
+              <td class="num">${t.total_types.toLocaleString()}</td>
+              <td class="num">${t.type_token_ratio}</td>
+              <td class="num">${t.hapax_legomena.toLocaleString()}</td>
+              <td>${isActive ? '<span class="badge badge-success">Faol</span>' : '<span class="badge badge-warning">Karantinda (0 matn)</span>'}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function loadAssocMeasures() {
+      const min_f = document.getElementById('thresholdSelect').value;
+      const q = document.getElementById('assocSearch').value;
+      try {
+        const res = await fetch(`/api/stage8/association-measures?min_f=${min_f}&q=${encodeURIComponent(q)}&page=${currentAssocPage}&limit=20`);
+        const data = await res.json();
+        if (data.success) {
+          totalAssocPages = data.total_pages;
+          document.getElementById('assocCountLabel').innerText = `Jami ${data.total} ta birikma topildi (f ≥ ${min_f})`;
+          document.getElementById('assocPageLabel').innerText = `${data.page} / ${data.total_pages}`;
+
+          const tbody = document.getElementById('assocBody');
+          tbody.innerHTML = "";
+          data.results.forEach(r => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td><b>${r.node_token} ${r.collocate_token}</b></td>
+              <td><span class="badge ${r.language==='uz'?'badge-primary':'badge-warning'}">${r.language.toUpperCase()}</span></td>
+              <td class="num" style="font-weight:700;">${r.o11}</td>
+              <td class="num">${r.r1}</td>
+              <td class="num">${r.c1}</td>
+              <td class="num">${r.corpus_size_n.toLocaleString()}</td>
+              <td class="num">${r.expected_e11}</td>
+              <td class="num" style="color:var(--primary); font-weight:600;">${r.mi_score}</td>
+              <td class="num">${r.t_score}</td>
+              <td class="num" style="font-weight:700; color:#15803d;">${r.log_likelihood_g2}</td>
+              <td class="num">${r.normalized_freq_per_10k}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function prevAssocPage() {
+      if (currentAssocPage > 1) {
+        currentAssocPage--;
+        loadAssocMeasures();
+      }
+    }
+
+    function nextAssocPage() {
+      if (currentAssocPage < totalAssocPages) {
+        currentAssocPage++;
+        loadAssocMeasures();
+      }
+    }
+
+    async function runCalculator() {
+      const o11 = parseFloat(document.getElementById('calcO11').value);
+      const r1 = parseFloat(document.getElementById('calcR1').value);
+      const c1 = parseFloat(document.getElementById('calcC1').value);
+      const N = parseFloat(document.getElementById('calcN').value);
+
+      try {
+        const res = await fetch('/api/stage8/calculator', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ o11, r1, c1, N })
+        });
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('resE11').innerText = data.expected_frequencies.e11;
+          document.getElementById('resMI').innerText = data.metrics.mi_score;
+          document.getElementById('resT').innerText = data.metrics.t_score;
+          document.getElementById('resG2').innerText = data.metrics.log_likelihood_g2;
+        } else {
+          alert("Xatolik: " + data.error);
+        }
+      } catch (err) {
+        alert("Server bilan aloqa uzildi: " + err.message);
+      }
+    }
+
+    function loadHandComputedExample() {
+      document.getElementById('calcO11').value = 10;
+      document.getElementById('calcR1').value = 50;
+      document.getElementById('calcC1').value = 100;
+      document.getElementById('calcN').value = 100000;
+      runCalculator();
+    }
+
+    async function loadChapter3Tables() {
+      try {
+        const res = await fetch('/api/stage8/chapter3-tables');
+        const data = await res.json();
+        if (data.success && data.tables) {
+          // Table 3.1
+          const b31 = document.getElementById('body31');
+          b31.innerHTML = "";
+          (data.tables.table_3_1_patterns || []).forEach(r => {
+            b31.innerHTML += `
+              <tr>
+                <td><b>${r.category}</b></td>
+                <td class="num">${r.cholpon_repr}</td>
+                <td class="num">${r.hemingway_repr}</td>
+                <td class="num" style="font-weight:700;">${r.total_repr}</td>
+              </tr>
+            `;
+          });
+
+          // Table 3.3
+          const b33 = document.getElementById('body33');
+          b33.innerHTML = "";
+          (data.tables.table_3_3_equivalence || []).forEach(r => {
+            b33.innerHTML += `
+              <tr>
+                <td><b>${r.category}</b></td>
+                <td class="num">${r.cholpon_repr}</td>
+                <td class="num">${r.hemingway_repr}</td>
+                <td class="num" style="font-weight:700;">${r.total_repr}</td>
+              </tr>
+            `;
+          });
+
+          // Table 3.4
+          const b34 = document.getElementById('body34');
+          b34.innerHTML = "";
+          (data.tables.table_3_4_strategies || []).forEach(r => {
+            b34.innerHTML += `
+              <tr>
+                <td><b>${r.category}</b></td>
+                <td class="num">${r.cholpon_repr}</td>
+                <td class="num">${r.hemingway_repr}</td>
+                <td class="num" style="font-weight:700;">${r.total_repr}</td>
+              </tr>
+            `;
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function exportData(format) {
+      window.location.href = `/api/stage8/export?format=${format}`;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadCorpusSizes();
+      loadAssocMeasures();
+      loadChapter3Tables();
+    });
+  </script>
+</body>
+</html>

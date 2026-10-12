@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dizayn Tizimi va Komponentlar Galereyasi | TILCOR</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/design-tokens.css">
+  <style>
+    .gallery-container {
+      max-width: 1200px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--tilcor-primary);
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--tilcor-border);
+    }
+    .card {
+      background: var(--tilcor-surface);
+      border: 1px solid var(--tilcor-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .swatch {
+      border: 1px solid var(--tilcor-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: white;
+    }
+    .swatch-color { height: 70px; }
+    .swatch-info { padding: 10px; font-size: 0.8rem; }
+    .swatch-info strong { display: block; margin-bottom: 2px; }
+    
+    .typo-sample {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      margin: 12px 0;
+      padding: 14px;
+      background: var(--tilcor-surface-alt);
+      border-radius: var(--radius-md);
+    }
+    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+    .btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .btn-primary { background: var(--tilcor-primary); color: white; }
+    .btn-primary:hover { background: var(--tilcor-primary-hover); }
+    .btn-secondary { background: var(--tilcor-uzbek); color: white; }
+    .btn-outline { background: white; border-color: var(--tilcor-border-strong); color: var(--tilcor-text); }
+    .btn-danger { background: #DC2626; color: white; }
+    
+    .kwic-box {
+      font-family: var(--font-ui);
+      background: white;
+      border: 1px solid var(--tilcor-border);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .kwic-left { width: 42%; text-align: right; color: var(--tilcor-text-muted); }
+    .kwic-node { width: 16%; text-align: center; font-weight: 700; color: var(--tilcor-primary); background: #FEF3C7; padding: 2px 6px; border-radius: 4px; }
+    .kwic-right { width: 42%; text-align: left; color: var(--tilcor-text); }
+
+    .pair-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--tilcor-border);
+      border-radius: var(--radius-md);
+      margin-top: 10px;
+    }
+    .pair-col { padding: 12px; border-radius: var(--radius-md); font-size: 0.9rem; }
+    .pair-uz { background: var(--tilcor-uzbek-bg); border-left: 4px solid var(--tilcor-uzbek); }
+    .pair-en { background: var(--tilcor-english-bg); border-left: 4px solid var(--tilcor-english); }
+  </style>
+</head>
+<body>
+
+  <header class="tilcor-header">
+    <div class="brand">
+      <h1>TILCOR — O‘zbek–ingliz parallel korpusi</h1>
+      <p>Kollokatsiyalar tarjimasi tadqiqoti uchun · Dizayn Tizimi (Komponentlar Galereyasi)</p>
+    </div>
+    <nav class="tilcor-nav">
+      <a href="index.html">Bosh sahifa</a>
+      <a href="kwic_concordance.html">Qidiruv & KWIC</a>
+      <a href="annotation_workspace.html">Annotatsiya</a>
+      <a href="methodology_statistics.html">Statistika</a>
+      <a href="sources_rights.html">Manbalar va huquqlar</a>
+      <a href="component_gallery.html" class="active">Komponentlar</a>
+    </nav>
+  </header>
+
+  <div class="gallery-container">
+    <h2 style="font-size:1.4rem; color:var(--tilcor-primary); margin-bottom:8px;">Akademik Dizayn Tizimi (Design System & Tokens)</h2>
+    <p style="color:var(--tilcor-text-muted); font-size:0.9rem;">
+      Dissertatsiya himoyasi uchun maxsus ishlab chiqilgan rasmiy universitet raqamli kutubxonasi uslubi. WCAG AA kontrast standartlariga mos, soxta animatsiyalarsiz.
+    </p>
+
+    <!-- Color Tokens -->
+    <h3 class="section-title">1. Ranglar Palitrasi (Colour Tokens)</h3>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1F2A5A;"></div>
+        <div class="swatch-info"><strong>Primary Deep Indigo</strong>#1F2A5A (Asosiy brend)</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0F766E;"></div>
+        <div class="swatch-info"><strong>Uzbek Highlight Teal</strong>#0F766E (O‘zbek matni)</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#B45309;"></div>
+        <div class="swatch-info"><strong>English Highlight Amber</strong>#B45309 (Ingliz matni)</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#F8FAFC; border-bottom:1px solid #E2E8F0;"></div>
+        <div class="swatch-info"><strong>Neutral Background</strong>#F8FAFC (Fon)</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0F172A;"></div>
+        <div class="swatch-info"><strong>Body Text</strong>#0F172A (Yuqori kontrast)</div>
+      </div>
+    </div>
+
+    <!-- Typography & Uzbek Glyph Support -->
+    <h3 class="section-title">2. Tipografika va O‘zbekcha Harflar Nazorati (Typography)</h3>
+    <div class="card">
+      <p style="font-size:0.85rem; color:var(--tilcor-text-muted); margin-bottom:10px;">
+        O‘zbek lotin alifbosi maxsus harflari (o‘, g‘, ’) to‘liq sinovdan o‘tkazilgan:
+      </p>
+      
+      <div class="typo-sample" style="font-family:var(--font-ui);">
+        <strong>Inter (UI Shrifti):</strong> O‘zbekiston, g‘alaba, ta’lim, ma’naviyat, ko‘ngil, qorako‘l, o‘rganish.
+      </div>
+      <div class="typo-sample" style="font-family:var(--font-serif);">
+        <strong>Noto Serif (Matnlar Shrifti):</strong> «O‘zbekiston, g‘alaba, ta’lim» — Abdulla Qodiriy va Abdulhamid Cho‘lpon merosi.
+      </div>
+      <div class="typo-sample" style="font-family:var(--font-mono); font-size:0.95rem;">
+        <strong>Monospace (Kod & Formula):</strong> U+02BB (ʻ) vs U+02BC (ʼ): "Oʻzbekiston", "taʼlim", f(x) = MI(w1, w2)
+      </div>
+    </div>
+
+    <!-- Status Badges -->
+    <h3 class="section-title">3. Holat Belgilari (Status Badges)</h3>
+    <div class="card">
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <span class="badge badge-auto">⚙️ avtomatik</span>
+        <span class="badge badge-review">⏳ ko‘rib chiqilmoqda</span>
+        <span class="badge badge-confirmed">✓ tasdiqlangan</span>
+        <span class="badge badge-excluded">✕ chiqarilgan / karantin</span>
+      </div>
+    </div>
+
+    <!-- Buttons & Actions -->
+    <h3 class="section-title">4. Tugmalar (Buttons & Component States)</h3>
+    <div class="card">
+      <div class="btn-group">
+        <button class="btn btn-primary">Asosiy Harakat (Primary)</button>
+        <button class="btn btn-secondary">O‘zbekcha Tahlil (Teal)</button>
+        <button class="btn btn-outline">Filtr / Tozalash (Outline)</button>
+        <button class="btn btn-danger">Bekor qilish / O‘chirish</button>
+      </div>
+    </div>
+
+    <!-- KWIC & Parallel Pair Components -->
+    <h3 class="section-title">5. KWIC Konkordans Satri va Parallel Juftlik Kartasi</h3>
+    <div class="card">
+      <div class="kwic-box">
+        <div class="kwic-left">...qish ichi</div>
+        <div class="kwic-node">yuraklaring</div>
+        <div class="kwic-right">g‘ash bo‘lib yurmasin... (PDF 5-bet)</div>
+      </div>
+
+      <div class="pair-card">
+        <div class="pair-col pair-uz">
+          <strong>Asl nusxa (UZ):</strong><br>
+          Qish ichi yuraklaring g‘ash bo‘lib, bir og‘iz so‘z kutib o‘tirmanglar.
+        </div>
+        <div class="pair-col pair-en">
+          <strong>Tarjima (EN):</strong><br>
+          Do not sit through the winter with your hearts heavy, waiting for a single word.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,154 @@
+{
+  "created_at": "2026-10-12T10:02:08.929088",
+  "source_directory": "C:\\Users\\user\\Desktop\\tarjimon",
+  "backup_directory": "C:\\Users\\user\\Desktop\\tarjimon\\backups\\backup_20261012_100208",
+  "files": [
+    {
+      "rel_path": "index.html",
+      "size": 120181,
+      "sha256": "2a307527ae046cf9a29100c00b7cb4d0f62095212dca12b90560eab1ebaf3676"
+    },
+    {
+      "rel_path": "server.py",
+      "size": 70122,
+      "sha256": "6f1e4a1a0fc2dbcfaa4ce66fd73cc07bfa55fe0e6def722c39fc375ed87eaa53"
+    },
+    {
+      "rel_path": "css\\styles.css",
+      "size": 2472,
+      "sha256": "1eecb76d66b1580214f584ed87939385e8c82246f2817c6914f7ca6c68a91687"
+    },
+    {
+      "rel_path": "data\\collocations_full.json",
+      "size": 8998563,
+      "sha256": "cc0e068f2a7e2d83ed4ff045c91a17ab76e22f73e6c9a9241902be2f17bea639"
+    },
+    {
+      "rel_path": "data\\corpus.db",
+      "size": 3604480,
+      "sha256": "edaa9b128e2366d0cd1cd52a2cb6f6d021bd2b21f23687cfa415c80434caa536"
+    },
+    {
+      "rel_path": "data\\dictionary.json",
+      "size": 4859922,
+      "sha256": "037c7630eb4adefd3a1a7b1b30a320c33d8863f5e019f059c458f8ac8b1d857c"
+    },
+    {
+      "rel_path": "data\\full_corpus.json",
+      "size": 4145265,
+      "sha256": "fa1abfaa1d833b92156b9b335e4f6e752936f4157160ed4a4cfa4f241b5aeebc"
+    },
+    {
+      "rel_path": "js\\app.js",
+      "size": 12145,
+      "sha256": "c04ac733d136ec5ef4154372e36b8c06a41eab132a4570311bf7bfcb7c139017"
+    },
+    {
+      "rel_path": "js\\charts.js",
+      "size": 5224,
+      "sha256": "94401b03fe7080b90a9c34a03ed43bde30b7dd7b34e93f79bf2da05a1dd1ba9b"
+    },
+    {
+      "rel_path": "js\\checker.js",
+      "size": 32784,
+      "sha256": "f7329f188b95ecb5eca7e90481c879b17f79a22236077f9dbcdbcab519680263"
+    },
+    {
+      "rel_path": "js\\collocations.js",
+      "size": 67396,
+      "sha256": "976edddd63921b6a83782a6b794adeb1e4d743305a3d5841b6deac662015d48e"
+    },
+    {
+      "rel_path": "js\\collocations_list.js",
+      "size": 2401838,
+      "sha256": "89166f77f19fdfb636ce7b4fabb65eab8111967cc4c46820aeb2bf8b5f865805"
+    },
+    {
+      "rel_path": "js\\corpus.js",
+      "size": 14460,
+      "sha256": "34ca6683be04afefc9a3a3ae4c8d127b175091a00db2723827dce63b444cfe70"
+    },
+    {
+      "rel_path": "js\\data.js",
+      "size": 53047,
+      "sha256": "e57636750dc57e71db9defcf70a511ebc7199db7d3cc309d61a451603b631830"
+    },
+    {
+      "rel_path": "js\\dictionary.js",
+      "size": 9567,
+      "sha256": "2228cce2698d9e4b270ea907c192233547839fe6e7d8678592acfc4530e21efd"
+    },
+    {
+      "rel_path": "js\\phd_hub.js",
+      "size": 58591,
+      "sha256": "4ab1121718cc8ac60a167c262b70671826e97e677f4c7fd2fe2fd56224797005"
+    },
+    {
+      "rel_path": "js\\translator.js",
+      "size": 17440,
+      "sha256": "3c2091f450659bcf0da8f6431752306eac0b88c8c44dfbdbbe1ab2eef11a6f3a"
+    }
+  ],
+  "source_pdfs": [
+    {
+      "path": "C:\\Users\\user\\Downloads\\Telegram Desktop\\cholpon-kecha-va-kunduz.pdf",
+      "filename": "cholpon-kecha-va-kunduz.pdf",
+      "size": 840434,
+      "sha256": "b07ed5e50ac9921caae61381d50c80e573e92647606cde14881f47b4ca1d6d64"
+    },
+    {
+      "path": "C:\\Users\\user\\Downloads\\Telegram Desktop\\night-and-day-a-novel-9781644690482_compress-pages.pdf",
+      "filename": "night-and-day-a-novel-9781644690482_compress-pages.pdf",
+      "size": 1564140,
+      "sha256": "b8ccf054e56d2b490c24ffb2267e5d4c827ca6b476811c2ebb9c21eb544d12cb"
+    },
+    {
+      "path": "C:\\Users\\user\\Downloads\\Telegram Desktop\\Chol va dengiz ( Ernst).pdf",
+      "filename": "Chol va dengiz ( Ernst).pdf",
+      "size": 629981,
+      "sha256": "dc0d4dd94e37c9a508a703c8099511f1194aaf1c4e600f48399ce632cec8ae00"
+    },
+    {
+      "path": "C:\\Users\\user\\Downloads\\Telegram Desktop\\oldmansea.pdf",
+      "filename": "oldmansea.pdf",
+      "size": 380238,
+      "sha256": "0ad1d820761a5aca9df52c22ea1cfc4ca5dad64923f51270dbe8f106f3817eef"
+    },
+    {
+      "path": "C:\\Users\\user\\Downloads\\Telegram Desktop\\inglizcha-ozbekcha_lugat.pdf",
+      "filename": "inglizcha-ozbekcha_lugat.pdf",
+      "size": 18283466,
+      "sha256": "3827a9e2d0002f3987861ed052dfd0e7a425ec72556fa5d7147cf26f350ce962"
+    },
+    {
+      "path": "C:\\Users\\user\\Downloads\\80-000-dictionary.pdf",
+      "filename": "80-000-dictionary.pdf",
+      "size": 37760172,
+      "sha256": "af796f8617a324d5e96816248f98ef6de9c53e8562d0167d201c1fcc4f72568e"
+    },
+    {
+      "path": "C:\\Users\\user\\Downloads\\Collocations in Use Intermediate [www.languagecentre.ir].pdf",
+      "filename": "Collocations in Use Intermediate [www.languagecentre.ir].pdf",
+      "size": 20051350,
+      "sha256": "670c7dd50c490d724ed5ba18c63da48057addfa73f0c6572a367a45a449fd39f"
+    },
+    {
+      "path": "C:\\Users\\user\\Downloads\\1000-english-collocations-ebook.pdf",
+      "filename": "1000-english-collocations-ebook.pdf",
+      "size": 1350014,
+      "sha256": "4d7cb27d215f9d0d1b9a11968462a52b69d161874045de49f966c06161ab9151"
+    },
+    {
+      "path": "C:\\Users\\user\\Downloads\\English Collocation in Use 2nd Edition-Advanced.pdf",
+      "filename": "English Collocation in Use 2nd Edition-Advanced.pdf",
+      "size": 3283976,
+      "sha256": "9a445cad809dbdd975e16bf28f99d5755d537a3592bb3660119e37708318c4ff"
+    },
+    {
+      "path": "C:\\Users\\user\\Downloads\\IELTS-academic-collocations-list.pdf",
+      "filename": "IELTS-academic-collocations-list.pdf",
+      "size": 716891,
+      "sha256": "80da9a050982dd6d13258413bb059c18160173c376c2eb7c3e9867a1781f96ce"
+    }
+  ]
+}

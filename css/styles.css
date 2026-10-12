@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+    font-family: var(--font-sans);
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Custom Highlight in Corpus Sentences */
+.colloc-uz {
+    background-color: rgba(99, 102, 241, 0.2);
+    color: #4f46e5;
+    font-weight: 700;
+    padding: 0 4px;
+    border-radius: 4px;
+    border-bottom: 2px solid #6366f1;
+}
+
+.dark .colloc-uz {
+    background-color: rgba(99, 102, 241, 0.35);
+    color: #a5b4fc;
+    border-bottom-color: #818cf8;
+}
+
+.colloc-en {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #059669;
+    font-weight: 700;
+    padding: 0 4px;
+    border-radius: 4px;
+    border-bottom: 2px solid #10b981;
+}
+
+.dark .colloc-en {
+    background-color: rgba(16, 185, 129, 0.35);
+    color: #6ee7b7;
+    border-bottom-color: #34d399;
+}
+
+/* Navigation active tab style */
+.nav-active {
+    color: #4f46e5 !important;
+    background-color: rgba(99, 102, 241, 0.08);
+    border-bottom: 2px solid #4f46e5;
+}
+
+.dark .nav-active {
+    color: #818cf8 !important;
+    background-color: rgba(99, 102, 241, 0.15);
+    border-bottom: 2px solid #818cf8;
+}
+
+/* Glassmorphism */
+.glass {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Print Styles for Research Paper / Dissertation */
+@media print {
+    header, nav, footer, #themeToggleBtn, .no-print, button {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+        font-size: 12pt;
+    }
+
+    .tab-view {
+        display: block !important;
+    }
+
+    #view-home, #view-corpus, #view-collocations, #view-checker, #view-analytics {
+        display: none !important;
+    }
+
+    #view-chapters {
+        display: block !important;
+    }
+
+    #chapterContentContainer {
+        border: none !important;
+        box-shadow: none !important;
+    }
+}

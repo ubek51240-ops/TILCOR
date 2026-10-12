@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TILCOR v2.0 — Lingvistik Qidiruv, KWIC va Eksport (Stage 9)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-hover: #1e40af;
+      --accent: #0284c7;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --node-bg: #fef08a;
+      --node-border: #eab308;
+      --equiv-bg: #bfdbfe;
+      --success: #15803d;
+      --warning: #b45309;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 80px;
+    }
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .header-title h1 { font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+    .header-title p { font-size: 0.82rem; color: #94a3b8; }
+    .header-actions { display: flex; gap: 12px; align-items: center; }
+    .nav-btn {
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.22); }
+    .container { max-width: 1440px; margin: 24px auto; padding: 0 20px; }
+
+    /* Search & Filter Bar */
+    .filter-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .search-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .search-input-box {
+      flex: 1;
+      min-width: 280px;
+      position: relative;
+    }
+    .search-input-box input {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      background: #f8fafc;
+    }
+    .search-input-box i {
+      position: absolute;
+      left: 14px;
+      top: 13px;
+      color: var(--text-muted);
+    }
+    .filter-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    select, button {
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 0.88rem;
+      cursor: pointer;
+      background: white;
+    }
+    .btn-primary { background: var(--primary); color: white; border: none; font-weight: 600; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: #f8fafc; color: var(--text); }
+    .btn-secondary:hover { background: #f1f5f9; }
+
+    /* Performance badge */
+    .perf-badge {
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-weight: 600;
+      background: #dcfce7;
+      color: #166534;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* KWIC Table Styling */
+    .kwic-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .kwic-header {
+      padding: 14px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .view-mode-tabs {
+      display: flex;
+      gap: 6px;
+      background: #e2e8f0;
+      padding: 3px;
+      border-radius: 8px;
+    }
+    .tab-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: #475569;
+    }
+    .tab-btn.active {
+      background: white;
+      color: var(--primary);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    /* Centred KWIC Table */
+    .kwic-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: inherit;
+    }
+    .kwic-table th {
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      color: #475569;
+    }
+    .kwic-table td {
+      padding: 10px 14px;
+      font-size: 0.92rem;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .kwic-table tr:hover { background: #fcfcfc; }
+    .kwic-left {
+      text-align: right;
+      width: 42%;
+      color: #475569;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .kwic-node {
+      text-align: center;
+      width: 16%;
+      font-weight: 700;
+      background: var(--node-bg);
+      color: #854d0e;
+      border-radius: 4px;
+      padding: 4px 8px;
+    }
+    .kwic-right {
+      text-align: left;
+      width: 42%;
+      color: #475569;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .kwic-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Parallel View */
+    .parallel-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+      gap: 24px;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .parallel-source { border-right: 1px solid var(--border); padding-right: 16px; background: #fafaf9; }
+    .parallel-target { padding-left: 8px; }
+    .mark-source {
+      background: var(--node-bg);
+      border-bottom: 2px solid var(--node-border);
+      font-weight: 600;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+    .mark-target {
+      background: var(--equiv-bg);
+      border-bottom: 2px solid #3b82f6;
+      font-weight: 600;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    .badge { padding: 3px 8px; border-radius: 9999px; font-size: 0.72rem; font-weight: 600; }
+    .badge-primary { background: #dbeafe; color: #1e40af; }
+    .badge-uz { background: #fef3c7; color: #92400e; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-title">
+      <h1><i class="fa-solid fa-magnifying-glass-chart"></i> TILCOR v2.0 — Lingvistik Qidiruv va KWIC (Stage 9)</h1>
+      <p>PhD Ilmiy Tadqiqoti · 2.3-bo‘lim: Konkordans, Apostrofga Sezgirlik va To‘liq Eksport</p>
+    </div>
+    <div class="header-actions">
+      <a href="methodology_statistics.html" class="nav-btn"><i class="fa-solid fa-chart-line"></i> Statistika va Formulalar</a>
+      <a href="annotation_workspace.html" class="nav-btn"><i class="fa-solid fa-layer-group"></i> Annotatsiya Ish Joyi</a>
+      <a href="index.html" class="nav-btn"><i class="fa-solid fa-arrow-left"></i> Bosh sahifa</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Filter Card -->
+    <div class="filter-card">
+      <div class="search-row">
+        <div class="search-input-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Qidiruv so‘zi yoki birikma (masalan: yurak, old man, baliq, ko'ngil)..." value="yurak" onkeydown="if(event.key==='Enter') executeSearch()">
+        </div>
+        <button class="btn-primary" onclick="executeSearch()"><i class="fa-solid fa-magnifying-glass"></i> Qidirish</button>
+        <span class="perf-badge" id="perfBadge"><i class="fa-solid fa-bolt"></i> So‘rov vaqti: 0 ms</span>
+      </div>
+
+      <div class="filter-row">
+        <label for="bookSelect" style="font-size:0.85rem; font-weight:600;"><i class="fa-solid fa-book"></i> Asar:</label>
+        <select id="bookSelect" onchange="executeSearch()">
+          <option value="all">Barcha asarlar</option>
+          <option value="book-cholpon-uz">Cho‘lpon: «Kecha va kunduz» (UZ)</option>
+          <option value="book-cholpon-en">Cho‘lpon: «Night and Day» (EN)</option>
+          <option value="book-hemingway-en">Hemingway: «The Old Man and the Sea» (EN)</option>
+          <option value="book-hemingway-uz">Hemingway: «Chol va dengiz» (UZ)</option>
+          <option value="book-stevenson-en">Stevenson: «Treasure Island» (EN)</option>
+        </select>
+
+        <label for="windowSelect" style="font-size:0.85rem; font-weight:600;">KWIC kontekst (so‘z):</label>
+        <select id="windowSelect" onchange="executeSearch()">
+          <option value="3">±3 ta so‘z</option>
+          <option value="6" selected>±6 ta so‘z (Standart)</option>
+          <option value="10">±10 ta so‘z</option>
+        </select>
+
+        <label for="sortSelect" style="font-size:0.85rem; font-weight:600;">Saralash:</label>
+        <select id="sortSelect" onchange="executeSearch()">
+          <option value="position">Matndagi tartibi</option>
+          <option value="left">Chap so‘z bo‘yicha (A-Z)</option>
+          <option value="right">O‘ng so‘z bo‘yicha (A-Z)</option>
+        </select>
+
+        <div style="margin-left:auto; display:flex; gap:8px;">
+          <button class="btn-secondary" onclick="exportData('xlsx')"><i class="fa-solid fa-file-excel"></i> Excel (.xlsx) Eksport</button>
+          <button class="btn-secondary" onclick="exportData('csv')"><i class="fa-solid fa-file-csv"></i> CSV (BOM) Eksport</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- KWIC Results Card -->
+    <div class="kwic-card">
+      <div class="kwic-header">
+        <div>
+          <span style="font-weight:700; font-size:1rem;" id="resultsTitle">Qidiruv natijalari</span>
+          <span style="font-size:0.85rem; color:var(--text-muted); margin-left:10px;" id="countBadge">0 ta natija</span>
+        </div>
+        <div class="view-mode-tabs">
+          <button class="tab-btn active" id="tabKwic" onclick="switchView('kwic')"><i class="fa-solid fa-align-center"></i> KWIC Konkordans</button>
+          <button class="tab-btn" id="tabParallel" onclick="switchView('parallel')"><i class="fa-solid fa-columns"></i> Parallel Ko‘rinish</button>
+        </div>
+      </div>
+
+      <!-- Mode 1: Centred KWIC Table -->
+      <div id="kwicViewContainer" style="overflow-x:auto;">
+        <table class="kwic-table">
+          <thead>
+            <tr>
+              <th style="text-align:right;">Chap kontekst</th>
+              <th style="text-align:center;">Markaziy so‘z (Node)</th>
+              <th style="text-align:left;">O‘ng kontekst</th>
+              <th style="text-align:center;">Manba va Sahifa</th>
+            </tr>
+          </thead>
+          <tbody id="kwicTableBody">
+            <!-- Populated safely via DOM -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mode 2: Parallel View -->
+      <div id="parallelViewContainer" style="display:none;">
+        <div id="parallelListContainer">
+          <!-- Populated safely via DOM -->
+        </div>
+      </div>
+
+      <!-- Pagination Footer -->
+      <div style="padding:14px 20px; background:#f8fafc; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+        <span id="pageInfoLabel" style="font-size:0.85rem; color:var(--text-muted);">1 / 1</span>
+        <div>
+          <button class="btn-secondary" onclick="prevPage()"><i class="fa-solid fa-chevron-left"></i> Oldingi</button>
+          <button class="btn-secondary" onclick="nextPage()">Keyingi <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentMode = 'kwic';
+    let currentPage = 1;
+    let totalPages = 1;
+
+    function switchView(mode) {
+      currentMode = mode;
+      document.getElementById('tabKwic').className = `tab-btn ${mode === 'kwic' ? 'active' : ''}`;
+      document.getElementById('tabParallel').className = `tab-btn ${mode === 'parallel' ? 'active' : ''}`;
+
+      if (mode === 'kwic') {
+        document.getElementById('kwicViewContainer').style.display = 'block';
+        document.getElementById('parallelViewContainer').style.display = 'none';
+      } else {
+        document.getElementById('kwicViewContainer').style.display = 'none';
+        document.getElementById('parallelViewContainer').style.display = 'block';
+      }
+    }
+
+    async function executeSearch() {
+      const q = document.getElementById('searchInput').value.trim();
+      if (!q) return;
+
+      const book = document.getElementById('bookSelect').value;
+      const windowSize = document.getElementById('windowSelect').value;
+      const sortBy = document.getElementById('sortSelect').value;
+
+      try {
+        const res = await fetch(`/api/stage9/kwic?q=${encodeURIComponent(q)}&book=${book}&window=${windowSize}&sort_by=${sortBy}&page=${currentPage}&limit=50`);
+        const data = await res.json();
+        if (data.success) {
+          totalPages = data.total_pages;
+          document.getElementById('countBadge').innerText = `${data.total} ta natija`;
+          document.getElementById('pageInfoLabel').innerText = `${data.page} / ${data.total_pages}`;
+
+          // Performance badge
+          const perf = document.getElementById('perfBadge');
+          perf.innerHTML = `<i class="fa-solid fa-bolt"></i> So‘rov: ${data.response_time_ms} ms (Maqsad: &lt; 100 ms)`;
+          perf.style.background = data.is_within_target ? '#dcfce7' : '#fee2e2';
+          perf.style.color = data.is_within_target ? '#166534' : '#991b1b';
+
+          renderKwicTable(data.results);
+          renderParallelView(data.results);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Safe DOM rendering for KWIC (Prevents XSS)
+    function renderKwicTable(items) {
+      const tbody = document.getElementById('kwicTableBody');
+      tbody.innerHTML = "";
+
+      if (items.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="4" style="text-align:center; padding:30px; color:var(--text-muted);">Qidiruv bo‘yicha natija topilmadi.</td>`;
+        tbody.appendChild(tr);
+        return;
+      }
+
+      items.forEach(item => {
+        const tr = document.createElement('tr');
+
+        const tdLeft = document.createElement('td');
+        tdLeft.className = 'kwic-left';
+        tdLeft.textContent = item.left_context;
+
+        const tdNode = document.createElement('td');
+        tdNode.className = 'kwic-node';
+        tdNode.textContent = item.node_word;
+
+        const tdRight = document.createElement('td');
+        tdRight.className = 'kwic-right';
+        tdRight.textContent = item.right_context;
+
+        const tdMeta = document.createElement('td');
+        tdMeta.className = 'kwic-meta';
+        tdMeta.style.textAlign = 'center';
+        tdMeta.innerHTML = `
+          <div><b>${escapeText(item.book_title)}</b></div>
+          <div>PDF p. ${item.pdf_page_num}</div>
+        `;
+
+        tr.appendChild(tdLeft);
+        tr.appendChild(tdNode);
+        tr.appendChild(tdRight);
+        tr.appendChild(tdMeta);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderParallelView(items) {
+      const container = document.getElementById('parallelListContainer');
+      container.innerHTML = "";
+
+      if (items.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">Parallel natija topilmadi.</div>`;
+        return;
+      }
+
+      items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'parallel-row';
+
+        const srcCol = document.createElement('div');
+        srcCol.className = 'parallel-source';
+        srcCol.innerHTML = `
+          <div style="font-size:0.78rem; font-weight:700; color:#b45309; margin-bottom:4px;">
+            ASL MATN: ${escapeText(item.book_title)} · p. ${item.pdf_page_num}
+          </div>
+          <div>${escapeText(item.full_sentence)}</div>
+        `;
+
+        const tgtCol = document.createElement('div');
+        tgtCol.className = 'parallel-target';
+        tgtCol.innerHTML = `
+          <div style="font-size:0.78rem; font-weight:700; color:#1e40af; margin-bottom:4px;">
+            TARJIMA MATNI
+          </div>
+          <div>${escapeText(item.aligned_translation || '[Parallel tarjima segmenti ulanmagan]')}</div>
+        `;
+
+        div.appendChild(srcCol);
+        div.appendChild(tgtCol);
+        container.appendChild(div);
+      });
+    }
+
+    function escapeText(str) {
+      if (!str) return "";
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        executeSearch();
+      }
+    }
+
+    function nextPage() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        executeSearch();
+      }
+    }
+
+    function exportData(format) {
+      const q = document.getElementById('searchInput').value.trim();
+      const book = document.getElementById('bookSelect').value;
+      window.location.href = `/api/stage9/export?q=${encodeURIComponent(q)}&book=${book}&format=${format}`;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      executeSearch();
+    });
+  </script>
+</body>
+</html>

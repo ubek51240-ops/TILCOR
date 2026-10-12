@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manbalar va Huquqlar | TILCOR Parallel Korpusi</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1F2A5A;
+      --primary-light: #2D3E82;
+      --teal: #0F766E;
+      --teal-light: #CCFBF1;
+      --amber: #B45309;
+      --amber-light: #FEF3C7;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --danger: #DC2626;
+      --success: #16A34A;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid var(--teal);
+    }
+    .brand h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+    .brand p { font-size: 0.8rem; opacity: 0.85; }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 16px;
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: background 0.2s;
+    }
+    nav a:hover, nav a.active { background: rgba(255,255,255,0.22); }
+    .container {
+      max-width: 1200px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+    .hero-banner {
+      background: white;
+      border: 1px solid var(--border);
+      border-left: 6px solid var(--teal);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .hero-banner h2 { font-size: 1.35rem; color: var(--primary); margin-bottom: 8px; }
+    .legal-notice {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 14px;
+      font-size: 0.875rem;
+      color: #166534;
+      line-height: 1.6;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .passport-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-public { background: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; }
+    .badge-protected { background: #FEF3C7; color: #B45309; border: 1px solid #FCD34D; }
+    .badge-quarantined { background: #FEE2E2; color: #B91C1C; border: 1px solid #FCA5A5; }
+    .badge-permission { background: #E0E7FF; color: #4338CA; border: 1px solid #A5B4FC; }
+
+    .spec-table {
+      width: 100%;
+      font-size: 0.825rem;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+    .spec-table td {
+      padding: 5px 0;
+      border-bottom: 1px dashed #F1F5F9;
+    }
+    .spec-table td.label {
+      color: var(--text-muted);
+      width: 40%;
+    }
+    .spec-table td.value {
+      font-weight: 500;
+      color: var(--text);
+    }
+    .sha-code {
+      font-family: monospace;
+      font-size: 0.72rem;
+      background: #F1F5F9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      word-break: break-all;
+      display: block;
+      margin-top: 4px;
+    }
+    .card-actions {
+      margin-top: 10px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn {
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-outline { background: white; border-color: var(--border); color: var(--text); }
+    .btn-outline:hover { background: #F1F5F9; }
+
+    .security-section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .security-section h3 {
+      font-size: 1.15rem;
+      color: var(--primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .sec-item {
+      padding: 14px;
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .sec-item h4 { font-size: 0.9rem; color: var(--primary); margin-bottom: 6px; }
+    .sec-item p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+    .status-ok { color: var(--success); font-weight: 600; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(2px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal {
+      background: white;
+      border-radius: 16px;
+      max-width: 500px;
+      width: 90%;
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    .modal h3 { font-size: 1.2rem; color: var(--primary); margin-bottom: 12px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+    .form-group select, .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <h1>TILCOR — O‘zbek–ingliz parallel korpusi</h1>
+      <p>Kollokatsiyalar tarjimasi tadqiqoti uchun · Manbalar va Huquqlar</p>
+    </div>
+    <nav>
+      <a href="index.html">Bosh sahifa</a>
+      <a href="kwic_concordance.html">Qidiruv & KWIC</a>
+      <a href="annotation_workspace.html">Annotatsiya</a>
+      <a href="methodology_statistics.html">Statistika</a>
+      <a href="sources_rights.html" class="active">Manbalar va huquqlar</a>
+    </nav>
+  </header>
+
+  <div class="container">
+
+    <div class="hero-banner">
+      <h2>Manbalar va Mualliflik Huquqlari Pasporti</h2>
+      <p style="color:var(--text-muted); font-size:0.9rem;">
+        Korpusdagi barcha matnlar bibliografik manbalari Stage 4 bosqichida PDF sahifalari va SHA-256 xesh qiymatlari bo‘yicha to‘liq verifikatsiya qilingan.
+      </p>
+
+      <div class="legal-notice">
+        <strong>⚖️ Qonuniy Asos (Fair Use & Ilmiy Maqsadlar):</strong><br>
+        Ushbu korpus O‘zbekiston Respublikasi «Mualliflik huquqi va turdosh huquqlar to‘g‘risida»gi Qonunining 19-moddasi (Asarlardan ilmiy va ta'limiy maqsadlarda erkin foydalanish) hamda xalqaro <em>Fair Use</em> me'yorlariga muvofiq, faqat doktorlik dissertatsiyasi ilmiy tahlili uchun tuzilgan. Mualliflik huquqi bilan himoyalangan matnlar omma uchun faqat cheklangan qidiruv kontekstlarida aks ettiriladi va to‘liq nusxalash taqiqlanadi.
+      </div>
+    </div>
+
+    <!-- Texts Passport Grid -->
+    <h3 style="font-size:1.15rem; color:var(--primary); margin-bottom:16px;">📚 6 ta Matnning Bibliografik Pasporti</h3>
+    <div class="grid" id="passportGrid">
+      <div style="grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);">Yuklanmoqda...</div>
+    </div>
+
+    <!-- Security & Access Control Architecture -->
+    <div class="security-section">
+      <h3>🛡️ Kirish Huquqlari va Xavfsizlik Arxitekturasi (Stage 10)</h3>
+      <div class="sec-grid">
+        <div class="sec-item">
+          <h4>👤 Rolga Asoslangan Kirish (RBAC)</h4>
+          <p>
+            <strong>Admin (Tadqiqotchi):</strong> To‘liq kirish, annotatsiya, boshqaruv.<br>
+            <strong>Reviewer (Ilmiy rahbar):</strong> Ko‘rib chiqish, tasdiqlash, eksport.<br>
+            <strong>Guest (Mehmon / Kengash):</strong> Himoyalangan matnlarda 50 ta natija limiti, eksport bloklangan.
+          </p>
+        </div>
+        <div class="sec-item">
+          <h4>🔒 Himoyalangan Matn Rejimi</h4>
+          <p>
+            Himoyalangan asarlarda bir qidiruvda ko‘pi bilan 50 ta natija chiqadi. Asarni ketma-ket to‘liq tiklab olish (sequential browsing) texnik jihatdan bloklangan.
+          </p>
+        </div>
+        <div class="sec-item">
+          <h4>💾 Avtomatik Zaxira (Backup & Restore)</h4>
+          <p>
+            Har kuni SHA-256 nazorati bilan atomar SQLite nusxasi yaratiladi. Tiklash (restore) mexanizmi yaxlitlik tekshiruvi bilan sinovdan o‘tgan.
+          </p>
+        </div>
+        <div class="sec-item">
+          <h4>🛡️ Xavfsizlik Himoyalari</h4>
+          <p>
+            SQL parametrli so‘rovlari (100% inyeksiya himoyasi), CSRF tekshiruvi, XSS bartaraf etilgan DOM usullari, shaxsiy ma'lumotlarsiz audit logi.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal for Admin Licence Update -->
+  <div class="modal-overlay" id="licenceModal">
+    <div class="modal">
+      <h3>Litsenziya Holatini Yangilash</h3>
+      <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:14px;" id="modalTextTitle"></p>
+      <input type="hidden" id="modalTextId">
+      
+      <div class="form-group">
+        <label>Litsenziya holati:</label>
+        <select id="modalLicenceSelect">
+          <option value="public_domain">Ochiq mulk (Public Domain)</option>
+          <option value="protected">Himoyalangan (Protected)</option>
+          <option value="permission_granted">Ruxsat olingan (Permission Granted)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Asos yoki izoh (Permission Note):</label>
+        <textarea id="modalLicenceNote" rows="3" placeholder="Masalan: Muallif vafotiga 70 yildan oshgan yoki ruxsat xati mavjud"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal()">Bekor qilish</button>
+        <button class="btn btn-primary" onclick="submitLicenceUpdate()">Saqlash va Auditlash</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadTexts() {
+      try {
+        const res = await fetch('/api/stage10/texts-licences');
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error);
+
+        const container = document.getElementById('passportGrid');
+        container.innerHTML = '';
+
+        data.texts.forEach(t => {
+          let badgeClass = 'badge-protected';
+          let badgeLabel = 'Himoyalangan (Protected)';
+
+          if (t.licence_status === 'public_domain') {
+            badgeClass = 'badge-public';
+            badgeLabel = 'Ochiq mulk (Public Domain)';
+          } else if (t.licence_status === 'permission_granted') {
+            badgeClass = 'badge-permission';
+            badgeLabel = 'Ruxsat olingan (Permission Granted)';
+          } else if (t.processing_status === 'quarantined') {
+            badgeClass = 'badge-quarantined';
+            badgeLabel = 'Karantinda (Quarantined)';
+          }
+
+          const card = document.createElement('div');
+          card.className = 'passport-card';
+          card.innerHTML = `
+            <div>
+              <div class="card-head">
+                <div>
+                  <div class="card-title">${t.work_title}</div>
+                  <div style="font-size:0.8rem; color:var(--text-muted);">${t.work_author} (${t.orig_year})</div>
+                </div>
+                <span class="badge ${badgeClass}">${badgeLabel}</span>
+              </div>
+
+              <table class="spec-table">
+                <tr><td class="label">Nashr / Tarjima:</td><td class="value">${t.edition_title || '—'}</td></tr>
+                <tr><td class="label">Nashriyot & Yil:</td><td class="value">${t.publisher || '—'}, ${t.edition_year || '—'} (${t.place || '—'})</td></tr>
+                <tr><td class="label">Tarjimon:</td><td class="value">${t.translator || '— (Asl nusxa)'}</td></tr>
+                <tr><td class="label">Yo‘nalish / Til:</td><td class="value">${t.language.toUpperCase()} (${t.role === 'original' ? 'Original' : 'Tarjima'}) · ${t.direction}</td></tr>
+                <tr><td class="label">Bosma / PDF bet:</td><td class="value">${t.print_pages} bet / ${t.pdf_pages} bet</td></tr>
+                <tr><td class="label">Izoh:</td><td class="value">${t.permission_note || (t.licence_status === 'public_domain' ? 'Muallif huquqi muddati tugagan (>70 yil)' : 'Fair Use (Ilmiy tadqiqot maqsadida)')}</td></tr>
+              </table>
+
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
+                Manba fayl xeshi (SHA-256):
+                <span class="sha-code">${t.source_file_sha256}</span>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <span style="font-size:0.75rem; color:var(--text-muted); font-weight:500;">ID: ${t.text_id}</span>
+              <button class="btn btn-outline" onclick="openModal('${t.text_id}', '${t.work_title}', '${t.licence_status}', '${t.permission_note || ''}')">Holatni tahrirlash</button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById('passportGrid').innerHTML = `<div style="color:var(--danger); grid-column:1/-1;">Xatolik: ${err.message}</div>`;
+      }
+    }
+
+    function openModal(id, title, status, note) {
+      document.getElementById('modalTextId').value = id;
+      document.getElementById('modalTextTitle').textContent = `${title} (ID: ${id})`;
+      document.getElementById('modalLicenceSelect').value = status;
+      document.getElementById('modalLicenceNote').value = note;
+      document.getElementById('licenceModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('licenceModal').style.display = 'none';
+    }
+
+    async function submitLicenceUpdate() {
+      const textId = document.getElementById('modalTextId').value;
+      const status = document.getElementById('modalLicenceSelect').value;
+      const note = document.getElementById('modalLicenceNote').value;
+
+      try {
+        const res = await fetch('/api/stage10/update-licence', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text_id: textId,
+            licence_status: status,
+            permission_note: note
+          })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          alert('Xatolik: ' + (data.error || 'Amal bajarilmadi'));
+          return;
+        }
+        closeModal();
+        loadTexts();
+      } catch (err) {
+        alert('Server xatosi: ' + err.message);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadTexts);
+  </script>
+</body>
+</html>

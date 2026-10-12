@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TILCOR v2.0 — Tarjima Mutanosibligi va Annotatsiya Ish Joyi (Stage 7 Workspace)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-hover: #1e40af;
+      --accent: #0284c7;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --highlight: #fef08a;
+      --highlight-border: #facc15;
+      --success: #15803d;
+      --warning: #b45309;
+      --danger: #b91c1c;
+      --ai-badge: #7c3aed;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 60px;
+    }
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .header-title h1 { font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+    .header-title p { font-size: 0.82rem; color: #94a3b8; }
+    .header-actions { display: flex; gap: 12px; align-items: center; }
+    .nav-btn {
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.22); }
+    .nav-btn.active { background: var(--accent); border-color: var(--accent); }
+    .badge {
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-user { background: #334155; color: #f1f5f9; }
+    .badge-confirmed { background: #dcfce7; color: #166534; }
+    .badge-draft { background: #fef3c7; color: #92400e; }
+    .badge-unannotated { background: #f1f5f9; color: #475569; }
+
+    .container { max-width: 1440px; margin: 20px auto; padding: 0 20px; }
+
+    /* Top Stats Bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .stat-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; margin-top: 4px; }
+
+    /* Toolbar */
+    .toolbar {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .filter-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    select, input[type="text"] {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 0.88rem;
+      background: white;
+    }
+    button {
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 0.88rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .btn-primary { background: var(--primary); color: white; border: none; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-success { background: var(--success); color: white; border: none; }
+    .btn-success:hover { background: #166534; }
+    .btn-secondary { background: #f1f5f9; color: var(--text); }
+    .btn-secondary:hover { background: #e2e8f0; }
+
+    /* Main Workspace Layout */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+    }
+
+    /* Left Sidebar: Occurrences List */
+    .occ-list-pane {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 220px);
+    }
+    .occ-list-header {
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .occ-list-items {
+      overflow-y: auto;
+      flex: 1;
+    }
+    .occ-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .occ-item:hover { background: #f8fafc; }
+    .occ-item.active { background: #eff6ff; border-left: 4px solid var(--primary); }
+    .occ-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .occ-item-title { font-weight: 600; font-size: 0.88rem; color: #1e293b; }
+    .occ-item-sub { font-size: 0.78rem; color: var(--text-muted); }
+    .occ-item-badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; }
+
+    /* Center-Right: Annotation Workspace */
+    .editor-pane {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Bilingual Sentence View */
+    .bilingual-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      overflow: hidden;
+    }
+    .bilingual-header {
+      background: #f8fafc;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .bilingual-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .col-segment {
+      padding: 20px;
+      line-height: 1.8;
+      font-size: 1.05rem;
+    }
+    .col-source {
+      background: #fafaf9;
+      border-right: 1px solid var(--border);
+    }
+    .col-target {
+      background: white;
+    }
+    .col-title {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .col-title-source { color: #b45309; }
+    .col-title-target { color: #1e40af; }
+    .source-highlight {
+      background: #fef08a;
+      border-bottom: 2px solid #eab308;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .target-highlight {
+      background: #bfdbfe;
+      border-bottom: 2px solid #3b82f6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .target-selection-helper {
+      margin-top: 14px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border: 1px dashed var(--border);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Taxonomy Form */
+    .form-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-title h2 { font-size: 1.15rem; font-weight: 700; }
+    .form-title p { font-size: 0.82rem; color: var(--text-muted); }
+    .ai-toggle-box {
+      background: #f5f3ff;
+      border: 1px solid #ddd6fe;
+      padding: 8px 14px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #6d28d9;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+    label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #334155;
+    }
+    .field-hint { font-size: 0.75rem; color: var(--text-muted); }
+    textarea {
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-family: inherit;
+      font-size: 0.88rem;
+      resize: vertical;
+    }
+
+    .action-bar {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .shortcuts-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .kbd {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.75rem;
+    }
+
+    /* Modal for Matrix and Guidelines */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-card {
+      background: white;
+      border-radius: 12px;
+      max-width: 1200px;
+      width: 100%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .modal-header {
+      padding: 16px 24px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* Matrix Table */
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .matrix-table th, .matrix-table td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .matrix-table th {
+      background: #f8fafc;
+      font-weight: 600;
+    }
+    .matrix-table td.cell-click {
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .matrix-table td.cell-click:hover {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    .matrix-table td.has-data {
+      background: #eff6ff;
+      color: #1e40af;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Header -->
+  <header>
+    <div class="header-title">
+      <h1><i class="fa-solid fa-layer-group"></i> TILCOR v2.0 — Tarjima Mutanosibligi va Annotatsiya (Stage 7)</h1>
+      <p>PhD Ilmiy Tadqiqoti · III Bob: Kollokatsiyalar Tarjima Ekvivalentligi va Strategiyalari</p>
+    </div>
+    <div class="header-actions">
+      <span class="badge badge-user"><i class="fa-solid fa-user-tie"></i> Foydalanuvchi: <span id="currentUser">admin (Tadqiqotchi)</span></span>
+      <button class="nav-btn" onclick="openMatrixModal()"><i class="fa-solid fa-table-cells"></i> Tarjima Mutanosibligi Matritsasi</button>
+      <button class="nav-btn" onclick="openGuidelineModal()"><i class="fa-solid fa-book-bookmark"></i> Annotatsiya Yo‘riqnomasi</button>
+      <a href="index.html" class="nav-btn"><i class="fa-solid fa-arrow-left"></i> Bosh sahifa</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Stats Summary Bar -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-label">Jami Uchrashuvlar</div>
+        <div class="stat-val" id="statTotalOcc">469</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tasdiqlangan (Confirmed)</div>
+        <div class="stat-val" style="color: var(--success);" id="statConfirmed">2</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Qoralama (Draft)</div>
+        <div class="stat-val" style="color: var(--warning);" id="statDraft">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Kutilayotgan (Unannotated)</div>
+        <div class="stat-val" style="color: var(--text-muted);" id="statUnannotated">467</div>
+      </div>
+    </div>
+
+    <!-- Filter Toolbar -->
+    <div class="toolbar">
+      <div class="filter-group">
+        <label for="bookFilter"><i class="fa-solid fa-book"></i> Asar:</label>
+        <select id="bookFilter" onchange="loadOccurrences()">
+          <option value="all">Barcha asarlar (Cho‘lpon & Hemingway)</option>
+          <option value="book-cholpon-uz">Cho‘lpon: «Kecha va kunduz» (UZ ➔ EN)</option>
+          <option value="book-hemingway-en">Hemingway: «The Old Man and the Sea» (EN ➔ UZ)</option>
+        </select>
+
+        <label for="statusFilter"><i class="fa-solid fa-filter"></i> Holat:</label>
+        <select id="statusFilter" onchange="loadOccurrences()">
+          <option value="all">Barchasi</option>
+          <option value="unannotated">Kutilayotganlar</option>
+          <option value="draft">Qoralamalar</option>
+          <option value="confirmed">Tasdiqlanganlar</option>
+        </select>
+
+        <input type="text" id="searchFilter" placeholder="Qidiruv (so‘z, jumla)..." onkeydown="if(event.key==='Enter') loadOccurrences()">
+        <button class="btn-secondary" onclick="loadOccurrences()"><i class="fa-solid fa-magnifying-glass"></i> Qidirish</button>
+      </div>
+
+      <div class="filter-group">
+        <button class="btn-secondary" onclick="prevOccurrence()"><i class="fa-solid fa-chevron-left"></i> Oldingi</button>
+        <span id="paginationLabel" style="font-size:0.85rem; font-weight:600;">1 / 20</span>
+        <button class="btn-secondary" onclick="nextOccurrence()">Keyingi <i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
+
+    <!-- Main Workspace Layout -->
+    <div class="workspace-grid">
+      <!-- Left: Occurrences List -->
+      <div class="occ-list-pane">
+        <div class="occ-list-header">
+          <span>Uchrashuvlar ro‘yxati</span>
+          <span class="badge badge-unannotated" id="listCountBadge">0 ta</span>
+        </div>
+        <div class="occ-list-items" id="occListContainer">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Right: Sentence Display + Taxonomy Editor -->
+      <div class="editor-pane">
+        <!-- Bilingual Segment Viewer -->
+        <div class="bilingual-card">
+          <div class="bilingual-header">
+            <span id="cardWorkTitle"><i class="fa-solid fa-bookmark"></i> Asar nomi</span>
+            <span><i class="fa-solid fa-file-pdf"></i> Sahifa: <b id="cardPdfPage">1</b> | ID: <span id="cardOccId">occ-00001</span></span>
+          </div>
+          <div class="bilingual-columns">
+            <!-- Left: Original Language -->
+            <div class="col-segment col-source">
+              <div class="col-title col-title-source">
+                <i class="fa-solid fa-file-lines"></i> <span id="sourceColTitle">ASL NUSXA (ORIGINAL)</span>
+              </div>
+              <div id="sourceSentenceText" style="user-select: text;">
+                <!-- Sentence text with highlighted source collocation -->
+              </div>
+            </div>
+
+            <!-- Right: Target Language (Translation) -->
+            <div class="col-segment col-target">
+              <div class="col-title col-title-target">
+                <i class="fa-solid fa-language"></i> <span id="targetColTitle">TARJIMA (TRANSLATION)</span>
+              </div>
+              <div id="targetSentenceText" style="user-select: text;" onmouseup="handleTargetTextSelection()">
+                <!-- Aligned target sentence -->
+              </div>
+              <div class="target-selection-helper">
+                <span>Belgilangan ekvivalent: <b id="selectedTargetSpanBadge" class="target-highlight">—</b></span>
+                <button type="button" class="btn-secondary" style="font-size: 0.78rem;" onclick="setNoTargetEquivalent()">
+                  <i class="fa-solid fa-ban"></i> Ekvivalenti yo‘q deb belgilash
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Taxonomy Annotation Form -->
+        <div class="form-card">
+          <div class="form-header">
+            <div class="form-title">
+              <h2>Ilmiy Taksonomiya (Prompt 7 · Versiya 1.0)</h2>
+              <p>Har bir parametr faqat tadqiqotchi tomonidan ekspert baholanadi va III bob jadvallariga asos bo‘ladi</p>
+            </div>
+            <div class="ai-toggle-box">
+              <i class="fa-solid fa-robot"></i>
+              <span>AI Taklifi (Loyiha):</span>
+              <button class="btn-secondary" style="padding: 4px 8px; font-size: 0.78rem;" onclick="fetchAiSuggestion()">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Taklif olish
+              </button>
+            </div>
+          </div>
+
+          <form id="annotationForm" onsubmit="event.preventDefault(); saveAnnotation(false);">
+            <div class="form-grid">
+              <!-- 1. Birlik turi (1.1) -->
+              <div class="form-group">
+                <label for="fieldUnitType">1. Birlik turi (1.1-fasl):</label>
+                <select id="fieldUnitType" required>
+                  <option value="kollokatsiya">Kollokatsiya (Barqaror birikma)</option>
+                  <option value="erkin_birikma">Erkin birikma (Free combination)</option>
+                  <option value="frazeologik_birlik">Frazeologik birlik (Idiom)</option>
+                  <option value="noaniq">Noaniq (Qo‘shimcha tahlil kutilmoqda)</option>
+                </select>
+                <span class="field-hint">Birikmaning leksik-semantik mustahkamligi</span>
+              </div>
+
+              <!-- 2. Struktur qolip (3.1) -->
+              <div class="form-group">
+                <label for="fieldPattern">2. Struktur qolip (3.1-fasl):</label>
+                <select id="fieldPattern" required>
+                  <option value="Fel+Ot">Fe’l + Ot (Verb + Noun)</option>
+                  <option value="Sifat+Ot">Sifat + Ot (Adj + Noun)</option>
+                  <option value="Ot+Fel">Ot + Fe’l (Noun + Verb)</option>
+                  <option value="Ravish+Fel">Ravish + Fe’l (Adv + Verb)</option>
+                  <option value="Ot+Ot">Ot + Ot (Noun + Noun)</option>
+                  <option value="boshqa">Boshqa grammatik qolip</option>
+                </select>
+                <span class="field-hint">Asl nusxadagi grammatik model</span>
+              </div>
+
+              <!-- 3. Semantik guruh (3.1) -->
+              <div class="form-group">
+                <label for="fieldSemantic">3. Semantik guruh (3.1-fasl):</label>
+                <select id="fieldSemantic" required>
+                  <option value="inson_ruhiyati">Inson his-tuyg‘ulari va ruhiy holati</option>
+                  <option value="tabiat_borliq">Tabiat va atrof-muhit hodisalari</option>
+                  <option value="harakat_holat">Harakat va jismoniy holat</option>
+                  <option value="ijtimoiy_munosabat">Ijtimoiy-madaniy munosabatlar</option>
+                  <option value="nutq_tafakkur">Nutqiy va aqliy faoliyat</option>
+                  <option value="moddiy_borliq">Moddiy buyumlar va maishiy borliq</option>
+                  <option value="boshqa">Boshqa semantik guruh</option>
+                </select>
+                <span class="field-hint">Mavzuviy leksik maydon</span>
+              </div>
+
+              <!-- 4. Ekvivalentlik turi (3.2) -->
+              <div class="form-group">
+                <label for="fieldEquivalence">4. Ekvivalentlik turi (3.2-fasl):</label>
+                <select id="fieldEquivalence" required>
+                  <option value="toliq_ekvivalent">To‘liq ekvivalent (Full equivalent)</option>
+                  <option value="qisman_ekvivalent">Qisman ekvivalent (Partial equivalent)</option>
+                  <option value="strukturaviy_transformatsiya">Strukturaviy transformatsiya</option>
+                  <option value="obraz_almashtirish">Boshqa obraz bilan almashtirish</option>
+                  <option value="tasviriy_tarjima">Tasviriy (izohli) tarjima</option>
+                  <option value="bir_sozga_siqilgan">Bir so‘zga siqilgan (Kompressiya)</option>
+                  <option value="tushirib_qoldirilgan">Tushirib qoldirilgan (Omission)</option>
+                  <option value="tarjimada_qoshilgan">Tarjimada qo‘shilgan (Addition)</option>
+                </select>
+                <span class="field-hint">Asl va tarjima o‘rtasidagi moslik darajasi</span>
+              </div>
+
+              <!-- 5. Tarjima strategiyasi (1.2, 3.2) -->
+              <div class="form-group">
+                <label for="fieldStrategy">5. Tarjima strategiyasi (1.2, 3.2):</label>
+                <select id="fieldStrategy" required>
+                  <option value="kalka">Kalka (So‘zma-so‘z ko‘chirish)</option>
+                  <option value="modulyatsiya">Modulyatsiya (Nuqtai nazar o‘zgarishi)</option>
+                  <option value="generalizatsiya">Generalizatsiya (Umumlashtirish)</option>
+                  <option value="konkretizatsiya">Konkretizatsiya (Xususiylashtirish)</option>
+                  <option value="kompensatsiya">Kompensatsiya (O‘rnini to‘ldirish)</option>
+                  <option value="izoh">Izoh (Explanatory gloss)</option>
+                  <option value="boshqa">Boshqa uslubiy vosita</option>
+                </select>
+                <span class="field-hint">Qo‘llanilgan tarjima usuli</span>
+              </div>
+
+              <!-- 6. Lingvomadaniy belgilar (3.3) -->
+              <div class="form-group">
+                <label for="fieldCulturalCategory">6. Lingvomadaniy realiya (3.3-fasl):</label>
+                <select id="fieldCulturalCategory">
+                  <option value="yoq">Realiya yo‘q (Umuminsoniy tushuncha)</option>
+                  <option value="etnografik">Etnografik realiya (Kiyim, taom, an'ana)</option>
+                  <option value="geografik">Geografik realiya (Joy nomlari, landshaft)</option>
+                  <option value="ijtimoiy_siyosiy">Ijtimoiy-siyosiy realiya (Mansab, unvon)</option>
+                  <option value="diniy_mafkuraviy">Diniy va mafkuraviy realiya</option>
+                </select>
+                <span class="field-hint">Milliy-madaniy kolorit belgisi</span>
+              </div>
+
+              <!-- Realiya izohi -->
+              <div class="form-group full-width">
+                <label for="fieldCulturalNote">Realiya bo‘yicha ilmiy izoh (3.3 uchun dissertatsiya dalili):</label>
+                <input type="text" id="fieldCulturalNote" placeholder="Masalan: milliy marosim nomi, ko‘chma ma'nosi...">
+              </div>
+
+              <!-- 7. Ishonch darajasi & Dalil izohi -->
+              <div class="form-group">
+                <label for="fieldConfidence">Ishonch darajasi:</label>
+                <select id="fieldConfidence">
+                  <option value="yuqori">Yuqori ishonch (Kontekstda aniq dalil bor)</option>
+                  <option value="orta">O‘rta ishonch (Ekvivalent variantli)</option>
+                  <option value="past">Past ishonch (Qayta ko‘rib chiqish talab etiladi)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="fieldEvidenceNote">Dalil izohi (Annotator yozuvi):</label>
+                <input type="text" id="fieldEvidenceNote" placeholder="Sahifa, kontekst yoki tarjimon tanlovi sababi...">
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="action-bar">
+              <div class="shortcuts-hint">
+                Tezkor tugmalar: <span class="kbd">Alt+S</span> Qoralama saqlash | <span class="kbd">Alt+C</span> Tasdiqlash | <span class="kbd">Alt+N</span> Keyingisi | <span class="kbd">Alt+P</span> Oldingisi
+              </div>
+              <div style="display: flex; gap: 12px;">
+                <button type="button" class="btn-secondary" onclick="saveAnnotation(false)">
+                  <i class="fa-solid fa-floppy-disk"></i> Qoralama saqlash (Alt+S)
+                </button>
+                <button type="button" class="btn-success" onclick="saveAnnotation(true)">
+                  <i class="fa-solid fa-check-double"></i> Tasdiqlash (Alt+C)
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Tarjima Mutanosibligi Matritsasi -->
+  <div class="modal-overlay" id="matrixModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <h2 style="font-size: 1.15rem; font-weight: 700;"><i class="fa-solid fa-table-cells"></i> Tarjima Mutanosibligi Matritsasi</h2>
+          <select id="matrixBookFilter" onchange="loadMatrixData()" style="padding: 4px 8px; font-size: 0.85rem;">
+            <option value="all">Barcha asarlar birgalikda</option>
+            <option value="book-cholpon-uz">Cho‘lpon: «Kecha va kunduz» (UZ ➔ EN)</option>
+            <option value="book-hemingway-en">Hemingway: «Chol va dengiz» (EN ➔ UZ)</option>
+          </select>
+        </div>
+        <button class="btn-secondary" onclick="closeMatrixModal()"><i class="fa-solid fa-xmark"></i> Yopish</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+          Faqatgina tadqiqotchi tomonidan <b>tasdiqlangan (confirmed)</b> uchrashuvlar asosida hisoblanadi. Har qanday katakka bosib, aniq uchrashuvlar va ularning PDF sahifalarini ko‘rishingiz mumkin (Drill-down).
+        </p>
+        <div style="overflow-x: auto;">
+          <table class="matrix-table" id="matrixTable">
+            <!-- Dynamically generated -->
+          </table>
+        </div>
+
+        <div id="drilldownSection" style="margin-top: 24px; display: none;">
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: var(--primary);" id="drilldownTitle">
+            Katak bo‘yicha aniq uchrashuvlar
+          </h3>
+          <div id="drilldownItemsContainer" style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- Drilldown items -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Annotatsiya Yo‘riqnomasi va Cohen's Kappa -->
+  <div class="modal-overlay" id="guidelineModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 style="font-size: 1.15rem; font-weight: 700;"><i class="fa-solid fa-book-bookmark"></i> Annotatsiya Yo‘riqnomasi (v1.0) va Ekspertlar Kelishuvi</h2>
+        <button class="btn-secondary" onclick="closeGuidelineModal()"><i class="fa-solid fa-xmark"></i> Yopish</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+          <div>
+            <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: var(--primary);">Kollokatsiyalarni Beligilash Qoidalari (Guideline v1.0)</h3>
+            <p style="font-size: 0.88rem; line-height: 1.6; margin-bottom: 12px;">
+              Ushbu yo‘riqnoma dissertatsiyaning 1.2, 3.1, 3.2 va 3.3-fasllari talablariga to‘liq mos keladi. Barcha ta'riflar va misollar faqat korpusning o‘zidan olingan.
+            </p>
+            <ul style="font-size: 0.85rem; line-height: 1.7; padding-left: 20px; margin-bottom: 20px;">
+              <li><b>Kollokatsiya vs Erkin birikma:</b> Agar tarkibiy qismlardan biri leksik jihatdan chegaralangan yoki odatiy turg‘un bo‘lsa — kollokatsiya (masalan, <i>baliq ovlamoq</i>, <i>chuqur xo‘rsinmoq</i>). Erkin birikma umumiy sintaktik modelga ega (<i>stol ustida</i>).</li>
+              <li><b>To‘liq ekvivalentlik:</b> Ma'no va grammatik shakl ikki tilda bir xil (<i>take a fish ➔ baliq tutmoq</i>).</li>
+              <li><b>Qisman ekvivalentlik:</b> Birikuvchanlik doirasi yoki leksik komponentda farq mavjud (<i>deep sigh ➔ og‘ir xo‘rsinish</i>).</li>
+              <li><b>Strukturaviy transformatsiya:</b> Birikmaning bir so‘zga (fe'lga) siqilishi yoki boshqa so‘z turkumiga o‘tishi.</li>
+              <li><b>Realiyalar:</b> O‘zbek yoki ingliz xalqining milliy madaniyatiga xos tushunchalar (etnografik, geografik, diniy).</li>
+            </ul>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 18px;">
+            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; color: #1e293b;">
+              <i class="fa-solid fa-scale-balanced"></i> Ikki Annotator Kelishuvi (Cohen's Kappa)
+            </h4>
+            <div id="kappaResultBox" style="font-size: 0.85rem; line-height: 1.6;">
+              Yuklanmoqda...
+            </div>
+            <button class="btn-secondary" style="margin-top: 14px; width: 100%; font-size: 0.82rem;" onclick="loadKappa()">
+              <i class="fa-solid fa-rotate"></i> Qayta hisoblash
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentOccurrences = [];
+    let currentIndex = 0;
+    let selectedTargetSpan = "";
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (e.altKey && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        saveAnnotation(false);
+      } else if (e.altKey && (e.key === 'c' || e.key === 'C')) {
+        e.preventDefault();
+        saveAnnotation(true);
+      } else if (e.altKey && (e.key === 'n' || e.key === 'N')) {
+        e.preventDefault();
+        nextOccurrence();
+      } else if (e.altKey && (e.key === 'p' || e.key === 'P')) {
+        e.preventDefault();
+        prevOccurrence();
+      }
+    });
+
+    async function loadOccurrences() {
+      const book = document.getElementById('bookFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const q = document.getElementById('searchFilter').value;
+
+      try {
+        const res = await fetch(`/api/stage7/occurrences?book=${book}&status=${status}&q=${encodeURIComponent(q)}&limit=50`);
+        const data = await res.json();
+        if (data.success) {
+          currentOccurrences = data.results;
+          currentIndex = 0;
+          updateStats(data.stats);
+          renderOccList();
+          if (currentOccurrences.length > 0) {
+            renderActiveOccurrence();
+          } else {
+            clearEditor();
+          }
+        }
+      } catch (err) {
+        console.error("Xatolik:", err);
+      }
+    }
+
+    function updateStats(stats) {
+      if (!stats) return;
+      document.getElementById('statTotalOcc').innerText = stats.total_occurrences;
+      document.getElementById('statConfirmed').innerText = stats.confirmed_count;
+      document.getElementById('statDraft').innerText = stats.draft_count;
+      document.getElementById('statUnannotated').innerText = stats.unannotated_count;
+    }
+
+    function renderOccList() {
+      const container = document.getElementById('occListContainer');
+      document.getElementById('listCountBadge').innerText = `${currentOccurrences.length} ta`;
+      container.innerHTML = "";
+
+      currentOccurrences.forEach((occ, idx) => {
+        const item = document.createElement('div');
+        item.className = `occ-item ${idx === currentIndex ? 'active' : ''}`;
+        item.onclick = () => { currentIndex = idx; renderOccList(); renderActiveOccurrence(); };
+
+        const isConf = occ.annotation && occ.annotation.is_confirmed;
+        const isDraft = occ.annotation && !occ.annotation.is_confirmed;
+        let badgeClass = "badge-unannotated";
+        let badgeText = "Kutilmoqda";
+        if (isConf) { badgeClass = "badge-confirmed"; badgeText = "Tasdiqlangan"; }
+        else if (isDraft) { badgeClass = "badge-draft"; badgeText = "Qoralama"; }
+
+        item.innerHTML = `
+          <div class="occ-item-header">
+            <span class="occ-item-title">${occ.source_collocation || '—'}</span>
+            <span class="badge ${badgeClass} occ-item-badge">${badgeText}</span>
+          </div>
+          <div class="occ-item-sub">
+            <span>${occ.book_id.includes('cholpon') ? 'Cho‘lpon' : 'Hemingway'} · p. ${occ.pdf_page_num}</span>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+
+      document.getElementById('paginationLabel').innerText = `${currentIndex + 1} / ${Math.max(1, currentOccurrences.length)}`;
+    }
+
+    function renderActiveOccurrence() {
+      if (!currentOccurrences[currentIndex]) return;
+      const occ = currentOccurrences[currentIndex];
+
+      document.getElementById('cardWorkTitle').innerHTML = `<i class="fa-solid fa-bookmark"></i> ${occ.source_title}`;
+      document.getElementById('cardPdfPage').innerText = occ.pdf_page_num;
+      document.getElementById('cardOccId').innerText = occ.occurrence_id;
+
+      // Source side (ALWAYS ORIGINAL)
+      document.getElementById('sourceColTitle').innerText = `ASL NUSXA (${occ.source_lang.toUpperCase()})`;
+      let srcText = occ.source_sentence;
+      const srcColloc = occ.source_collocation;
+      if (srcColloc && srcText.includes(srcColloc)) {
+        srcText = srcText.replace(srcColloc, `<mark class="source-highlight">${srcColloc}</mark>`);
+      }
+      document.getElementById('sourceSentenceText').innerHTML = srcText;
+
+      // Target side (TRANSLATION)
+      document.getElementById('targetColTitle').innerText = `TARJIMA (${occ.target_lang.toUpperCase()})`;
+      let tgtText = occ.target_sentence;
+      const tgtSpan = (occ.annotation && occ.annotation.target_span) || occ.target_collocation || "";
+      selectedTargetSpan = tgtSpan;
+      updateTargetSpanBadge(selectedTargetSpan);
+
+      if (tgtSpan && tgtText.includes(tgtSpan)) {
+        tgtText = tgtText.replace(tgtSpan, `<mark class="target-highlight">${tgtSpan}</mark>`);
+      }
+      document.getElementById('targetSentenceText').innerHTML = tgtText;
+
+      // Populate Form
+      const ann = occ.annotation;
+      if (ann) {
+        document.getElementById('fieldUnitType').value = ann.unit_type || 'kollokatsiya';
+        document.getElementById('fieldPattern').value = ann.structural_pattern || 'Fel+Ot';
+        document.getElementById('fieldSemantic').value = ann.semantic_group || 'inson_ruhiyati';
+        document.getElementById('fieldEquivalence').value = ann.equivalence_type || 'toliq_ekvivalent';
+        document.getElementById('fieldStrategy').value = ann.translation_strategy || 'kalka';
+        document.getElementById('fieldCulturalCategory').value = ann.cultural_category || 'yoq';
+        document.getElementById('fieldCulturalNote').value = ann.cultural_note || '';
+        document.getElementById('fieldConfidence').value = ann.confidence_level || 'yuqori';
+        document.getElementById('fieldEvidenceNote').value = ann.evidence_note || '';
+      } else {
+        // Defaults from candidate metadata
+        document.getElementById('fieldUnitType').value = 'kollokatsiya';
+        document.getElementById('fieldPattern').value = 'Fel+Ot';
+        document.getElementById('fieldSemantic').value = 'inson_ruhiyati';
+        document.getElementById('fieldEquivalence').value = 'toliq_ekvivalent';
+        document.getElementById('fieldStrategy').value = 'kalka';
+        document.getElementById('fieldCulturalCategory').value = 'yoq';
+        document.getElementById('fieldCulturalNote').value = '';
+        document.getElementById('fieldConfidence').value = 'yuqori';
+        document.getElementById('fieldEvidenceNote').value = '';
+      }
+    }
+
+    function handleTargetTextSelection() {
+      const selection = window.getSelection().toString().trim();
+      if (selection.length > 0) {
+        selectedTargetSpan = selection;
+        updateTargetSpanBadge(selection);
+      }
+    }
+
+    function setNoTargetEquivalent() {
+      selectedTargetSpan = "";
+      updateTargetSpanBadge(null);
+      document.getElementById('fieldEquivalence').value = 'tushirib_qoldirilgan';
+    }
+
+    function updateTargetSpanBadge(span) {
+      const badge = document.getElementById('selectedTargetSpanBadge');
+      if (!span) {
+        badge.innerText = "To‘g‘ridan-to‘g‘ri ekvivalenti yo‘q";
+        badge.className = "badge badge-draft";
+      } else {
+        badge.innerText = span;
+        badge.className = "target-highlight";
+      }
+    }
+
+    async function saveAnnotation(isConfirmed) {
+      if (!currentOccurrences[currentIndex]) return;
+      const occ = currentOccurrences[currentIndex];
+
+      const payload = {
+        occurrence_id: occ.occurrence_id,
+        source_span: occ.source_collocation,
+        target_span: selectedTargetSpan,
+        has_target_equivalent: selectedTargetSpan ? true : false,
+        unit_type: document.getElementById('fieldUnitType').value,
+        structural_pattern: document.getElementById('fieldPattern').value,
+        semantic_group: document.getElementById('fieldSemantic').value,
+        equivalence_type: document.getElementById('fieldEquivalence').value,
+        translation_strategy: document.getElementById('fieldStrategy').value,
+        is_cultural: document.getElementById('fieldCulturalCategory').value !== 'yoq',
+        cultural_category: document.getElementById('fieldCulturalCategory').value,
+        cultural_note: document.getElementById('fieldCulturalNote').value,
+        confidence_level: document.getElementById('fieldConfidence').value,
+        evidence_note: document.getElementById('fieldEvidenceNote').value,
+        is_confirmed: isConfirmed
+      };
+
+      try {
+        const res = await fetch('/api/stage7/annotate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          // Update in-memory
+          occ.annotation = {
+            id: data.annotation_id,
+            is_confirmed: isConfirmed,
+            ...payload
+          };
+          renderOccList();
+          nextOccurrence();
+        } else {
+          alert("Saqlashda xatolik: " + (data.error || 'Nomaʼlum xato'));
+        }
+      } catch (err) {
+        alert("Server bilan aloqa uzildi: " + err.message);
+      }
+    }
+
+    async function fetchAiSuggestion() {
+      if (!currentOccurrences[currentIndex]) return;
+      const occ = currentOccurrences[currentIndex];
+
+      try {
+        const res = await fetch('/api/stage7/ai-suggest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ occurrence_id: occ.occurrence_id })
+        });
+        const data = await res.json();
+        if (data.success && data.suggested_values) {
+          const s = data.suggested_values;
+          document.getElementById('fieldUnitType').value = s.unit_type;
+          document.getElementById('fieldPattern').value = s.structural_pattern;
+          document.getElementById('fieldSemantic').value = s.semantic_group;
+          document.getElementById('fieldEquivalence').value = s.equivalence_type;
+          document.getElementById('fieldStrategy').value = s.translation_strategy;
+          document.getElementById('fieldEvidenceNote').value = s.evidence_note;
+          alert("AI tavsiyasi yuklandi (qoralama sifatida shakllantirildi). Iltimos, ko‘rib chiqib tasdiqlang.");
+        }
+      } catch (err) {
+        alert("AI taklifini olishda xatolik: " + err.message);
+      }
+    }
+
+    function nextOccurrence() {
+      if (currentIndex < currentOccurrences.length - 1) {
+        currentIndex++;
+        renderOccList();
+        renderActiveOccurrence();
+      }
+    }
+
+    function prevOccurrence() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderOccList();
+        renderActiveOccurrence();
+      }
+    }
+
+    function clearEditor() {
+      document.getElementById('sourceSentenceText').innerText = "Tanlangan filtrlarga mos uchrashuv topilmadi.";
+      document.getElementById('targetSentenceText').innerText = "";
+    }
+
+    // Modal Matrix
+    function openMatrixModal() {
+      document.getElementById('matrixModal').style.display = 'flex';
+      loadMatrixData();
+    }
+    function closeMatrixModal() {
+      document.getElementById('matrixModal').style.display = 'none';
+    }
+
+    async function loadMatrixData() {
+      const book = document.getElementById('matrixBookFilter').value;
+      try {
+        const res = await fetch(`/api/stage7/matrix?book=${book}`);
+        const data = await res.json();
+        if (data.success) {
+          renderMatrixTable(data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function renderMatrixTable(data) {
+      const table = document.getElementById('matrixTable');
+      const equivLabels = {
+        'toliq_ekvivalent': 'To‘liq ekv.',
+        'qisman_ekvivalent': 'Qisman ekv.',
+        'strukturaviy_transformatsiya': 'Strukt. transf.',
+        'obraz_almashtirish': 'Obraz almash.',
+        'tasviriy_tarjima': 'Tasviriy',
+        'bir_sozga_siqilgan': 'Siqilgan',
+        'tushirib_qoldirilgan': 'Tushirib qold.',
+        'tarjimada_qoshilgan': 'Qo‘shilgan'
+      };
+
+      let html = `<thead><tr><th>Struktur Qolip</th>`;
+      data.equivalences.forEach(eq => {
+        html += `<th>${equivLabels[eq] || eq}</th>`;
+      });
+      html += `<th>Jami (n)</th></tr></thead><tbody>`;
+
+      data.patterns.forEach(p => {
+        html += `<tr><td style="font-weight:600; text-align:left;">${p}</td>`;
+        data.equivalences.forEach(eq => {
+          const val = data.matrix[p][eq] || 0;
+          const cellClass = val > 0 ? "has-data cell-click" : "cell-click";
+          html += `<td class="${cellClass}" onclick="drillDownMatrix('${p}', '${eq}')">${val}</td>`;
+        });
+        html += `<td style="font-weight:700;">${data.row_totals[p] || 0}</td></tr>`;
+      });
+
+      // Footer total
+      html += `<tr><td style="font-weight:700; text-align:left;">Jami</td>`;
+      data.equivalences.forEach(eq => {
+        html += `<td style="font-weight:700;">${data.col_totals[eq] || 0}</td>`;
+      });
+      html += `<td style="font-weight:800; background:#e0f2fe; color:#0369a1;">${data.grand_total}</td></tr>`;
+      html += `</tbody>`;
+
+      table.innerHTML = html;
+    }
+
+    async function drillDownMatrix(pattern, equiv) {
+      const book = document.getElementById('matrixBookFilter').value;
+      const res = await fetch(`/api/stage7/matrix?book=${book}&pattern=${pattern}&equivalence=${equiv}`);
+      const data = await res.json();
+      const sec = document.getElementById('drilldownSection');
+      const cont = document.getElementById('drilldownItemsContainer');
+
+      sec.style.display = 'block';
+      document.getElementById('drilldownTitle').innerText = `${pattern} × ${equiv} bo‘yicha aniq uchrashuvlar (${data.drilldown.length} ta)`;
+      cont.innerHTML = "";
+
+      if (data.drilldown.length === 0) {
+        cont.innerHTML = "<p style='font-size:0.85rem; color:var(--text-muted);'>Ushbu katakda tasdiqlangan misollar mavjud emas.</p>";
+        return;
+      }
+
+      data.drilldown.forEach(item => {
+        const div = document.createElement('div');
+        div.style.background = "#f8fafc";
+        div.style.border = "1px solid var(--border)";
+        div.style.borderRadius = "6px";
+        div.style.padding = "10px 14px";
+        div.style.fontSize = "0.85rem";
+        div.innerHTML = `
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-weight:600;">
+            <span>${item.source_span} ➔ ${item.target_span || '[Ekvivalent yo‘q]'}</span>
+            <span style="color:var(--text-muted);">PDF p. ${item.pdf_page_num} | ${item.occurrence_id}</span>
+          </div>
+          <div style="color:#334155; margin-bottom:4px;"><b>Asl:</b> ${item.source_sentence}</div>
+          <div style="color:#1e40af;"><b>Tarjima:</b> ${item.target_sentence}</div>
+        `;
+        cont.appendChild(div);
+      });
+    }
+
+    // Modal Guideline & Kappa
+    function openGuidelineModal() {
+      document.getElementById('guidelineModal').style.display = 'flex';
+      loadKappa();
+    }
+    function closeGuidelineModal() {
+      document.getElementById('guidelineModal').style.display = 'none';
+    }
+
+    async function loadKappa() {
+      const box = document.getElementById('kappaResultBox');
+      try {
+        const res = await fetch('/api/stage7/cohens-kappa');
+        const data = await res.json();
+        if (data.cohens_kappa !== null) {
+          box.innerHTML = `
+            <div><b>Umumiy baholangan juftliklar:</b> ${data.shared_count} ta</div>
+            <div><b>Bir xil chiqqan yozuvlar:</b> ${data.agree_count} ta</div>
+            <div><b>Kuzatilgan moslik ($P_o$):</b> ${(data.observed_agreement * 100).toFixed(1)}%</div>
+            <div><b>Kutilgan moslik ($P_e$):</b> ${(data.expected_agreement * 100).toFixed(1)}%</div>
+            <div style="margin-top:8px; font-size:1.1rem; font-weight:700; color:var(--primary);">
+              Cohen's $\\kappa$: ${data.cohens_kappa}
+            </div>
+            <div style="color:var(--text-muted); font-size:0.8rem; margin-top:4px;">
+              ${data.interpretation}
+            </div>
+          `;
+        } else {
+          box.innerHTML = `<p style="color:var(--text-muted);">${data.interpretation}</p>`;
+        }
+      } catch (err) {
+        box.innerText = "Kelishuvni hisoblashda xatolik: " + err.message;
+      }
+    }
+
+    // On Load
+    window.addEventListener('DOMContentLoaded', () => {
+      loadOccurrences();
+    });
+  </script>
+</body>
+</html>

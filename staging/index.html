@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="uz" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>TILCOR — O‘zbek–ingliz parallel korpusi</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Header & Navigation -->
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo & Brand (PDF 9-bo'lim: UZ-EN Collocation Corpus / TILCOR v2.0) -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="app.switchTab('home')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-700 via-indigo-600 to-emerald-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+                        <i data-lucide="network" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-extrabold text-base sm:text-lg tracking-tight bg-gradient-to-r from-indigo-700 via-indigo-600 to-emerald-600 bg-clip-text text-transparent">
+                                TILCOR — O‘zbek–ingliz parallel korpusi
+                            </span>
+                            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-mono">
+                                TILCOR v2.0
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-none">Kollokatsiyalar tarjimasi tadqiqoti uchun</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Links (TILCOR v2.0 Yagona Arxitektura) -->
+                <nav class="hidden md:flex items-center space-x-1">
+                    <button data-tab-target="home" class="px-3 py-2 rounded-xl text-xs font-semibold transition nav-active flex items-center gap-1.5">
+                        <i data-lucide="home" class="w-4 h-4"></i> Bosh sahifa
+                    </button>
+                    <a href="kwic_concordance.html" class="px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5" title="KWIC Konkordans va Parallel Qidiruv">
+                        <i data-lucide="search" class="w-4 h-4 text-indigo-500"></i> Korpus & KWIC
+                    </a>
+                    <button data-tab-target="collocations" class="px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5" title="Kollokatsiyalar tahlili">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-emerald-500"></i> Kollokatsiyalar
+                    </button>
+                    <a href="annotation_workspace.html" class="px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5" title="Annotatsiya ish joyi va Tarjima mutanosibligi matritsasi">
+                        <i data-lucide="tag" class="w-4 h-4 text-amber-500"></i> Tahlil (Annotatsiya)
+                    </a>
+                    <a href="methodology_statistics.html" class="px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5" title="III bob statistikasi va metodologiya">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 text-blue-500"></i> Statistika
+                    </a>
+                    <a href="sources_rights.html" class="px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5" title="Manbalar va mualliflik huquqlari pasporti">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-teal-600"></i> Manbalar va huquqlar
+                    </a>
+                    <a href="about_project.html" class="px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5" title="Dissertatsiya va tadqiqotchi haqida">
+                        <i data-lucide="info" class="w-4 h-4 text-purple-500"></i> Loyiha haqida
+                    </a>
+                </nav>
+
+                <!-- Right Action Buttons -->
+                <div class="flex items-center gap-2">
+                    <button id="themeToggleBtn" title="Rejimni almashtirish" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                        <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
+                        <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Sub-nav -->
+            <div class="md:hidden flex overflow-x-auto py-2 space-x-1 border-t border-slate-100 dark:border-slate-800/60 text-xs">
+                <button data-tab-target="home" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap nav-active">Bosh sahifa</button>
+                <button data-tab-target="corpus" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap text-slate-600 dark:text-slate-300">Parallel Korpus</button>
+                <button data-tab-target="collocations" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap text-slate-600 dark:text-slate-300">Kollokatsiyalar</button>
+                <button data-tab-target="checker" class="px-2.5 py-1.5 rounded-lg font-bold text-indigo-600 whitespace-nowrap">Research Lab</button>
+                <button data-tab-target="dictionary" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap text-slate-600 dark:text-slate-300">Lugʻat</button>
+                
+                <button data-tab-target="analytics" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap text-slate-600 dark:text-slate-300">Eksport</button>
+                <button data-tab-target="translator" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap text-slate-600 dark:text-slate-300">Tarjimon</button>
+                <button data-tab-target="phd" class="px-2.5 py-1.5 rounded-lg font-bold text-amber-600 whitespace-nowrap">AI Assistent</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ============================================== -->
+        <!-- VIEW 1: HOME (BOSH SAHIFA) -->
+        <!-- ============================================== -->
+        <section id="view-home" class="tab-view space-y-10">
+            <!-- Hero Banner (PDF Bosh Sarlavhasi va Maqsadi) -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950 via-indigo-900 to-slate-900 text-white p-8 sm:p-12 shadow-2xl border border-indigo-800/40">
+                <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-20 -top-20 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 max-w-4xl space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/30 border border-indigo-400/30 text-xs font-semibold tracking-wide text-indigo-200 uppercase">
+                        <i data-lucide="graduation-cap" class="w-4 h-4 text-emerald-400"></i>
+                        <span>Kollokatsiyalar tarjimasi tadqiqoti uchun</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                        TILCOR — O‘zbek–ingliz parallel korpusi
+                    </h1>
+                    <p class="text-base sm:text-xl text-indigo-200 font-medium max-w-3xl">
+                        Parallel korpus va kollokatsiyalarni tahlil qilish, tarjima ekvivalentlarini qiyoslash ilmiy platformasi (TILCOR v2.0)
+                    </p>
+
+                    <div class="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 max-w-3xl">
+                        <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                            <strong class="text-amber-300">Loyiha maqsadi:</strong> Inglizcha original matnlar va ularning o‘zbekcha tarjimalarini parallel bog‘lash, kollokatsiyalarni izlash, tarjima ekvivalentlarini qiyoslash va ilmiy tahlil natijalarini olish imkonini beruvchi veb-platforma.
+                        </p>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="app.switchTab('corpus')" class="px-6 py-3.5 rounded-xl bg-white text-indigo-950 font-extrabold text-xs sm:text-sm hover:bg-indigo-50 transition shadow-lg flex items-center gap-2">
+                            <i data-lucide="split" class="w-4 h-4 text-indigo-600"></i> 1. Parallel Korpus (5,157 Jumla)
+                        </button>
+                        <button onclick="app.switchTab('collocations')" class="px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs sm:text-sm transition shadow-lg flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> 2. Kollokatsiyalar Matritsasi (6,546)
+                        </button>
+                        <button onclick="app.switchTab('checker')" class="px-6 py-3.5 rounded-xl bg-indigo-700/90 hover:bg-indigo-600 text-white font-bold text-xs sm:text-sm transition border border-indigo-400/40 flex items-center gap-2">
+                            <i data-lucide="flask-conical" class="w-4 h-4 text-amber-300"></i> 3. Collocation Research Lab
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                    <span id="stat-total-segments" class="text-3xl sm:text-4xl font-black text-indigo-600 dark:text-indigo-400 block font-mono">—</span>
+                    <span class="text-xs uppercase font-bold text-slate-500 dark:text-slate-400 mt-1 block">Parallel Jumla & Segment</span>
+                </div>
+                <div class="p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                    <span id="stat-total-collocations" class="text-3xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400 block font-mono">—</span>
+                    <span class="text-xs uppercase font-bold text-slate-500 dark:text-slate-400 mt-1 block">Kollokatsiyalar Bazasi</span>
+                </div>
+                <div class="p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                    <span id="stat-total-modules" class="text-3xl sm:text-4xl font-black text-blue-600 dark:text-blue-400 block font-mono">6 ta</span>
+                    <span class="text-xs uppercase font-bold text-slate-500 dark:text-slate-400 mt-1 block">Asosiy Ilmiy Modul</span>
+                </div>
+                <div class="p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                    <span id="stat-total-dict" class="text-3xl sm:text-4xl font-black text-amber-600 dark:text-amber-400 block font-mono">—</span>
+                    <span class="text-xs uppercase font-bold text-slate-500 dark:text-slate-400 mt-1 block">Elektron Lugʻat Soʻzlari</span>
+                </div>
+            </div>
+
+            <!-- 1. LOYIHA KONSEPSIYASI (PDF 1-bo'lim) -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-mono font-bold uppercase text-indigo-600 dark:text-indigo-400">1. Loyiha Konsepsiyasi</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Bitta Platformada Uchta Asosiy Yoʻnalish</h2>
+                    </div>
+                    <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 font-mono">Tavsiya etilgan arxitektura</span>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Pillar 1 -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <div class="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-xl">
+                                <i data-lucide="split" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Parallel Korpus</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Original va tarjima matnlarini jumla yoki segment darajasida yonma-yon ko‘rsatish. Toʻliq matnli qidiruv va kontekstual konkordans (KWIC).
+                            </p>
+                        </div>
+                        <button onclick="app.switchTab('corpus')" class="mt-5 w-full py-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold text-xs hover:bg-indigo-600 hover:text-white transition flex items-center justify-center gap-1.5">
+                            Parallel Korpusni Koʻrish <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Pillar 2 -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-xl">
+                                <i data-lucide="flask-conical" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Collocation Research Lab</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                So‘z birikmalarini aniqlash, matndan kollokatsiya nomzodlarini ajratish, chastota va MI score, t-score, log-likelihood kabi statistik ko‘rsatkichlar bo‘yicha tahlil qilish.
+                            </p>
+                        </div>
+                        <button onclick="app.switchTab('checker')" class="mt-5 w-full py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold text-xs hover:bg-emerald-600 hover:text-white transition flex items-center justify-center gap-1.5">
+                            Research Labga Kirish <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Pillar 3 -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-xl">
+                                <i data-lucide="book-check" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Elektron Kollokatsion Lug‘at</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Kollokatsiya, o‘zbekcha ekvivalent, real kontekst, tarjima strategiyasi, kalka xatoliklari va lingvomadaniy izohni saqlash va qidirish.
+                            </p>
+                        </div>
+                        <button onclick="app.switchTab('collocations')" class="mt-5 w-full py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold text-xs hover:bg-amber-600 hover:text-white transition flex items-center justify-center gap-1.5">
+                            Lugʻat & Matritsani Ochish <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. SAYTNING ASOSIY MODULLARI JADVALI (PDF 2-bo'lim) -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                    <div>
+                        <span class="text-xs font-mono font-bold uppercase text-indigo-600 dark:text-indigo-400">2. Saytning Asosiy Modullari</span>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">PhD Boblari Bilan Bogʻliq Modullar Matritsasi</h3>
+                    </div>
+                    <span class="text-xs text-slate-500 font-mono">PDF hujjat jadvali asosida</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 text-slate-600 dark:text-slate-300 font-bold uppercase text-[11px]">
+                                <th class="p-3.5">Modul</th>
+                                <th class="p-3.5">Vazifasi</th>
+                                <th class="p-3.5 text-center">PhD bilan bogʻliqligi</th>
+                                <th class="p-3.5 text-right">Saytda ochish</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-700/60 text-slate-700 dark:text-slate-300">
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
+                                <td class="p-3.5 font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                                    <i data-lucide="database" class="w-4 h-4 shrink-0"></i> Parallel matnlar bazasi
+                                </td>
+                                <td class="p-3.5">Inglizcha original va o‘zbekcha tarjimani bog‘laydi; manba ma’lumotlarini saqlaydi (muallif, tarjimon, nashr, sahifa/segment).</td>
+                                <td class="p-3.5 text-center"><span class="px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-xs">II bob</span></td>
+                                <td class="p-3.5 text-right"><button onclick="app.switchTab('corpus')" class="px-3 py-1 rounded-lg bg-indigo-600 text-white font-semibold text-xs hover:bg-indigo-700 transition">Ochish</button></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
+                                <td class="p-3.5 font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                                    <i data-lucide="search" class="w-4 h-4 shrink-0"></i> Kollokatsiya qidiruvi
+                                </td>
+                                <td class="p-3.5">So‘z, birikma va kontekstni qidiradi; til bo‘yicha filtrlaydi (Inglizcha / O‘zbekcha).</td>
+                                <td class="p-3.5 text-center"><span class="px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-xs">II–III bob</span></td>
+                                <td class="p-3.5 text-right"><button onclick="app.switchTab('collocations')" class="px-3 py-1 rounded-lg bg-indigo-600 text-white font-semibold text-xs hover:bg-indigo-700 transition">Ochish</button></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
+                                <td class="p-3.5 font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                                    <i data-lucide="split" class="w-4 h-4 shrink-0"></i> Kontekst ko‘rinishi (KWIC)
+                                </td>
+                                <td class="p-3.5">Birikma qatnashgan jumla va unga mos tarjimani yonma-yon ko‘rsatadi.</td>
+                                <td class="p-3.5 text-center"><span class="px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-xs">III bob</span></td>
+                                <td class="p-3.5 text-right"><button onclick="app.switchTab('corpus')" class="px-3 py-1 rounded-lg bg-indigo-600 text-white font-semibold text-xs hover:bg-indigo-700 transition">Ochish</button></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
+                                <td class="p-3.5 font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
+                                    <i data-lucide="layers" class="w-4 h-4 shrink-0"></i> Struktur-semantik tasnif
+                                </td>
+                                <td class="p-3.5">Verb + noun, adjective + noun kabi qoliplar va semantik guruhlarni tasniflaydi.</td>
+                                <td class="p-3.5 text-center"><span class="px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-mono font-bold text-xs">3.1</span></td>
+                                <td class="p-3.5 text-right"><button onclick="app.switchTab('collocations')" class="px-3 py-1 rounded-lg bg-emerald-600 text-white font-semibold text-xs hover:bg-emerald-700 transition">Ochish</button></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
+                                <td class="p-3.5 font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
+                                    <i data-lucide="arrow-left-right" class="w-4 h-4 shrink-0"></i> Tarjima ekvivalentligi
+                                </td>
+                                <td class="p-3.5">Mos ekvivalent, qisman moslik, transformatsiya yoki tarjimasiz holatni belgilashga yordam beradi.</td>
+                                <td class="p-3.5 text-center"><span class="px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-mono font-bold text-xs">3.2</span></td>
+                                <td class="p-3.5 text-right"><button onclick="app.switchTab('collocations')" class="px-3 py-1 rounded-lg bg-emerald-600 text-white font-semibold text-xs hover:bg-emerald-700 transition">Ochish</button></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
+                                <td class="p-3.5 font-bold text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                                    <i data-lucide="globe-2" class="w-4 h-4 shrink-0"></i> Lingvomadaniy izoh
+                                </td>
+                                <td class="p-3.5">Madaniy xususiyatga ega birikmalar va ularning tarjima yechimlarini qayd etadi.</td>
+                                <td class="p-3.5 text-center"><span class="px-2.5 py-1 rounded-md bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-mono font-bold text-xs">3.3</span></td>
+                                <td class="p-3.5 text-right"><button onclick="app.switchTab('collocations')" class="px-3 py-1 rounded-lg bg-amber-600 text-white font-semibold text-xs hover:bg-amber-700 transition">Ochish</button></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
+                                <td class="p-3.5 font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                                    <i data-lucide="download" class="w-4 h-4 shrink-0"></i> Statistika va eksport
+                                </td>
+                                <td class="p-3.5">Chastota jadvallari, assotsiatsiya indekslari va tanlangan natijalarni CSV/Excel formatiga chiqaradi.</td>
+                                <td class="p-3.5 text-center"><span class="px-2.5 py-1 rounded-md bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-mono font-bold text-xs">II–III bob</span></td>
+                                <td class="p-3.5 text-right"><button onclick="app.switchTab('analytics')" class="px-3 py-1 rounded-lg bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition">Ochish</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 3. QIDIRUV NATIJASI QANDAY KO'RINADI? (PDF 3-bo'lim namunasi) -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
+                    <div>
+                        <span class="text-xs font-mono font-bold uppercase text-indigo-600 dark:text-indigo-400">3. Qidiruv Natijasi Koʻrinishi</span>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Standartlashtirilgan Interfeys Namunasi</h3>
+                    </div>
+                    <span class="text-xs text-slate-400">PDF namunasi asosida tuzilgan</span>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 space-y-4">
+                    <div class="grid sm:grid-cols-2 gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+                        <div class="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">English Collocation</span>
+                            <h4 class="text-lg font-bold text-slate-900 dark:text-white mt-0.5">make a decision</h4>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">O‘zbekcha Ekvivalent</span>
+                            <h4 class="text-lg font-bold text-slate-900 dark:text-white mt-0.5">qaror qabul qilmoq</h4>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-indigo-50/50 dark:bg-slate-800/80 border border-indigo-100 dark:border-slate-700 space-y-2 text-xs sm:text-sm">
+                        <span class="text-xs font-bold text-indigo-700 dark:text-indigo-300 block mb-1">Kontekst (Jumla darajasida yonma-yon):</span>
+                        <p class="text-slate-800 dark:text-slate-100 flex items-start gap-2">
+                            <span class="shrink-0 px-1.5 py-0.5 rounded font-mono font-bold text-[10px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">EN</span>
+                            <span>The committee <mark class="bg-emerald-200 dark:bg-emerald-900 text-emerald-900 dark:text-emerald-100 font-bold px-1 rounded">made a decision</mark> after the meeting.</span>
+                        </p>
+                        <p class="text-slate-800 dark:text-slate-100 flex items-start gap-2 pt-1 border-t border-indigo-100/60 dark:border-slate-700">
+                            <span class="shrink-0 px-1.5 py-0.5 rounded font-mono font-bold text-[10px] bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">UZ</span>
+                            <span>Qo‘mita yig‘ilishdan so‘ng <mark class="bg-indigo-200 dark:bg-indigo-900 text-indigo-900 dark:text-indigo-100 font-bold px-1 rounded">qaror qabul qildi</mark>.</span>
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs pt-1">
+                        <div class="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                            <span class="text-[10px] text-slate-400 block font-mono">3.1 Struktur-semantik:</span>
+                            <strong class="text-slate-700 dark:text-slate-200">Verb + Noun (Nutq/Iroda)</strong>
+                        </div>
+                        <div class="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                            <span class="text-[10px] text-slate-400 block font-mono">3.2 Ekvivalentlik:</span>
+                            <strong class="text-emerald-600 dark:text-emerald-400">Mos ekvivalent (To‘liq)</strong>
+                        </div>
+                        <div class="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                            <span class="text-[10px] text-slate-400 block font-mono">3.3 Lingvomadaniy:</span>
+                            <strong class="text-slate-700 dark:text-slate-200">Adabiy-rasmiy moslik</strong>
+                        </div>
+                        <div class="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                            <span class="text-[10px] text-slate-400 block font-mono">Statistika:</span>
+                            <strong class="text-indigo-600 dark:text-indigo-400">MI: 7.2 | T: 8.9 | f=64</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. MUHIM METODOLOGIK OGOHLANTIRISH (PDF 8-bo'lim) -->
+            <div class="p-6 rounded-3xl bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-300 dark:border-amber-800 space-y-2">
+                <div class="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-extrabold text-sm sm:text-base">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0"></i>
+                    <span>8. Muhim Metodologik Ogohlantirish (Ilmiy Talab)</span>
+                </div>
+                <p class="text-xs sm:text-sm text-amber-900/90 dark:text-amber-200/90 leading-relaxed font-normal">
+                    <strong>Dastur ilmiy xulosani o‘zi kafolatlamaydi.</strong> Korpus tarkibi, matnlarning moslashtirilishi, kollokatsiya mezonlari, statistik usul va inson tomonidan tekshirish jarayoni ochiq bayon qilinishi kerak. 500–1 000 jumla — faqat dastlabki prototip uchun tavsiya; yakuniy korpus hajmi tadqiqot savollari va tanlangan metodga ko‘ra asoslanadi. Har bir avtomatik aniqlangan birikma ilmiy mezonlar asosida tekshiriladi; chastota yuqoriligi o‘z-o‘zidan kollokatsiya ekanini isbotlamaydi.
+                </p>
+            </div>
+
+            <!-- 6. BOSQICHMA-BOSQICH AMALGA OSHIRISH (PDF 6-bo'lim) -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm space-y-4">
+                <span class="text-xs font-mono font-bold uppercase text-indigo-600 dark:text-indigo-400">6. Bosqichma-bosqich amalga oshirish</span>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Tadqiqot Yoʻl Xaritasi (5 Bosqich)</h3>
+
+                <div class="grid sm:grid-cols-5 gap-3 pt-2">
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                        <span class="text-xs font-mono font-bold text-indigo-600">1-bosqich</span>
+                        <h4 class="text-xs font-bold text-slate-800 dark:text-slate-100">Savollar & Mezonlar</h4>
+                        <p class="text-[11px] text-slate-500">Kollokatsiya ta’rifi, tanlash mezonlari va ekvivalentlik yorliqlari.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                        <span class="text-xs font-mono font-bold text-indigo-600">2-bosqich</span>
+                        <h4 class="text-xs font-bold text-slate-800 dark:text-slate-100">Kichik Korpus</h4>
+                        <p class="text-[11px] text-slate-500">500–1 000 ta moslashtirilgan jumla bilan prototipni sinash.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                        <span class="text-xs font-mono font-bold text-indigo-600">3-bosqich</span>
+                        <h4 class="text-xs font-bold text-slate-800 dark:text-slate-100">Qidiruv Prototipi</h4>
+                        <p class="text-[11px] text-slate-500">Original–tarjima juftligini ko‘rsatish, kollokatsiya qidiruvi.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                        <span class="text-xs font-mono font-bold text-indigo-600">4-bosqich</span>
+                        <h4 class="text-xs font-bold text-slate-800 dark:text-slate-100">Tahlil & Validatsiya</h4>
+                        <p class="text-[11px] text-slate-500">Natijalarni qo‘lda tekshirish, xatolarni o‘lchash, metodologiya.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 space-y-1.5">
+                        <span class="text-xs font-mono font-bold text-emerald-600">5-bosqich (Joriy)</span>
+                        <h4 class="text-xs font-bold text-emerald-800 dark:text-emerald-200">Kengaytirish</h4>
+                        <p class="text-[11px] text-emerald-700 dark:text-emerald-300">5,157 jumla, 6,546 birikma, statistika, eksport va lugʻat.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRIMARY LITERARY CORPORA SECTION (Badiiy Empirik Baza) -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-mono font-bold uppercase text-indigo-600 dark:text-indigo-400">5. Korpus ma’lumotlari va ishonchlilik</span>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Toʻliq Yuklangan Badiiy Manbalar</h2>
+                    </div>
+                    <span class="text-xs text-slate-500 font-mono">Barcha manbalar bibliografik pasportga ega</span>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Book 1: Cholpon -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                                    2,471 ta Jumla
+                                </span>
+                                <span class="text-xs font-mono text-slate-400">#chol-1 – #chol-2471</span>
+                            </div>
+                            <div class="mb-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-800 dark:text-amber-300 text-[11px] font-semibold flex items-center gap-1.5"><i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-600 shrink-0"></i> Tekislash qayta ko‘rib chiqilmoqda — tahlil uchun foydalanmang</div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Choʻlpon: «Kecha va kunduz»</h3>
+                            <h4 class="text-sm font-medium text-emerald-600 dark:text-emerald-400">«Night and Day» (Christopher Fort, 2020)</h4>
+                            <div class="mt-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 text-[11px] text-slate-500 space-y-1">
+                                <div><strong>Nashriyot:</strong> Academic Studies Press / Gʻafur Gʻulom</div>
+                                <div><strong>Huquq:</strong> Cheklangan ilmiy parcha</div>
+                            </div>
+                        </div>
+                        <button onclick="app.switchTab('corpus'); corpusManager.filterByBook('cholpon');" class="mt-4 w-full py-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold text-xs hover:bg-indigo-600 hover:text-white transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="search" class="w-3.5 h-3.5"></i> Choʻlpon romanidan qidirish
+                        </button>
+                    </div>
+
+                    <!-- Book 2: Hemingway -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                    1,340 ta Jumla
+                                </span>
+                                <span class="text-xs font-mono text-slate-400">#hem-1 – #hem-1340</span>
+                            </div>
+                            <div class="mb-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-800 dark:text-amber-300 text-[11px] font-semibold flex items-center gap-1.5"><i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-600 shrink-0"></i> Tekislash qayta ko‘rib chiqilmoqda — tahlil uchun foydalanmang</div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">E. Hemingway: «The Old Man and the Sea»</h3>
+                            <h4 class="text-sm font-medium text-emerald-600 dark:text-emerald-400">«Chol va dengiz» (Ibrohim Gʻafurov, 1986)</h4>
+                            <div class="mt-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 text-[11px] text-slate-500 space-y-1">
+                                <div><strong>Nashriyot:</strong> Charles Scribner's / Yangi Asr Avlodi</div>
+                                <div><strong>Huquq:</strong> Cheklangan ilmiy parcha</div>
+                            </div>
+                        </div>
+                        <button onclick="app.switchTab('corpus'); corpusManager.filterByBook('hemingway');" class="mt-4 w-full py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold text-xs hover:bg-emerald-600 hover:text-white transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="search" class="w-3.5 h-3.5"></i> Xeminguey qissasidan qidirish
+                        </button>
+                    </div>
+
+                    <!-- Book 3: Stevenson -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                                    Karantinda (D2)
+                                </span>
+                                <span class="text-xs font-mono text-slate-400">#ste-1 – #ste-1346</span>
+                            </div>
+                            <div class="mb-2 p-2 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-800 dark:text-rose-300 text-[11px] font-semibold flex items-center gap-1.5"><i data-lucide="shield-alert" class="w-3.5 h-3.5 text-rose-600 shrink-0"></i> O‘zbekcha tarjima skanerlangan rasm (matn qatlami yo‘q). OCR va tekshiruvgacha chiqarilgan.</div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">R. L. Stevenson: «Treasure Island»</h3>
+                            <h4 class="text-sm font-medium text-emerald-600 dark:text-emerald-400">«Xazinalar oroli» (Sharif Rizo, 1974)</h4>
+                            <div class="mt-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 text-[11px] text-slate-500 space-y-1">
+                                <div><strong>Nashriyot:</strong> Cassell & Co / «Sharq»</div>
+                                <div><strong>Huquq:</strong> Cheklangan ilmiy parcha</div>
+                            </div>
+                        </div>
+                        <button onclick="app.switchTab('corpus'); corpusManager.filterByBook('stevenson');" class="mt-4 w-full py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold text-xs hover:bg-amber-600 hover:text-white transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="search" class="w-3.5 h-3.5"></i> Stivenson asaridan qidirish
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: TRANSLATOR (JONLI TARJIMON) -->
+        <!-- ============================================== -->
+        <section id="view-translator" class="tab-view hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-700/80">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="languages" class="w-6 h-6 text-indigo-600"></i> Oʻzbekcha ⟷ Inglizcha Jonli Tarjimon
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                            Neyron tarjima vositasi va kollokatsiyalarni avtomatik diagnostika qilish tizimi
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <select id="transSourceLang" class="bg-white dark:bg-slate-800 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 border-none">
+                            <option value="uz">Oʻzbekcha</option>
+                            <option value="en">English (Inglizcha)</option>
+                        </select>
+                        <button id="transSwapBtn" title="Tillarni almashtirish" class="p-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition">
+                            <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+                        </button>
+                        <select id="transTargetLang" class="bg-white dark:bg-slate-800 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 border-none">
+                            <option value="en">English (Inglizcha)</option>
+                            <option value="uz">Oʻzbekcha</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between text-xs text-slate-500">
+                            <span id="transSourceBadge" class="font-bold text-indigo-600 dark:text-indigo-400">Oʻzbek tili</span>
+                            <span id="transCharCount" class="font-mono text-slate-400">0 ta belgi</span>
+                        </div>
+                        <textarea id="transSourceInput" rows="7" placeholder="Matnni shu yerga yozing (avtomatik tarjima qilinadi)..." class="w-full p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 leading-relaxed"></textarea>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-1.5">
+                                <button id="transSpeakSourceBtn" title="Tinglash" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+                                    <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                </button>
+                                <button id="transClearBtn" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 text-xs font-semibold">Tozalash</button>
+                            </div>
+                            <button id="transSubmitBtn" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5">
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i> Tarjima qilish
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between text-xs text-slate-500">
+                            <span id="transTargetBadge" class="font-bold text-emerald-600 dark:text-emerald-400">English</span>
+                            <span class="text-xs text-slate-400">Natija</span>
+                        </div>
+                        <div class="p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-900/60 min-h-[175px] text-sm leading-relaxed flex flex-col justify-between">
+                            <div id="transTargetOutput">
+                                <span class="text-slate-400 italic">Tarjima bu yerda avtomatik paydo boʻladi...</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-end gap-2">
+                            <button id="transSpeakTargetBtn" title="Tinglash" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 transition">
+                                <i data-lucide="volume-2" class="w-4 h-4"></i>
+                            </button>
+                            <button id="transCopyBtn" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-1.5">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Nusxalash
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="transCollocIntel" class="hidden"></div>
+
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-700/80">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Asarlardan namunalar:</span>
+                    <div id="transSamplesList" class="grid sm:grid-cols-2 md:grid-cols-4 gap-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: DICTIONARY (816 BETLIK LUG'AT) -->
+        <!-- ============================================== -->
+        <section id="view-dictionary" class="tab-view hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-700/80">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="book-a" class="w-6 h-6 text-indigo-600"></i> 80,000 Soʻzli Katta Lugʻat & Qidiruv
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                            «80-000-dictionary.pdf» (881 bet) va «Niso Poligraf» (816 bet) asosida 24,554+ soʻzdan iborat katta elektron lugʻat bazasi
+                        </p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200">
+                        24,554 Ta Elektron Soʻz
+                    </span>
+                </div>
+
+                <!-- Search Input Bar -->
+                <div class="space-y-3">
+                    <div class="relative">
+                        <i data-lucide="search" class="w-5 h-5 absolute left-4 top-3.5 text-slate-400"></i>
+                        <input type="text" id="dictSearchInput" placeholder="Inglizcha soʻzni yoki oʻzbekcha maʼnosini kiriting (masalan: accept, ability, active, ocean, water, sea)..." class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span class="text-slate-400">Tezkor soʻzlar:</span>
+                            <div id="dictQuickWords" class="flex gap-1 flex-wrap"></div>
+                        </div>
+                        <button id="dictClearBtn" class="text-xs text-indigo-600 font-semibold hover:underline">Tozalash</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-700/60">
+                    <span id="dictResultCount" class="font-medium">Yuklanmoqda...</span>
+                    <span>Bazada: <strong class="font-mono text-indigo-600">24,554 ta soʻz</strong></span>
+                </div>
+
+                <!-- Results Grid -->
+                <div id="dictResultsContainer" class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- Populated by DictionaryManager -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW 3: PARALLEL CORPUS (5,157 JUMLALIK CONCORDANCE) -->
+        <!-- ============================================== -->
+        <section id="view-corpus" class="tab-view hidden space-y-6">
+            <!-- Warning Banner required by Stage 2 Stage Gate -->
+            <div class="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-amber-900 dark:text-amber-200 text-xs sm:text-sm font-semibold flex items-center gap-3">
+                <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 shrink-0"></i>
+                <div>
+                    <strong>Diqqat (Stage 2–4):</strong> Hemingway va Cho‘lpon parallel jumlalari tekislashi (alignment) qayta ko‘rib chiqilmoqda — ilmiy tahlil uchun foydalanmang.
+                </div>
+            </div>
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="split" class="w-6 h-6 text-indigo-600"></i> 5,157 Ta Toʻliq Parallel Jumla Konkordansi
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                            Choʻlpon, Xeminguey va Stivenson asarlarining <strong>toʻliq matnidan</strong> ixtiyoriy soʻz yoki birikmani qidiring
+                        </p>
+                    </div>
+
+                    <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200">
+                        Jami: 5,157 Jumla
+                    </span>
+                </div>
+
+                <!-- Search Input & Filters -->
+                <div class="grid sm:grid-cols-12 gap-3 pt-2">
+                    <div class="sm:col-span-6 relative">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400"></i>
+                        <input type="text" id="corpusSearchInput" placeholder="Ixtiyoriy soʻzni qidiring (masalan: baliq, yurak, dengiz, chol, kema, sea, fish, boat)..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+
+                    <div class="sm:col-span-4">
+                        <select id="corpusBookFilter" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="all">Barcha manbalar (5,157 jumla)</option>
+                            <option value="hemingway">E. Hemingway: «Chol va dengiz» (1,340 jumla)</option>
+                            <option value="cholpon">Choʻlpon: «Kecha va kunduz» (2,471 jumla)</option>
+                            <option value="stevenson">R.L. Stevenson: «Treasure Island» (1,346 jumla)</option>
+                        </select>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <button id="corpusClearBtn" class="w-full py-2.5 px-3 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 text-xs font-bold transition">
+                            Tozalash
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-700/60">
+                    <span id="corpusResultCountBadge" class="font-medium">Barcha 5,157 jumladan qidirishga tayyor</span>
+                    <span>Toʻliq indeks: <strong id="corpusTotalCount" class="font-mono text-indigo-600 dark:text-indigo-400">5,157</strong> ta jumla</span>
+                </div>
+            </div>
+
+            <!-- Concordance Results List -->
+            <div id="corpusResultsContainer" class="space-y-4">
+                <!-- Dynamically populated by CorpusManager -->
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW 4: COLLOCATIONS MATRIX -->
+        <!-- ============================================== -->
+        <!-- VIEW 4: COLLOCATIONS MATRIX & SEARCH VIEW -->
+        <!-- ============================================== -->
+        <section id="view-collocations" class="tab-view hidden space-y-6">
+            <!-- DEEPSEEK AI: SO'Z TAHLILI, KOLLOKATSIYALARNI ANIQLASH VA TARJIMA QILISH -->
+            <div class="bg-gradient-to-br from-indigo-900/90 via-slate-900 to-purple-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-500/30 relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="max-w-3xl mb-5">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold mb-3 border border-indigo-400/30">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        DeepSeek-v4 AI & PhD Kollokatsiya Modeli
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-bold flex items-center gap-2 text-white">
+                        <i data-lucide="bot" class="w-6 h-6 text-indigo-400"></i> AI Soʻz va Gap Tahlilchisi (Ot, Feʻl, Kollokatsiyalar & Tarjima)
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
+                        Ixtiyoriy soʻz yoki gap yozing (masalan: <em>dam oldim</em>, <em>choy ichdim</em>, <em>charchadim uxlayman</em>) — AI har bir soʻzni oʻrganib, <strong>qaysi biri Ot (Noun)</strong> va <strong>qaysi biri Feʻl (Verb)</strong> ekanini aniqlaydi, birikma modelini koʻrsatadi hamda barqaror kollokatsiyalarini taqdim etadi.
+                    </p>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex flex-col sm:flex-row gap-2.5">
+                        <div class="relative flex-1">
+                            <i data-lucide="search" class="w-5 h-5 absolute left-4 top-3.5 text-slate-400"></i>
+                            <input type="text" id="collocAiWordInput" placeholder="Soʻz yoki gap yozing (masalan: dam oldim, choy ichdim, charchadim uxlayman, kitob oʻqidim)..." class="w-full pl-12 pr-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/15 backdrop-blur-sm transition">
+                        </div>
+                        <button id="collocAiAnalyzeBtn" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-sm shadow-lg shadow-indigo-500/25 transition flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer active:scale-95">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> AI Tahlil & Tarjima Qilish
+                        </button>
+                    </div>
+
+                    <!-- Tezkor namunalar -->
+                    <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
+                        <span class="text-slate-400 text-[11px] font-medium">Tezkor namunalar (Ot & Feʻl tahlili):</span>
+                        <button onclick="collocationManager.triggerAiWordSearch('dam oldim')" class="px-2.5 py-1 rounded-lg bg-indigo-500/30 hover:bg-indigo-500/50 text-indigo-100 border border-indigo-400/30 transition font-semibold">dam oldim</button>
+                        <button onclick="collocationManager.triggerAiWordSearch('choy ichdim')" class="px-2.5 py-1 rounded-lg bg-indigo-500/30 hover:bg-indigo-500/50 text-indigo-100 border border-indigo-400/30 transition font-semibold">choy ichdim</button>
+                        <button onclick="collocationManager.triggerAiWordSearch('charchadim uxlayman')" class="px-2.5 py-1 rounded-lg bg-indigo-500/30 hover:bg-indigo-500/50 text-indigo-100 border border-indigo-400/30 transition font-semibold">charchadim uxlayman</button>
+                        <button onclick="collocationManager.triggerAiWordSearch('kitob oʻqidim')" class="px-2.5 py-1 rounded-lg bg-indigo-500/30 hover:bg-indigo-500/50 text-indigo-100 border border-indigo-400/30 transition font-semibold">kitob oʻqidim</button>
+                        <button onclick="collocationManager.triggerAiWordSearch('take a rest')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-indigo-200 border border-white/10 transition">take a rest</button>
+                        <button onclick="collocationManager.triggerAiWordSearch('qaror')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-indigo-200 border border-white/10 transition">qaror (decision)</button>
+                        <button onclick="collocationManager.triggerAiWordSearch('sovuq')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-indigo-200 border border-white/10 transition">sovuq (cold)</button>
+                    </div>
+                </div>
+
+                <!-- Live AI Natijalar Kartasi -->
+                <div id="collocAiResultBox" class="mt-5 hidden transition-all duration-300">
+                    <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl p-5 sm:p-6 text-slate-800 dark:text-slate-100 border border-white/20 dark:border-slate-700 shadow-2xl space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                                <h3 id="collocAiResultTitle" class="font-bold text-sm sm:text-base text-slate-900 dark:text-white flex items-center gap-2">
+                                    AI Natijasi
+                                </h3>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button id="collocAiFilterDbBtn" class="px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 text-xs font-semibold flex items-center gap-1 transition">
+                                    <i data-lucide="database" class="w-3.5 h-3.5"></i> Bazadan Koʻrish
+                                </button>
+                                <button id="collocAiCopyBtn" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 text-xs font-semibold flex items-center gap-1 transition">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> Nusxalash
+                                </button>
+                                <button onclick="document.getElementById('collocAiResultBox').classList.add('hidden')" class="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="collocAiResultContent" class="space-y-4 text-xs sm:text-sm leading-relaxed">
+                            <!-- Natija shu yerga yuklanadi -->
+                        </div>
+                    </div>
+                </div>
+            <!-- RESEARCHER OCCURRENCES & KWIC HUB (PHD GATE 6) -->
+            <div id="phdResearcherHubContainer"></div>
+
+            <!-- MATRITSA VA ASOSIY FILTRLAR -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-6 h-6 text-indigo-600"></i> Kollokatsiyalar Matritsasi va Qidiruv Bazasi
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                            MI va T-Score koʻrsatkichlari bilan saralangan barqaror birikmalar (6,546 ta turgʻun birikma)
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <div class="bg-slate-100 dark:bg-slate-700 p-1 rounded-xl flex items-center gap-1">
+                            <button id="collocViewGrid" class="p-1.5 rounded-lg bg-indigo-600 text-white text-xs font-medium">
+                                <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                            </button>
+                            <button id="collocViewTable" class="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 text-xs font-medium">
+                                <i data-lucide="table" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                        <button onclick="collocationManager.openAiPromptModal('Kollokatsiyalar matritsasi boʻyicha eng faol birikmalar, ularning MI/T-score koʻrsatkichlari hamda oʻzbek-ingliz tarjimasidagi uslubiy qonuniyatlarini tahlil qilib bering.')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> DeepSeek AI Tahlil
+                        </button>
+
+                        <button id="collocExportBtn" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition" title="CSV formatida yuklab olish">
+                            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> CSV
+                        </button>
+                        <button id="collocExportExcelBtn" onclick="collocationManager.exportExcel()" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition" title="Microsoft Excel formatida to'liq eksport">
+                            <i data-lucide="download" class="w-4 h-4"></i> Excel (XLS)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1-QATOR FILTRLAR: Qidiruv, Til va Manba -->
+                <div class="grid sm:grid-cols-12 gap-3 pt-2">
+                    <div class="sm:col-span-5 relative">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400"></i>
+                        <input type="text" id="collocSearchInput" placeholder="Soʻz yoki gap yozing (masalan: dam oldim, choy ichdim, charchadim uxlayman)..." class="w-full pl-10 pr-24 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button onclick="collocationManager.triggerAiFromSearchInput()" title="AI Morfo-Sintaktik tahlil (Ot, Fe'l va Kollokatsiyalar)" class="absolute right-1.5 top-1.5 px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1 shadow-sm">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> AI Tahlil
+                        </button>
+                    </div>
+
+                    <!-- Modul 2: Til bo'yicha filtr -->
+                    <div class="sm:col-span-3">
+                        <select id="collocLangFilter" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold">
+                            <option value="all">🌐 Barcha tillar (EN + UZ)</option>
+                            <option value="en">🇬🇧 Inglizcha kollokatsiyalar</option>
+                            <option value="uz">🇺🇿 O‘zbekcha ekvivalentlar</option>
+                        </select>
+                    </div>
+
+                    <!-- Modul 1: Manba matnlar filtri -->
+                    <div class="sm:col-span-4">
+                        <select id="collocSourceFilter" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+                            <option value="all">Barcha manbalar (6,546 ta)</option>
+                            <option value="Choʻlpon">Choʻlpon: «Kecha va kunduz» (Parallel Badiiy)</option>
+                            <option value="Chol va dengiz">E. Hemingway: «Chol va dengiz» (Parallel)</option>
+                            <option value="Xazinalar">R. L. Stevenson: «Treasure Island» (Parallel)</option>
+                            <option value="Cambridge Collocations (Intermediate)">Cambridge Intermediate (4,323)</option>
+                            <option value="IELTS Academic Collocations List">IELTS Academic (2,466)</option>
+                            <option value="1000 English Collocations Ebook">1000 Collocations Ebook (778)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tezkor Namunalar (Ot & Fe'l tahlili) -->
+                <div class="flex items-center gap-1.5 flex-wrap text-xs pt-1">
+                    <span class="text-slate-400 text-[11px] font-semibold">Namuna soʻrovlar (Ot & Feʻl tahlili):</span>
+                    <button onclick="collocationManager.quickSearch('dam oldim')" class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 text-[11px] font-semibold transition border border-indigo-200 dark:border-indigo-800">dam oldim</button>
+                    <button onclick="collocationManager.quickSearch('choy ichdim')" class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 text-[11px] font-semibold transition border border-indigo-200 dark:border-indigo-800">choy ichdim</button>
+                    <button onclick="collocationManager.quickSearch('charchadim uxlayman')" class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 text-[11px] font-semibold transition border border-indigo-200 dark:border-indigo-800">charchadim uxlayman</button>
+                    <button onclick="collocationManager.quickSearch('kitob o\'qidim')" class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 text-[11px] font-semibold transition border border-indigo-200 dark:border-indigo-800">kitob oʻqidim</button>
+                    <button onclick="collocationManager.quickSearch('take a rest')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 text-[11px] font-semibold transition">take a rest</button>
+                </div>
+
+                <!-- 2-QATOR FILTRLAR (PhD Boblari: 3.1, 3.2, 3.3 va Statistika) -->
+                <div class="grid sm:grid-cols-12 gap-3 pt-1">
+                    <!-- 3.1-bob: Struktur-semantik qolip -->
+                    <div class="sm:col-span-3">
+                        <label class="block text-[10px] font-mono font-bold text-slate-500 mb-1 uppercase">3.1 Struktur-semantik qolip:</label>
+                        <select id="collocPatternFilter" class="w-full py-2 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="all">Barcha strukturalar</option>
+                            <option value="Sifat + Ot">Sifat + Ot (Adj + Noun)</option>
+                            <option value="Feʼl + Ot">Feʼl + Ot (Verb + Noun)</option>
+                            <option value="Ot + Feʼl">Ot + Feʼl (Noun + Verb)</option>
+                            <option value="Ravish + Feʼl">Ravish + Feʼl (Adv + Verb)</option>
+                            <option value="Ravish + Sifat">Ravish + Sifat (Adv + Adj)</option>
+                            <option value="Feʼl + Ravish">Feʼl + Ravish (Verb + Adv)</option>
+                        </select>
+                    </div>
+
+                    <!-- 3.1-bob: Semantik guruh -->
+                    <div class="sm:col-span-3">
+                        <label class="block text-[10px] font-mono font-bold text-slate-500 mb-1 uppercase">3.1 Semantik guruh:</label>
+                        <select id="collocSemanticFilter" class="w-full py-2 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="all">Barcha semantik guruhlar</option>
+                            <option value="Hissiyot">Hissiyot va ruhiy kechinmalar</option>
+                            <option value="Harakat">Harakat va jismoniy holat</option>
+                            <option value="Ijtimoiy">Ijtimoiy munosabatlar va jamiyat</option>
+                            <option value="Nutq">Nutq, muloqot va tafakkur</option>
+                            <option value="Tabiat">Tabiat, muhit va borliq</option>
+                            <option value="Ilmiy">Ilmiy-akademik va mantiqiy</option>
+                        </select>
+                    </div>
+
+                    <!-- 3.2-bob: Tarjima ekvivalentligi -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-[10px] font-mono font-bold text-slate-500 mb-1 uppercase">3.2 Ekvivalentlik:</label>
+                        <select id="collocCategoryFilter" class="w-full py-2 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="all">Barcha ekvivalentlik</option>
+                            <option value="Mos ekvivalent">Mos ekvivalent (Toʻliq)</option>
+                            <option value="Qisman moslik">Qisman moslik</option>
+                            <option value="Transformatsiya">Transformatsiya</option>
+                            <option value="Tarjimasiz">Tarjimasiz / Kalka holati</option>
+                        </select>
+                    </div>
+
+                    <!-- 3.3-bob: Lingvomadaniy izoh -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-[10px] font-mono font-bold text-slate-500 mb-1 uppercase">3.3 Lingvomadaniy:</label>
+                        <select id="collocCulturalFilter" class="w-full py-2 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+                            <option value="all">Barcha birikmalar</option>
+                            <option value="cultural_only">🏛️ Faqat lingvomadaniy</option>
+                        </select>
+                    </div>
+
+                    <!-- Statistik saralash -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-[10px] font-mono font-bold text-slate-500 mb-1 uppercase">Statistik saralash:</label>
+                        <select id="collocSortSelect" class="w-full py-2 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="mi">MI Score (Yuqori)</option>
+                            <option value="tscore">T-Score (Yuqori)</option>
+                            <option value="ll">Log-Likelihood (LL)</option>
+                            <option value="freq">Chastota (f)</option>
+                            <option value="uzbek">Oʻzbekcha (A-Z)</option>
+                            <option value="english">Inglizcha (A-Z)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100 dark:border-slate-700/60">
+                    <span id="collocBadgeCount" class="font-medium">...</span>
+                    <span>Bazada jami: <strong id="collocTotalCount" class="font-mono text-indigo-600 dark:text-indigo-400">0</strong></span>
+                </div>
+            </div>
+
+            <!-- REAL-TIME AI MORFO-SINTAKTIK & SO'Z TURKUMLARI TAHLILCHISI (OT, FE'L, BIRIKMALAR) -->
+            <div id="collocPosAnalysisBox" class="hidden mb-6 bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 rounded-3xl p-6 text-white border border-indigo-500/30 shadow-xl space-y-4"></div>
+
+            <div id="collocContainer"></div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW 5: CHECKER & EXTRACTOR (MATN TAHLILI) -->
+        <!-- ============================================== -->
+        <!-- ============================================== -->
+        <!-- VIEW 5: COLLOCATION RESEARCH LAB (PDF 1 & 4-BO'LIMLAR) -->
+        <!-- ============================================== -->
+        <section id="view-checker" class="tab-view hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-700/80">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-xs font-semibold mb-2 border border-indigo-200/80 dark:border-indigo-800">
+                            <i data-lucide="flask-conical" class="w-3.5 h-3.5 text-indigo-600"></i>
+                            <span>PDF 1-bo'lim: Collocation Research Lab</span>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                            Matnni Segmentlash, Kollokatsiyalarni Aniqlash va Statistik Tahlil Laboratoriyasi
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1 max-w-3xl">
+                            Matningizni kiriting: Tizim matnni segmentlaydi, N-gram nomzod birikmalarni ajratadi, chastota (f), MI score, T-score hamda Log-Likelihood (LL) kabi ilmiy statistik ko‘rsatkichlarni hisoblab, kalka xatolarini diagnostika qiladi.
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-2 text-xs font-mono">
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800">
+                            Tokenizatsiya & N-gram Extraction
+                        </span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="relative">
+                        <textarea id="checkerInputText" rows="5" placeholder="Ixtiyoriy o‘zbekcha yoki inglizcha matnni kiriting (masalan, tarjima qilingan roman parchasi, maqola jumlalari)..." class="w-full p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 leading-relaxed font-sans"></textarea>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex flex-wrap items-center gap-2.5">
+                            <button id="checkerAnalyzeBtn" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md transition flex items-center gap-2 cursor-pointer">
+                                <i data-lucide="flask-conical" class="w-4 h-4"></i> Lab Ekstraksiya & Statistik Tahlil
+                            </button>
+                            <button id="checkerAiDiagnoseBtn" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-purple-500/20 transition flex items-center gap-2 cursor-pointer active:scale-95">
+                                <i data-lucide="bot" class="w-4 h-4 text-purple-200"></i> DeepSeek AI Chuqur Diagnostika
+                            </button>
+                            <button id="checkerClearBtn" class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 text-xs sm:text-sm font-semibold transition cursor-pointer">
+                                Tozalash
+                            </button>
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span>MI, T-Score & Log-Likelihood Heuristics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-700/80">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Asarlar boʻyicha sinov namunalari:</span>
+                    <div id="checkerSamplesList" class="grid sm:grid-cols-3 gap-2"></div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-700/80">
+                    <div id="checkerResultsContainer">
+                        <div class="text-center py-12 text-slate-400">
+                            <i data-lucide="flask-conical" class="w-10 h-10 mx-auto mb-2 opacity-40"></i>
+                            <p class="text-sm">Matnni kiriting va «Lab Ekstraksiya & Statistik Tahlil» tugmasini bosing</p>
+                            <p class="text-xs text-slate-400 mt-1">Algoritm matnni segmentlaydi, N-gram kollokatsiya nomzodlarini aniqlaydi va assotsiatsiya kuchini hisoblaydi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW 2: CHAPTERS unpublished per Stage 2 emergency containment -->
+
+        <!-- ============================================== -->
+        <!-- VIEW 6: ANALYTICS & STATS (STATISTIKA) -->
+        <!-- ============================================== -->
+        <section id="view-analytics" class="tab-view hidden space-y-8">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm">
+                <div class="max-w-3xl mb-6">
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 text-indigo-600"></i> Tadqiqotning Statistik Koʻrsatkichlari va Grafiklar
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                        Choʻlpon, Xeminguey va Stivenson asarlari korpusi asosida diagrammalar
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="p-5 bg-slate-50 dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> Strukturaviy Modellar Taqsimoti
+                        </h4>
+                        <p class="text-xs text-slate-500 mb-4">Sifat+Ot, Feʼl+Ot, Ot+Feʼl nisbatlari</p>
+                        <div class="h-64 relative">
+                            <canvas id="patternChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="p-5 bg-slate-50 dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Tarjima Ekvivalentligi Turlari
+                        </h4>
+                        <p class="text-xs text-slate-500 mb-4">Toʻliq, qisman va konseptual foizlar</p>
+                        <div class="h-64 relative">
+                            <canvas id="equivalenceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="p-5 bg-slate-50 dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Asarlar Boʻyicha Taqsimot
+                        </h4>
+                        <p class="text-xs text-slate-500 mb-4">Choʻlpon, Stivenson va Xeminguey ulushi</p>
+                        <div class="h-64 relative">
+                            <canvas id="genreChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW 9: PHD XALQARO STANDARTLAR VA HIMOYA HUB -->
+        <!-- ============================================== -->
+        <section id="view-phd" class="tab-view hidden space-y-8">
+            <!-- Header Banner with Bilingual Switcher -->
+            <div class="bg-gradient-to-r from-amber-600 via-indigo-700 to-indigo-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="flex flex-wrap items-center justify-between gap-4 relative z-10">
+                    <div class="space-y-2 max-w-3xl">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-amber-200 text-xs font-semibold">
+                            <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+                            <span data-i18n-uz="PhD Ilmiy Himoyasi & Xalqaro Standartlar" data-i18n-en="PhD Defense & International Corpus Standards">PhD Ilmiy Himoyasi & Xalqaro Standartlar</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight" data-i18n-uz="Xalqaro Korpus Platformalari & Ilmiy Himoya Markazi" data-i18n-en="International Corpus Platforms & PhD Defense Center">
+                            Xalqaro Korpus Platformalari & Ilmiy Himoya Markazi
+                        </h2>
+                        <p class="text-white/80 text-xs sm:text-sm leading-relaxed" data-i18n-uz="Sketch Engine, COCA, BNC, AntConc, CLARIN-ERIC mezonlari asosida parallel korpus kollokatsiyalarini tadqiq etish va dissertatsiyani xalqaro andozalarga muvofiq himoya qilish tizimi." data-i18n-en="Benchmarking Uzbek-English parallel collocations against Sketch Engine, COCA, BNC, AntConc, and CLARIN-ERIC standards for doctoral dissertation defense.">
+                            Sketch Engine, COCA, BNC, AntConc, CLARIN-ERIC mezonlari asosida parallel korpus kollokatsiyalarini tadqiq etish va dissertatsiyani xalqaro andozalarga muvofiq himoya qilish tizimi.
+                        </p>
+                    </div>
+
+                    <!-- Bilingual Switcher Toggle -->
+                    <div class="flex items-center gap-1.5 p-1.5 rounded-2xl bg-black/25 backdrop-blur-md border border-white/20 self-start sm:self-center">
+                        <button id="phdLangUz" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-indigo-600 text-white flex items-center gap-1.5">
+                            <span>🇺🇿</span> Oʻzbekcha
+                        </button>
+                        <button id="phdLangEn" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-200 hover:text-white flex items-center gap-1.5">
+                            <span>🇬🇧</span> English
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. International Platforms Tabs & Grid -->
+            <div class="space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="globe-2" class="w-5 h-5 text-indigo-600"></i>
+                            <span data-i18n-uz="Xalqaro Korpus Platformalari Tahlili (6 ta Etalon)" data-i18n-en="International Corpus Platforms Benchmarking (6 Benchmarks)">Xalqaro Korpus Platformalari Tahlili (6 ta Etalon)</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-0.5" data-i18n-uz="Dunyo miqyosida korpus lingvistikasi va tarjimashunoslik dissertatsiyalarida tan olingan yetakchi platformalar" data-i18n-en="Recognized leading platforms in corpus linguistics and doctoral translation research worldwide">
+                            Dunyo miqyosida korpus lingvistikasi va tarjimashunoslik dissertatsiyalarida tan olingan yetakchi platformalar
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-1.5 overflow-x-auto p-1 bg-slate-100 dark:bg-slate-800 rounded-2xl text-xs">
+                        <button data-phd-platform="all" class="px-3 py-1.5 rounded-xl font-semibold bg-indigo-600 text-white transition">Barchasi</button>
+                        <button data-phd-platform="sketchengine" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 transition">Sketch Engine</button>
+                        <button data-phd-platform="coca" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 transition">COCA</button>
+                        <button data-phd-platform="bnc" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 transition">BNC</button>
+                        <button data-phd-platform="antconc" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 transition">AntConc</button>
+                        <button data-phd-platform="clarin" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 transition">CLARIN</button>
+                        <button data-phd-platform="wordnet" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 transition">WordNet</button>
+                    </div>
+                </div>
+
+                <div id="phdPlatformsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+            </div>
+
+            <!-- 1.5 XALQARO PLATFORMALAR AMALIY LABORATORIYASI (SKETCH ENGINE, COCA, ANTCONC, CLARIN) -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-700/80">
+                    <div>
+                        <span class="text-xs uppercase font-mono tracking-wider text-purple-600 dark:text-purple-400 font-bold" data-i18n-uz="Amaliy Korpus Laboratoriyasi" data-i18n-en="Applied Corpus Laboratory">Amaliy Korpus Laboratoriyasi</span>
+                        <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mt-1" data-i18n-uz="Xorijiy Platformalardan Koʻchirilgan Asosiy Metodologik Modellar" data-i18n-en="Methodological Modules Transferred from International Platforms">
+                            Xorijiy Platformalardan Koʻchirilgan Asosiy Metodologik Modellar
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-1" data-i18n-uz="Sketch Engine, COCA, AntConc va CLARIN-ERIC tizimlarining eng zarur algoritmlari portalimizga toʻliq singdirildi." data-i18n-en="Key algorithms and protocols from Sketch Engine, COCA, AntConc, and CLARIN-ERIC directly integrated into our portal.">
+                            Sketch Engine, COCA, AntConc va CLARIN-ERIC tizimlarining eng zarur algoritmlari portalimizga toʻliq singdirildi.
+                        </p>
+                    </div>
+
+                    <!-- Workbench Tab Selector -->
+                    <div class="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl text-xs font-semibold">
+                        <button onclick="phdHubManager.switchWorkbenchTab('sketchengine')" id="wbTab-sketchengine" class="px-3.5 py-2 rounded-xl bg-indigo-600 text-white shadow-sm transition flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="layers" class="w-3.5 h-3.5"></i> Sketch Engine (logDice)
+                        </button>
+                        <button onclick="phdHubManager.switchWorkbenchTab('coca')" id="wbTab-coca" class="px-3.5 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 transition flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="split" class="w-3.5 h-3.5"></i> COCA (4L-4R Span)
+                        </button>
+                        <button onclick="phdHubManager.switchWorkbenchTab('antconc')" id="wbTab-antconc" class="px-3.5 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 transition flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="align-center" class="w-3.5 h-3.5"></i> AntConc (KWIC & G²)
+                        </button>
+                        <button onclick="phdHubManager.switchWorkbenchTab('clarin')" id="wbTab-clarin" class="px-3.5 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 transition flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="file-code" class="w-3.5 h-3.5"></i> CLARIN (TMX Pipeline)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Workbench Dynamic Content Area -->
+                <div id="phdWorkbenchContainer" class="transition-all duration-300"></div>
+            </div>
+
+            <!-- 2. Association Metric Simulator (MI, T-Score, logDice) -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm space-y-6">
+                <div>
+                    <span class="text-xs uppercase font-mono tracking-wider text-indigo-600 dark:text-indigo-400 font-bold" data-i18n-uz="Statistik Metodologiya Simulyatori" data-i18n-en="Statistical Methodology Simulator">Statistik Metodologiya Simulyatori</span>
+                    <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mt-1" data-i18n-uz="MI Score, T-Score va logDice Assotsiatsiya Hisoblagichi" data-i18n-en="MI Score, T-Score & logDice Association Calculator">
+                        MI Score, T-Score va logDice Assotsiatsiya Hisoblagichi
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1 max-w-2xl" data-i18n-uz="Ixtiyoriy ikki soʻz birikmasini kiriting va uning barqaror kollokatsiya yoki erkin birikma (yoxud kalka) ekanligini xalqaro formulalar boʻyicha tekshiring." data-i18n-en="Enter any word pair to verify whether it is a strong collocation or an unnatural calque according to international formulas.">
+                        Ixtiyoriy ikki soʻz birikmasini kiriting va uning barqaror kollokatsiya yoki erkin birikma (yoxud kalka) ekanligini xalqaro formulalar boʻyicha tekshiring.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-12 gap-3">
+                    <div class="sm:col-span-5">
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1" data-i18n-uz="1-soʻz (Node / Asos soʻz):" data-i18n-en="Word 1 (Node word):">1-soʻz (Node / Asos soʻz):</label>
+                        <input type="text" id="phdSimWord1" value="cold" placeholder="Masalan: cold, heavy, make..." class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono">
+                    </div>
+
+                    <div class="sm:col-span-5">
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1" data-i18n-uz="2-soʻz (Collocate / Hamroh soʻz):" data-i18n-en="Word 2 (Collocate word):">2-soʻz (Collocate / Hamroh soʻz):</label>
+                        <input type="text" id="phdSimWord2" value="gaze" placeholder="Masalan: gaze, stare, look, rain..." class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono">
+                    </div>
+
+                    <div class="sm:col-span-2 flex items-end">
+                        <button id="phdMetricCalcBtn" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-600/20 transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="calculator" class="w-4 h-4"></i> Hisoblash
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Simulation Result Box -->
+                <div id="phdSimResultBox" class="hidden"></div>
+            </div>
+
+            <!-- 3. PhD Dissertation Novelties & Defense Materials -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm space-y-6">
+                <div>
+                    <span class="text-xs uppercase font-mono tracking-wider text-amber-600 dark:text-amber-400 font-bold" data-i18n-uz="Dissertatsiya Himoyasi Tayyorgarligi" data-i18n-en="Dissertation Defense Framework">Dissertatsiya Himoyasi Tayyorgarligi</span>
+                    <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mt-1" data-i18n-uz="Boblar Boʻyicha Ilmiy Yangiliklar va Himoya Tezislari" data-i18n-en="Core Scientific Novelties by Dissertation Chapters">
+                        Boblar Boʻyicha Ilmiy Yangiliklar va Himoya Tezislari
+                    </h3>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-5">
+                    <!-- Chapter 1 -->
+                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold">1-BOB</span>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">Nazariy Asoslar</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white" data-i18n-uz="Parallel Korpus va Kollokatsiyalar Nazariyasi" data-i18n-en="Theory of Parallel Corpora & Collocations">
+                            Parallel Korpus va Kollokatsiyalar Nazariyasi
+                        </h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n-uz="BNC va Sketch Engine ilmiy konsepsiyalari chogʻishtirilib, oʻzbek-ingliz parallel matnlarida kollokatsiyani erkin sintaktik birikmadan farqlovchi mezonlar ishlab chiqildi." data-i18n-en="Synthesized BNC and Sketch Engine frameworks to define explicit criteria distinguishing collocations from free syntactic combinations in Uzbek-English parallel texts.">
+                            BNC va Sketch Engine ilmiy konsepsiyalari chogʻishtirilib, oʻzbek-ingliz parallel matnlarida kollokatsiyani erkin sintaktik birikmadan farqlovchi mezonlar ishlab chiqildi.
+                        </p>
+                    </div>
+
+                    <!-- Chapter 2 -->
+                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">2-BOB</span>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">Kompyuter Lingvistikasi</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white" data-i18n-uz="Kollokatsiyalarni Statistik Ekstraksiya Qilish" data-i18n-en="Statistical Collocation Extraction">
+                            Kollokatsiyalarni Statistik Ekstraksiya Qilish
+                        </h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n-uz="5,157 parallel jumla va 6,533 ta ilmiy birikma tahlil qilinib, MI Score ≥ 3.0 va T-Score ≥ 2.0 filtrlash algoritmi yordamida oʻzaro faol birikuvchilik darajasi hisoblab chiqildi." data-i18n-en="Analyzed 5,157 parallel sentences and 6,533 academic collocations, calculating association strength using MI Score ≥ 3.0 and T-Score ≥ 2.0 filtering algorithms.">
+                            5,157 parallel jumla va 6,533 ta ilmiy birikma tahlil qilinib, MI Score ≥ 3.0 va T-Score ≥ 2.0 filtrlash algoritmi yordamida oʻzaro faol birikuvchilik darajasi hisoblab chiqildi.
+                        </p>
+                    </div>
+
+                    <!-- Chapter 3 -->
+                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold">3-BOB</span>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">Tarjima Ekvivalentligi</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white" data-i18n-uz="Ekvivalentlik Tipologiyasi & Kalkalarni Tuzatish" data-i18n-en="Equivalence Typology & Calque Prevention">
+                            Ekvivalentlik Tipologiyasi & Kalkalarni Tuzatish
+                        </h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n-uz="Toʻliq, konseptual va kontekstual ekvivalentlik modellari ishlab chiqildi. «Cold look», «strong rain» kabi tipik soʻzma-soʻz kalkalarni aniqlash va ilmiy bartaraf etish usullari asoslandi." data-i18n-en="Classified translational equivalence into Full, Conceptual, and Contextual types while providing definitive solutions to eliminate literal calques such as 'cold look' and 'strong rain'.">
+                            Toʻliq, konseptual va kontekstual ekvivalentlik modellari ishlab chiqildi. «Cold look», «strong rain» kabi tipik soʻzma-soʻz kalkalarni aniqlash va ilmiy bartaraf etish usullari asoslandi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. DeepSeek AI Linguistic Assistant Integration -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="bot" class="w-5 h-5 text-indigo-600"></i>
+                                <span>PhD AI Lingvistik Maslahatchi & Korpus Tahlilchisi</span>
+                            </h3>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-0.5">
+                            DeepSeek-v4 Vision Flash AI modeli bilan toʻliq integratsiyalashgan (C:\Users\user\Desktop\Новый текстовый документ.txt)
+                        </p>
+                    </div>
+
+                    <span class="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-emerald-800">
+                        deepseek-v4-flash-vision-exp
+                    </span>
+                </div>
+
+                <!-- Quick prompt suggestion chips -->
+                <div class="flex items-center gap-2 overflow-x-auto py-1 text-xs">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold shrink-0">Tayyor mavzular:</span>
+                    <button onclick="phdHubManager.askAiAssistant('«Sovuq nigoh» birikmasida cold look nega kalka hisoblanadi va toʻgʻri ilmiy ekvivalentlari qanday?')" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-700/60 hover:bg-indigo-50 dark:hover:bg-indigo-950 text-slate-700 dark:text-slate-200 text-xs transition shrink-0">
+                        ❄️ Sovuq nigoh & cold look kalkasi
+                    </button>
+                    <button onclick="phdHubManager.askAiAssistant('Dissertatsiyaning 2-bobida MI Score va T-Score formulalari nima maqsadda qoʻllanilgan?')" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-700/60 hover:bg-indigo-50 dark:hover:bg-indigo-950 text-slate-700 dark:text-slate-200 text-xs transition shrink-0">
+                        📊 MI va T-Score formulalari
+                    </button>
+                    <button onclick="phdHubManager.askAiAssistant('Sketch Engine va BNC korpuslarining oʻzbek tili parallel korpusi uchun ahamiyati nima?')" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-700/60 hover:bg-indigo-50 dark:hover:bg-indigo-950 text-slate-700 dark:text-slate-200 text-xs transition shrink-0">
+                        🌐 Sketch Engine va BNC taqqosi
+                    </button>
+                    <button onclick="phdHubManager.askAiAssistant('PhD himoyasida komissiya aʼzolariga taqdim etiladigan asosiy ilmiy xulosalarni shakllantirib ber.')" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-700/60 hover:bg-indigo-50 dark:hover:bg-indigo-950 text-slate-700 dark:text-slate-200 text-xs transition shrink-0">
+                        🎓 Himoya uchun ilmiy tezislar
+                    </button>
+                </div>
+
+                <!-- AI Chat Log Window -->
+                <div id="phdAiChatLog" class="h-80 overflow-y-auto p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-3">
+                    <div class="flex justify-start mb-2">
+                        <div class="max-w-2xl p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs leading-relaxed shadow-sm">
+                            <span class="font-bold flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 text-[11px] mb-1">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> PhD Korpus Lingvisti & DeepSeek AI:
+                            </span>
+                            <p>
+                                Assalomu alaykum! Men doktorlik dissertatsiyangiz (<strong>«Tarjima va teng matnlar parallel korpusida oʻzaro faol birikuvchi (kollokatsion) soʻzlar tadqiqi»</strong>) boʻyicha ixtisoslashgan sunʼiy intellekt assistentiman.
+                                Xalqaro korpus mezonlari (Sketch Engine, BNC, COCA), statistik koʻrsatkichlar (MI, T-Score), badiiy parallel korpusimiz (Choʻlpon, Hemingway, Stevenson) hamda uslubiy kalkalar boʻyicha savollaringizga ilmiy javob berishga tayyorman.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Prompt Input Bar -->
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="text" id="phdAiInput" placeholder="Kollokatsiya, korpus yoki himoya boʻyicha savol bering (oʻzbekcha / inglizcha)..." class="flex-grow px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button id="phdAiSendBtn" class="px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-600/20 transition flex items-center gap-1.5">
+                        <i data-lucide="send" class="w-4 h-4"></i> Yuborish
+                    </button>
+                </div>
+            </div>
+
+            <!-- 5. RASMIY PHD HIMOYA DOSSIERI & NUTQ MATNI (DEFENSE DOSSIER & COMMITTEE Q&A) -->
+            <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl border border-indigo-500/30 space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/10">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold mb-2 border border-amber-400/30">
+                            <i data-lucide="award" class="w-3.5 h-3.5"></i>
+                            <span data-i18n-uz="Rasmiy Himoya Hujjatlari" data-i18n-en="Official Defense Dossier">Rasmiy Himoya Hujjatlari</span>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-black text-white" data-i18n-uz="Dissertatsiya Himoyasi Kirish Nutqi & Ilmiy Kengash Savol-Javoblari" data-i18n-en="Doctoral Defense Opening Speech & Committee Q&A Dossier">
+                            Dissertatsiya Himoyasi Kirish Nutqi & Ilmiy Kengash Savol-Javoblari
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-1" data-i18n-uz="Ilmiy Kengash majlisida nomzod tomonidan oʻqiladigan rasmiy 5 daqiqalik maʼruza va taqrizchilarning ehtimoliy savollariga tayyor akademik javoblar." data-i18n-en="Official 5-minute defense presentation for the Scientific Council and academic responses to committee inquiries.">
+                            Ilmiy Kengash majlisida nomzod tomonidan oʻqiladigan rasmiy 5 daqiqalik maʼruza va taqrizchilarning ehtimoliy savollariga tayyor akademik javoblar.
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button onclick="phdHubManager.copyDefenseSpeech()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                            <span data-i18n-uz="Nutqni Nusxalash" data-i18n-en="Copy Speech">Nutqni Nusxalash</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Speech Container -->
+                <div id="phdDefenseDossierContent" class="space-y-6"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-10 mt-12 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span class="font-extrabold text-base text-slate-900 dark:text-white">KORPUS.LINGVO</span>
+                        <span class="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-slate-600 dark:text-slate-300">v4.5 (Toʻliq 6,533 Kollokat & 24,554 Lugʻat & PhD Hub)</span>
+                    </div>
+                    <p class="text-xs text-slate-500 max-w-xl">
+                        «Tarjima va teng matnlar parallel korpusida oʻzaro faol birikuvchi (kollokatsion) soʻzlar tadqiqi (oʻzbek va ingliz tillari misolida)» ilmiy dissertatsiyasi asosida ishlab chiqilgan.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3 text-xs text-slate-500">
+                    <span>Oʻzbekiston Respublikasi</span>
+                    <span>•</span>
+                    <span>Toshkent — 2026</span>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-slate-100 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">Korpusdagi matnlar mualliflik huquqi egalariga tegishli. Ular faqat ilmiy tadqiqot maqsadida, cheklangan parchalar ko‘rinishida ko‘rsatiladi. Nusxa ko‘chirish va tarqatish taqiqlanadi.</div>
+        </div>
+    </footer>
+
+    <!-- MODALS -->
+    <div id="collocDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button id="closeCollocModalBtn" class="absolute right-5 top-5 p-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div id="collocModalContent"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/collocations_list.js"></script>
+    <script src="js/corpus.js"></script>
+    <script src="js/dictionary.js"></script>
+    <script src="js/collocations.js"></script>
+    <script src="js/checker.js"></script>
+    <script src="js/translator.js"></script>
+    <script src="js/phd_hub.js"></script>
+    <script src="js/researcher_hub.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

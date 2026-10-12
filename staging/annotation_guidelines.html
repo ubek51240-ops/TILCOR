@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TILCOR v2.0 — Kollokatsiyalarni Annotatsiyalash Ilmiy Yo‘riqnomasi (Guideline v1.0)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --highlight: #fef08a;
+      --success: #15803d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    h2 { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin: 24px 0 12px 0; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; }
+    h3 { font-size: 1.05rem; font-weight: 600; color: #1e293b; margin: 16px 0 8px 0; }
+    p { margin-bottom: 12px; font-size: 0.95rem; }
+    .example-box {
+      background: #f1f5f9;
+      border-left: 4px solid var(--primary);
+      padding: 12px 18px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.9rem;
+    }
+    .badge-ver { background: #dbeafe; color: #1e40af; padding: 3px 10px; border-radius: 9999px; font-weight: 600; font-size: 0.8rem; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.88rem; }
+    th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; }
+    th { background: #f8fafc; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1 style="font-size:1.15rem; margin:0;"><i class="fa-solid fa-book-open"></i> TILCOR v2.0 — Ilmiy Annotatsiya Yo‘riqnomasi</h1>
+      <span style="font-size:0.8rem; color:#94a3b8;">PhD Himoyasi Standartlari Asosida · Versiya 1.0 (2026)</span>
+    </div>
+    <div style="display:flex; gap:12px;">
+      <a href="annotation_workspace.html" style="color:white; text-decoration:none; background:rgba(255,255,255,0.15); padding:6px 14px; border-radius:6px; font-size:0.85rem;"><i class="fa-solid fa-arrow-left"></i> Ish joyiga qaytish</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h1>Badiiy Matnlarda Kollokatsiyalarni Ajratish va Tasniflash Yo‘riqnomasi</h1>
+        <span class="badge-ver">Guideline v1.0</span>
+      </div>
+      <p style="color:var(--text-muted);">
+        <b>Dissertatsiya mavzusi:</b> «TARJIMA VA TENG MATNLAR PARALLEL KORPUSIDA O‘ZARO FAOL BIRIKUVCHI (KOLLOKATSION) SO‘ZLAR TADQIQI (o‘zbek va ingliz tillari misolida)»  
+        Ushbu yo‘riqnoma dissertatsiyaning 1.2, 3.1, 3.2 va 3.3-fasllari doirasida parallel matnlardagi kollokatsion birliklarni yagona ilmiy tamoyil asosida annotatsiyalash uchun ishlab chiqilgan.
+      </p>
+
+      <h2>1. Birlik Turi va Chegaralanishi (1.1-fasl)</h2>
+      <p>Annotator korpus matnidagi har bir birlikni quyidagi to‘rt toifadan biriga mansub deb belgilaydi:</p>
+      <table>
+        <thead><tr><th>Birlik Turi</th><th>Ta'rifi</th><th>Korpusdan Tasdiqlangan Misollar</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>Kollokatsiya</b></td>
+            <td>Leksik jihatdan chegaralangan, ikki yoki undan ortiq so‘zning tabiiy, barqaror va odatiy qo‘shilishi. Komponentlar erkin almashina olmaydi.</td>
+            <td><i>fished alone ➔ baliq ovlardi</i><br><i>ko‘ngli tusamoq ➔ hearts wished for</i><br><i>chuqur xo‘rsinmoq ➔ sigh deeply</i></td>
+          </tr>
+          <tr>
+            <td><b>Erkin birikma</b></td>
+            <td>Sintaktik qoliplar asosida so‘zlarning ma'noviy talab bo‘yicha vaqtincha birlashishi. Komponentlar sinonimlari bilan cheklovsiz almashtirilishi mumkin.</td>
+            <td><i>katta stol</i>, <i>qayiqda o‘tirdi</i>, <i>kitobni o‘qidi</i></td>
+          </tr>
+          <tr>
+            <td><b>Frazeologik birlik</b></td>
+            <td>Semantik yaxlitlikka ega, to‘g‘ridan-to‘g‘ri ma'nosini to‘liq yo‘qotgan, ko‘chma ma'noli turg‘un ibora (idioma).</td>
+            <td><i>yuragi yorilmoq</i>, <i>ko‘z yummoq</i> (vafot etmoq), <i>boshi osmonga yetmoq</i></td>
+          </tr>
+          <tr>
+            <td><b>Noaniq</b></td>
+            <td>Birikuvchanlik chegarasi bahsli bo‘lgan yoki kontekstual tahlilni talab qiluvchi birliklar.</td>
+            <td>Ekspert tomonidan qo‘shimcha adabiyotlar tahlili talab etiladi.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>2. Struktur Qoliplar (3.1-fasl)</h2>
+      <p>Asl nusxadagi kollokatsiyalarning grammatik modeli quyidagi 5 asosiy qolipdan biriga kiritiladi:</p>
+      <ul>
+        <li><b>Fe’l + Ot (Verb + Noun):</b> <i>baliq ovlamoq</i>, <i>take a fish</i>, <i>qaror qabul qilmoq</i></li>
+        <li><b>Sifat + Ot (Adj + Noun):</b> <i>sovuq nigoh</i>, <i>permanent defeat</i>, <i>og‘ir mehnat</i></li>
+        <li><b>Ot + Fe’l (Noun + Verb):</b> <i>ko‘ngli tusamoq</i>, <i>yurak urmoq</i>, <i>tong otmoq</i></li>
+        <li><b>Ravish + Fe’l (Adv + Verb):</b> <i>chuqur xo‘rsinmoq</i>, <i>og‘ir nafas olmoq</i></li>
+        <li><b>Ot + Ot (Noun + Noun):</b> <i>hayot tarzi</i>, <i>qalb amri</i></li>
+        <li><b>Boshqa:</b> Predlogli yoki uch komponentli maxsus birikmalar.</li>
+      </ul>
+
+      <h2>3. Tarjima Ekvivalentligi Turlari (3.2-fasl)</h2>
+      <table>
+        <thead><tr><th>Ekvivalentlik Turi</th><th>Ta'rifi</th><th>Korpusdan Misol</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>To‘liq ekvivalent</b></td>
+            <td>Semantik va strukturaviy jihatdan ikki tilda aynan mos kelgan holat.</td>
+            <td><i>fished alone ➔ baliq ovlardi</i></td>
+          </tr>
+          <tr>
+            <td><b>Qisman ekvivalent</b></td>
+            <td>Semantik jihatdan mos, lekin birikuvchanlik me'yorida qisman siljish mavjud.</td>
+            <td><i>heavy heart ➔ og‘ir yurak (emas, ezilgan ko‘ngil)</i></td>
+          </tr>
+          <tr>
+            <td><b>Strukturaviy transformatsiya</b></td>
+            <td>Grammatik so‘z turkumi yoki sintaktik struktura o‘zgargan (fe'l+ot ➔ sof fe'l).</td>
+            <td><i>make a choice ➔ tanlamoq</i></td>
+          </tr>
+          <tr>
+            <td><b>Obraz almashtirish</b></td>
+            <td>Metaforik obraz yoki metafora asosi o‘zgargan holda berilgan.</td>
+            <td><i>flag of permanent defeat ➔ yaksoni chiqqan polkning yalovi</i></td>
+          </tr>
+          <tr>
+            <td><b>Tasviriy tarjima</b></td>
+            <td>To‘g‘ridan-to‘g‘ri leksik birlik yo‘qligi sababli tushuntiruvchi ibora orqali berilgan.</td>
+            <td>Izohli iboralar</td>
+          </tr>
+          <tr>
+            <td><b>Bir so‘zga siqilgan</b></td>
+            <td>Ikki yoki uch so‘zli birikma bitta ixcham so‘z bilan ifodalangan.</td>
+            <td>Kompressiya usuli</td>
+          </tr>
+          <tr>
+            <td><b>Tushirib qoldirilgan</b></td>
+            <td>Tarjimada ushbu birikma mutlaqo aks etmagan (omission).</td>
+            <td>Tarjima matnida mavjud emas</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>4. Ikki Annotator Kelishuvi va Nazorat Mexanizmi</h2>
+      <p>
+        Annotatsiyalar xolisligini ta'minlash maqsadida tizimda ikkita mustaqil ekspert (Tadqiqotchi va Ilmiy Rahbar) annotatsiyalari solishtiriladi va <b>Cohen's Kappa ($\kappa$)</b> ko‘rsatkichi hisoblab boriladi:
+      </p>
+      <div class="example-box">
+        $$\kappa = \frac{P_o - P_e}{1 - P_e}$$
+        <ul>
+          <li><b>$P_o$</b> — Kuzatilgan kelishuv ulushi (Observed Agreement).</li>
+          <li><b>$P_e$</b> — Tasodifiy ehtimolli kelishuv ulushi (Expected Chance Agreement).</li>
+        </ul>
+      </div>
+      <p>
+        Landis & Koch (1977) mezoniga ko‘ra $\kappa \ge 0.61$ bo‘lgan holatda annotatsiyalar dissertatsiyaning yakuniy jadvallariga kiritish uchun yetarli darajada ilmiy asoslangan deb topiladi.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
