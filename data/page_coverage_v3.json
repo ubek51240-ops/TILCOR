@@ -1,0 +1,21 @@
+{
+  "kvk_uz": {
+    "total_pages": 263,
+    "below_98_count": 0,
+    "below_98": []
+  },
+  "kvk_en": {
+    "total_pages": 227,
+    "below_98_count": 0,
+    "below_98": []
+  },
+  "oms_en": {
+    "total_pages": 117,
+    "missing_pages": 0
+  },
+  "oms_uz": {
+    "total_pages": 46,
+    "below_98_count": 0,
+    "below_98": []
+  }
+}

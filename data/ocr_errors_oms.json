@@ -1,0 +1,328 @@
+[
+  {
+    "original": "chnqishim",
+    "corrected": "chiqishim",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_12",
+        "page": 1,
+        "snippet": "— Santyago,— dedi bola bog‘log‘liq qayiq turgan qirg‘oqdan yuqorilab ketgan yo‘l osha ko‘tarilisharkan,— endi yana sen b..."
+      }
+    ]
+  },
+  {
+    "original": "uchui",
+    "corrected": "uchun",
+    "type": "ocr_letter_i_for_n",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_14",
+        "page": 1,
+        "snippet": "Chol bolani baliq oviga o‘rgatgan, shuning uchui ham bola uni yaxshi ko‘rardi."
+      }
+    ]
+  },
+  {
+    "original": "uchup",
+    "corrected": "uchun",
+    "type": "ocr_letter_p_for_n",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_414",
+        "page": 10,
+        "snippet": "Chol uchar baliqning suvdan qayta-qayta otilib chiqayotganini, qush esa uni tutish uchup noshud va o‘ng‘aysiz harakatlar..."
+      }
+    ]
+  },
+  {
+    "original": "unnng",
+    "corrected": "uning",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_1835",
+        "page": 46,
+        "snippet": "U yana muk tushib uxlar, bola esa yonida o‘tirib unnng uyqusini ardoqlardi."
+      }
+    ]
+  },
+  {
+    "original": "unnkidan",
+    "corrected": "uningkidan",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_901",
+        "page": 22,
+        "snippet": "«Qiziq, bunaqangi chuqurlikda u nimani ham ko‘ra olardi?—deb o‘yladi chol.—Ko‘zlari juda yirik-yirik, lekin otning ko‘zi..."
+      }
+    ]
+  },
+  {
+    "original": "charchashnn",
+    "corrected": "charchashni",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_686",
+        "page": 17,
+        "snippet": "Ammo quyosh yana ham yuqori ko‘tarilganda, baliq charchashnn hatto xayoliga ham keltirmayotganligi cholga ayon bo‘ldi."
+      }
+    ]
+  },
+  {
+    "original": "kuchanmayotganinn",
+    "corrected": "kuchanmayotganini",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_495",
+        "page": 13,
+        "snippet": "U baliqning zo‘r berib kuchanmayotganinn sezib turar, shun-dan bo‘lsa kerak chilvirni siqimlamay, yengilgina ushlab olga..."
+      }
+    ]
+  },
+  {
+    "original": "yelkasinnng",
+    "corrected": "yelkasining",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_671",
+        "page": 17,
+        "snippet": "Chol qopni o‘rnashtiribroq qo‘ydi, chilvirni ehtiyot bilan yelkasinnng hali lat yemagan qismiga o‘tkazib, butun og‘irlik..."
+      }
+    ]
+  },
+  {
+    "original": "olmasliginn",
+    "corrected": "olmasligini",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_694",
+        "page": 17,
+        "snippet": "U chilvirni yana ham tarangroq tortishga urinib ko‘rdi, ammo chilvir busiz ham avval boshdan shunday taranglashgan ediki..."
+      }
+    ]
+  },
+  {
+    "original": "baliqnnng",
+    "corrected": "baliqning",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_834",
+        "page": 21,
+        "snippet": "Agar baliqnnng harakatnni bir me’yordagi qarshilik bilan sekinlatishga muvaffaq bo‘lmasa, u holda baliq bor-yo‘q kalavas..."
+      }
+    ]
+  },
+  {
+    "original": "harakatnni",
+    "corrected": "harakatini",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_834",
+        "page": 21,
+        "snippet": "Agar baliqnnng harakatnni bir me’yordagi qarshilik bilan sekinlatishga muvaffaq bo‘lmasa, u holda baliq bor-yo‘q kalavas..."
+      }
+    ]
+  },
+  {
+    "original": "burgutnnng",
+    "corrected": "burgutning",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_842",
+        "page": 21,
+        "snippet": "Go‘yo burgutnnng yumuq panjalariga o‘xshaydi."
+      }
+    ]
+  },
+  {
+    "original": "negrnnng",
+    "corrected": "negrning",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_929",
+        "page": 23,
+        "snippet": "Negrnnng soyasi juda ham bahaybat bo‘lib, shamol lampalarni tebratgan paytlarda devorda lopillar edi."
+      }
+    ]
+  },
+  {
+    "original": "chetinn",
+    "corrected": "chetini",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_1074",
+        "page": 27,
+        "snippet": "Chol kaftining chetinn qayiq ziyiga ishqab turib, quyruq tarafga ohista suzib ketayotgan fosfor zarralarini ko‘rdi."
+      }
+    ]
+  },
+  {
+    "original": "parchalarnni",
+    "corrected": "parchalarini",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_1141",
+        "page": 29,
+        "snippet": "Chol endi chilvirni chap qo‘li va yelkalari bilan to‘xtatib turardi; yuzidan makrel go‘shtining parchalarnni yuvib tashl..."
+      }
+    ]
+  },
+  {
+    "original": "ikknnchi",
+    "corrected": "ikkinchi",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_1149",
+        "page": 29,
+        "snippet": "Chol chilvirni qo‘lining yangi qirqilib ketgan yerlariga tekizib yubormaslikka harakat qilib, avaylabgina ushladi va cha..."
+      }
+    ]
+  },
+  {
+    "original": "qismnni",
+    "corrected": "qismini",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_1179",
+        "page": 29,
+        "snippet": "— Endi baliq o‘z doirasining eng olis qismnni o‘tayapti,—dedi u."
+      }
+    ]
+  },
+  {
+    "original": "narsasinn",
+    "corrected": "narsasini",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_1367",
+        "page": 34,
+        "snippet": "Chol ularning boshini pkki barmog‘i orasiga olib uzib tashladi va hech narsasinn qo‘ymay obdon chaynab yeb yubordi."
+      }
+    ]
+  },
+  {
+    "original": "nnhoyati",
+    "corrected": "nihoyatda",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_1368",
+        "page": 34,
+        "snippet": "Qisqichbaqalar nnhoyati mayda edi."
+      }
+    ]
+  },
+  {
+    "original": "ularnn",
+    "corrected": "ularni",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_1370",
+        "page": 34,
+        "snippet": "Chol ularnn batamom yeb bitirgandan so‘ng, shishada qolgan ozginagina suvning chorak qismini ichdi."
+      }
+    ]
+  },
+  {
+    "original": "akulalarnnng",
+    "corrected": "akulalarning",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_1515",
+        "page": 38,
+        "snippet": "So‘ng qo‘llar butun og‘riqqa bira to‘la bardosh beradigan bo‘lib ko‘niksin, keyin yana ishdan bo‘yin tovlab yurmasin uch..."
+      }
+    ]
+  },
+  {
+    "original": "jag‘larinn",
+    "corrected": "jag‘larini",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 0,
+    "contexts": []
+  },
+  {
+    "original": "o‘znning",
+    "corrected": "o‘zining",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 0,
+    "contexts": []
+  },
+  {
+    "original": "voqeann",
+    "corrected": "voqeani",
+    "type": "ocr_letter_n_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_1830",
+        "page": 45,
+        "snippet": "— T iburon, — dedi ofitsiant.— Akulalar.— U so‘ragan ayolga bo‘lgan voqeann batafsil tushuntirib berish niyatida edi."
+      }
+    ]
+  },
+  {
+    "original": "garpunnni",
+    "corrected": "garpunni",
+    "type": "ocr_extra_n",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_105",
+        "page": 3,
+        "snippet": "Garchi chol o‘z narsalariga shu yerlik odamlardan birontasi ham ko‘z olaytirmasligiga amin bo‘lsa-da, harqalay, changak ..."
+      }
+    ]
+  },
+  {
+    "original": "pkki",
+    "corrected": "ikki",
+    "type": "ocr_letter_p_for_i",
+    "occurrences": 1,
+    "contexts": [
+      {
+        "segment_id": "oms_uz_1367",
+        "page": 34,
+        "snippet": "Chol ularning boshini pkki barmog‘i orasiga olib uzib tashladi va hech narsasinn qo‘ymay obdon chaynab yeb yubordi."
+      }
+    ]
+  }
+]

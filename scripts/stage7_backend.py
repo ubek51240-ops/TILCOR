@@ -661,24 +661,23 @@ def calculate_cohens_kappa():
 
     p_e = sum((freq1[c] / n) * (freq2[c] / n) for c in cats)
 
-    if p_e == 1.0:
-        kappa = 1.0
+    MIN_SHARED = 50   # the training set of the protocol in section 1.1.4 has 50 units
+    if p_e >= 1.0:
+        # every unit got the same single category from both annotators: kappa is undefined
+        kappa = None
+        interp = "Kappa aniqlanmagan: ikkala annotator ham barcha birliklarga bitta toifa bergan (kutilgan muvofiqlik = 1)."
     else:
         kappa = (p_o - p_e) / (1.0 - p_e)
-
-    # Landis & Koch scale
-    if kappa < 0:
-        interp = "Muvofiqlik yo‘q (Poor agreement)"
-    elif kappa <= 0.20:
-        interp = "Juda past muvofiqlik (Slight agreement)"
-    elif kappa <= 0.40:
-        interp = "Qoniqarli muvofiqlik (Fair agreement)"
-    elif kappa <= 0.60:
-        interp = "O‘rtacha muvofiqlik (Moderate agreement)"
-    elif kappa <= 0.80:
-        interp = "Yetarli darajada yuqori muvofiqlik (Substantial agreement)"
-    else:
-        interp = "Deyarli to‘liq bir xil muvofiqlik (Almost perfect agreement)"
+        # thresholds of the protocol (1.1.4): Artstein & Poesio (2008, p. 576)
+        if kappa >= 0.8:
+            interp = "Yaxshi ishonchlilik (κ ≥ 0,8; Artstein & Poesio, 2008, b. 576)"
+        elif kappa >= 0.67:
+            interp = "Ehtiyotkor xulosa uchun yetarli (0,67 ≤ κ < 0,8; Artstein & Poesio, 2008, b. 576)"
+        else:
+            interp = "Yetarli emas (κ < 0,67): yo‘riqnoma qayta ko‘rib chiqiladi"
+    if n < MIN_SHARED:
+        interp = (f"Umumiy birliklar soni {n} ta — bu protokoldagi 50 ta o‘quv to‘plamidan kam, "
+                  "shuning uchun koeffitsiyent ishonchli emas va dissertatsiyada keltirilmaydi. " + interp)
 
     return {
         "success": True,
@@ -686,7 +685,8 @@ def calculate_cohens_kappa():
         "agree_count": agree_count,
         "observed_agreement": round(p_o, 4),
         "expected_agreement": round(p_e, 4),
-        "cohens_kappa": round(kappa, 4),
+        "cohens_kappa": round(kappa, 4) if kappa is not None else None,
+        "reliable": bool(kappa is not None and n >= MIN_SHARED),
         "interpretation": interp
     }
 
@@ -727,3 +727,63 @@ def get_ai_suggestion_for_occurrence(occ_id):
             "evidence_note": "AI taklifi: faqat ushbu parallel jumla asosida shakllantirilgan qoralama. Inson tasdig‘i talab qilinadi."
         }
     }
+
+def export_annotations(format_type='csv'):
+    import io
+    import csv
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT 
+            pa.id, pa.occurrence_id, pa.annotator_id, pa.unit_type,
+            pa.structural_pattern, pa.semantic_group, pa.equivalence_type,
+            pa.translation_strategy, pa.is_cultural, pa.cultural_category,
+            pa.confidence_level, pa.is_confirmed, pa.evidence_note,
+            o.book_id, c.surface_form_uz, c.surface_form_en,
+            a.source_text, a.target_text
+        FROM phd_annotations pa
+        JOIN collocation_occurrences o ON pa.occurrence_id = o.id
+        JOIN collocation_candidates c ON o.candidate_id = c.id
+        JOIN alignments a ON o.alignment_id = a.id
+        ORDER BY pa.id ASC
+    ''')
+    rows = cur.fetchall()
+    conn.close()
+
+    fields = [
+        'ID', 'Occurrence_ID', 'Annotator', 'Birlik_Turi', 'Struktur_Qolip',
+        'Semantik_Guruh', 'Ekvivalentlik_Turi', 'Tarjima_Strategiyasi',
+        'Madaniy_Kategoriya', 'Ishonch_Darajasi', 'Holat', 'Izoh',
+        'Asar', 'Uzbekcha_Birikma', 'Inglizcha_Birikma', 'Asl_Gap', 'Tarjima_Gap'
+    ]
+
+    data_rows = []
+    for r in rows:
+        data_rows.append([
+            r['id'], r['occurrence_id'], r['annotator_id'], r['unit_type'],
+            r['structural_pattern'], r['semantic_group'], r['equivalence_type'],
+            r['translation_strategy'], r['cultural_category'] or '—',
+            r['confidence_level'], 'Tasdiqlangan' if r['is_confirmed'] else 'Qoralama',
+            r['evidence_note'] or '', r['book_id'], r['surface_form_uz'],
+            r['surface_form_en'], r['source_text'], r['target_text']
+        ])
+
+    if format_type == 'xlsx':
+        import openpyxl
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Annotatsiyalar"
+        ws.append(fields)
+        for dr in data_rows:
+            ws.append(dr)
+        out = io.BytesIO()
+        wb.save(out)
+        return out.getvalue(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "tilcor_annotations.xlsx"
+    else:
+        out = io.StringIO()
+        out.write('\ufeff')
+        writer = csv.writer(out)
+        writer.writerow(fields)
+        for dr in data_rows:
+            writer.writerow(dr)
+        return out.getvalue().encode('utf-8'), "text/csv; charset=utf-8", "tilcor_annotations.csv"

@@ -70,9 +70,9 @@ def run_tests():
     with open(about_path, "r", encoding="utf-8") as f:
         about_content = f.read()
     assert "Voxitov Ibrohim Sodiq o‘g‘li" in about_content
-    assert "10.02.20" in about_content
+    assert "10.00.06" in about_content
     print("  ✓ Tadqiqotchi: Voxitov Ibrohim Sodiq o‘g‘li")
-    print("  ✓ Ixtisoslik: 10.02.20")
+    print("  ✓ Ixtisoslik: 10.00.06")
     print("  --> PASS: Loyiha pasporti to‘liq aks ettirilgan.")
 
     print("\n" + "=" * 65)

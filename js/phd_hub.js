@@ -1,5 +1,5 @@
 /**
- * KORPUS.LINGVO — PhD Xalqaro Korpus Standartlari & Himoya Markazi (PhD Defense Hub)
+ * TILCOR — PhD Xalqaro Korpus Standartlari & Himoya Markazi (PhD Defense Hub)
  * Xalqaro korpus platformalari: Sketch Engine, COCA, BNC, AntConc, CLARIN-ERIC, WordNet
  * DeepSeek-v4 AI integratsiyasi: C:\Users\user\Desktop\Новый текстовый документ.txt
  */
@@ -122,8 +122,8 @@ class PhdHubManager {
                 uzbekSupportEn: 'Used as the English benchmark for comparison',
                 descUz: 'Badiiy (Fiction), ilmiy (Academic), gazeta (Newspaper), jurnallar (Magazines) va ogʻzaki (Spoken) janrlar boʻyicha muvozanatlangan dunyodagi eng yirik korpus. Kollokatsiyalarning janrlar boʻylab taqsimlanishini koʻrsatadi.',
                 descEn: 'The largest balanced corpus in existence across 8 genres (Fiction, Academic, News, Spoken). Demonstrates collocation dispersion and frequency across diverse linguistic registers.',
-                dissertationRoleUz: 'E.Hemingwayning «The Old Man and the Sea» va R.L.Stevensonning «Treasure Island» asarlaridagi kollokatsiyalarning zamonaviy ingliz tilidagi tabiiy qoʻllanishini verifikatsiya qilishda xizmat qiladi.',
-                dissertationRoleEn: 'Crucial for verifying the naturalness of collocations extracted from Hemingway and Stevenson against modern American English benchmarks.'
+                dissertationRoleUz: 'E.Hemingwayning «The Old Man and the Sea» asaridagi kollokatsiyalarning zamonaviy ingliz tilidagi tabiiy qoʻllanishini verifikatsiya qilishda xizmat qiladi.',
+                dissertationRoleEn: 'Crucial for verifying the naturalness of collocations extracted from Hemingway against modern American English benchmarks.'
             },
             {
                 id: 'bnc',
@@ -173,8 +173,8 @@ class PhdHubManager {
                 uzbekSupportEn: 'Fully compliant with TEI corpus metadata',
                 descUz: 'Yevropa Ittifoqining gumanitar fanlar uchun korpus infratuzilmasi. Parallel korpuslarni xalqaro saqlash, TEI-XML formatida annotatsiya qilish va ilmiy tadqiqotlar uchun ochiq taqdim etish standartlarini belgilaydi.',
                 descEn: 'The pan-European research infrastructure for language resources. Sets international standards for parallel corpus annotation, metadata, and open science sharing.',
-                dissertationRoleUz: 'Portalimizdagi 5,157 ta parallel jumla bazasining metadata tuzilishi CLARIN-ERIC tavsiyalariga muvofiq shakllantirildi.',
-                dissertationRoleEn: 'The structural metadata of our 5,157 parallel sentence database aligns with CLARIN-ERIC corpus standards.'
+                dissertationRoleUz: 'Portalimizdagi 3,811 ta parallel jumla bazasining metadata tuzilishi CLARIN-ERIC tavsiyalariga muvofiq shakllantirildi.',
+                dissertationRoleEn: 'The structural metadata of our 3,811 parallel sentence database aligns with CLARIN-ERIC corpus standards.'
             },
             {
                 id: 'wordnet',
@@ -498,7 +498,7 @@ class PhdHubManager {
                                     <i data-lucide="table" class="w-4 h-4 text-indigo-600"></i>
                                     ${isUz ? 'Bilingual Word Sketch (Ikki Tilli Grammatik Kollokatsiyalar Matritsasi)' : 'Bilingual Word Sketch Grammatical Matrix'}
                                 </h4>
-                                <span class="text-[11px] text-slate-400 font-mono">6,546 ta birikma asosida</span>
+                                <span class="text-[11px] text-slate-400 font-mono">6,537 ta birikma asosida</span>
                             </div>
 
                             <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700">
@@ -597,7 +597,7 @@ class PhdHubManager {
                             </h4>
                             <p class="text-xs text-slate-500">
                                 ${isUz 
-                                    ? 'Tadqiqotimizdagi badiiy kollokatsiyalar (Choʻlpon, Hemingway, Stevenson) COCA janrlari bilan sinxron tahlil qilindi:' 
+                                    ? 'Tadqiqotimizdagi badiiy kollokatsiyalar (Choʻlpon, Hemingway) COCA janrlari bilan sinxron tahlil qilindi:' 
                                     : 'Literary collocations from our parallel corpus benchmarked against COCA genre profiles:'}
                             </p>
 
@@ -706,11 +706,11 @@ class PhdHubManager {
                         <div class="lg:col-span-7 space-y-3">
                             <h4 class="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
                                 <i data-lucide="code" class="w-4 h-4 text-amber-600"></i>
-                                ${isUz ? 'Portalimizdagi 5,157 jumlali TMX XML Hujjatidan Namuna' : 'Authentic TMX XML Snippet (From Our 5,157 Corpus)'}
+                                ${isUz ? 'Portalimizdagi 3,811 jumlali TMX XML Hujjatidan Namuna' : 'Authentic TMX XML Snippet (From Our 3,811 Corpus)'}
                             </h4>
                             <div class="p-4 bg-slate-900 text-amber-300 rounded-2xl font-mono text-[11px] leading-relaxed border border-slate-800 overflow-x-auto">
 &lt;tu tuid="pair-108" srclang="en"&gt;
-  &lt;prop type="domain"&gt;Literary Fiction (Stevenson)&lt;/prop&gt;
+  &lt;prop type="domain"&gt;Literary Fiction (Badiiy)&lt;/prop&gt;
   &lt;tuv xml:lang="en"&gt;
     &lt;seg&gt;The ship dropped anchor in the quiet cove at dusk.&lt;/seg&gt;
   &lt;/tuv&gt;
@@ -748,12 +748,12 @@ class PhdHubManager {
                         ${isUz ? `
                             <p>«Hurmatli Ilmiy Kengash raisi, aʼzolari va taqrizchilar!</p>
                             <p>Eʼtiboringizga havola etilayotgan <strong>«Tarjima va teng matnlar parallel korpusida oʻzaro faol birikuvchi (kollokatsion) soʻzlar tadqiqi (oʻzbek va ingliz tillari misolida)»</strong> mavzusidagi doktorlik dissertatsiyamiz zamonaviy kompyuter lingvistikasi va tarjimashunoslikning eng dolzarb muammolaridan biriga bagʻishlangan.</p>
-                            <p>Tadqiqotimizning asosiy ilmiy mohiyati — Choʻlpon, Ernest Xeminguey va Robert Luis Stivenson asarlarining 5,157 ta parallel jumlasi hamda 6,546 ta ilmiy kollokatsiyasini Sketch Engine (logDice), BNC (MI Score) va COCA xalqaro mezonlari asosida tahlil qilish, soʻzma-soʻz kalka tarjima xatolarini (masalan, <em>*cold look</em> oʻrniga <em>cold gaze/icy stare</em>) ilmiy asosda bartaraf etishdan iboratdir.</p>
+                            <p>Tadqiqotimizning asosiy ilmiy mohiyati — Choʻlpon, Ernest Xeminguey  asarlarining 3,811 ta parallel jumlasi hamda 6,537 ta ilmiy kollokatsiyasini Sketch Engine (logDice), BNC (MI Score) va COCA xalqaro mezonlari asosida tahlil qilish, soʻzma-soʻz kalka tarjima xatolarini (masalan, <em>*cold look</em> oʻrniga <em>cold gaze/icy stare</em>) ilmiy asosda bartaraf etishdan iboratdir.</p>
                             <p>Yaratilgan ushbu interaktiv elektron platforma dissertatsiyaning barcha amaliy natijalarini toʻliq namoyon etuvchi mustaqil dasturiy taʼminot hisoblanadi.»</p>
                         ` : `
                             <p>«Distinguished Chairman, Members of the Scientific Council, and Reviewers!</p>
                             <p>The doctoral dissertation presented to you, entitled <strong>'Research on Active Collocational Words in Parallel Corpora of Translated and Aligned Texts (A Case Study of Uzbek and English)'</strong>, addresses one of the most critical frontiers in computational corpus linguistics and translation studies.</p>
-                            <p>The fundamental novelty lies in benchmarking 5,157 parallel aligned sentences and 6,546 collocations against Sketch Engine (logDice), BNC (MI Score), and COCA standards to eliminate literal calques (such as replacing <em>*cold look</em> with <em>cold gaze/icy stare</em>).</p>
+                            <p>The fundamental novelty lies in benchmarking 3,811 parallel aligned sentences and 6,537 collocations against Sketch Engine (logDice), BNC (MI Score), and COCA standards to eliminate literal calques (such as replacing <em>*cold look</em> with <em>cold gaze/icy stare</em>).</p>
                             <p>This interactive portal serves as the standalone software verifying our empirical findings.»</p>
                         `}
                     </div>
@@ -798,8 +798,8 @@ class PhdHubManager {
                             <strong class="text-amber-300 block">4. ${isUz ? 'Oʻzbek tilidagi qaysi manbalar korpusga kiritildi?' : 'Which Uzbek literary sources are utilized?'}</strong>
                             <p class="text-slate-300 leading-relaxed">
                                 ${isUz 
-                                    ? 'Choʻlponning «Kecha va kunduz» romani, E.Hemingwayning «Chol va dengiz» (I.Gʻafurov tarjimasi) hamda Stevensonning «Xazinalar oroli» (Sh.Rizo tarjimasi).' 
-                                    : 'Choʻlpon’s Night and Day, Hemingway’s Old Man and the Sea (I.Gʻafurov), and Stevenson’s Treasure Island (Sh.Rizo).'}
+                                    ? 'Choʻlponning «Kecha va kunduz» romani hamda E.Hemingwayning «Chol va dengiz» (I.Gʻafurov tarjimasi) asarlari.' 
+                                    : 'Choʻlpon’s Night and Day, Hemingway’s Old Man and the Sea (I.Gʻafurov).'}
                             </p>
                         </div>
                     </div>

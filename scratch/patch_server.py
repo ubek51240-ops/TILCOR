@@ -1,366 +1,257 @@
 import re
 
 with open('server.py', 'r', encoding='utf-8') as f:
-    code = f.read()
+    content = f.read()
 
-# 1. Add base64 and time import
-if 'import base64' not in code:
-    code = code.replace('import sqlite3\n', 'import sqlite3\nimport base64\nimport time\nimport sys\n')
-
-# 2. Add AUTH CONFIG & Active Corpus filtering right after DATA_DIR / loading
-auth_config_block = """
-# =====================================================================
-# STAGE 2 AUTHENTICATION & ACCESS CONTROL
-# =====================================================================
-AUTH_USERS = {
-    "admin": "tilcor_phd_admin_2026",      # Researcher (Tadqiqotchi)
-    "reviewer": "tilcor_supervisor_2026"   # Supervisor (Ilmiy rahbar)
+# 1. Add auth and session definitions after AUTH_USERS
+old_auth_block = """AUTH_USERS = {
+    "admin": os.environ.get("TILCOR_ADMIN_PASSWORD", "tilcor_phd_admin_2026"),      # Researcher (Tadqiqotchi)
+    "reviewer": os.environ.get("TILCOR_REVIEWER_PASSWORD", "tilcor_supervisor_2026"), # Supervisor (Ilmiy rahbar)
+    "guest": os.environ.get("TILCOR_GUEST_PASSWORD", "tilcor_guest_2026")          # Guest / Council (Kengash a'zolari / mehmon)
 }
 
-AI_REQUEST_LOG = []
+AI_REQUEST_LOG = []"""
 
-def check_ai_rate_limit():
-    global AI_REQUEST_LOG
+new_auth_block = """import hashlib
+import secrets
+
+AUTH_USERS = {
+    "admin": os.environ.get("TILCOR_ADMIN_PASSWORD", "tilcor_phd_admin_2026"),      # Researcher (Tadqiqotchi)
+    "reviewer": os.environ.get("TILCOR_REVIEWER_PASSWORD", "tilcor_supervisor_2026"), # Supervisor (Ilmiy rahbar)
+    "guest": os.environ.get("TILCOR_GUEST_PASSWORD", "tilcor_guest_2026")          # Guest / Council (Kengash a'zolari / mehmon)
+}
+
+ADMIN_SALT = b"tilcor_salt_2026_secure"
+ADMIN_PASSWORD_HASH = hashlib.pbkdf2_hmac(
+    'sha256',
+    AUTH_USERS["admin"].encode('utf-8'),
+    ADMIN_SALT,
+    100000
+).hex()
+
+SESSIONS = {}        # token -> {"user": str, "created": float, "expires": float}
+FAILED_LOGINS = {}   # ip -> [timestamps]
+
+def check_login_rate_limit(ip: str) -> bool:
     now = time.time()
-    AI_REQUEST_LOG = [t for t in AI_REQUEST_LOG if now - t < 60]
-    if len(AI_REQUEST_LOG) >= 10:
+    attempts = [t for t in FAILED_LOGINS.get(ip, []) if now - t < 300]
+    FAILED_LOGINS[ip] = attempts
+    return len(attempts) < 5
+
+def record_failed_login(ip: str):
+    now = time.time()
+    FAILED_LOGINS.setdefault(ip, []).append(now)
+
+def verify_admin_login(username: str, password: str) -> bool:
+    if username != 'admin':
         return False
-    AI_REQUEST_LOG.append(now)
-    return True
-"""
+    calc = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), ADMIN_SALT, 100000).hex()
+    return secrets.compare_digest(calc, ADMIN_PASSWORD_HASH)
 
-code = code.replace("COLLOCATIONS = []\n", auth_config_block + "\nCOLLOCATIONS = []\n")
+def extract_cookie_token(cookie_str: str) -> Optional[str]:
+    if not cookie_str:
+        return None
+    for part in cookie_str.split(';'):
+        part = part.strip()
+        if part.startswith('tilcor_session='):
+            return part.split('=', 1)[1]
+    return None
 
-# Active corpus helpers
-active_helpers = """
-def get_active_corpus():
+AI_REQUEST_LOG = []"""
+
+if old_auth_block in content:
+    content = content.replace(old_auth_block, new_auth_block)
+else:
+    print("WARNING: old_auth_block not found verbatim, checking regex...")
+
+# 2. Update get_active_corpus, get_active_collocations, get_active_dictionary
+old_get_active = """def get_active_corpus():
     return [c for c in FULL_CORPUS if c.get('status') != 'excluded']
 
 def get_active_collocations():
-    return [c for c in COLLOCATIONS if c.get('status') != 'excluded']
-"""
-code = code.replace("def find_corpus_example", active_helpers + "\ndef find_corpus_example")
+    return [c for c in COLLOCATIONS if c.get('status') != 'excluded']"""
 
-# 3. Update search_corpus to exclude quarantined records
-code = code.replace(
-    "        if book != 'all' and c.get('book') != book:\n            continue",
-    "        if c.get('status') == 'excluded':\n            continue\n        if book != 'all' and c.get('book') != book:\n            continue"
-)
+new_get_active = """def get_active_corpus():
+    return [c for c in FULL_CORPUS if c.get('status') != 'excluded' and not c.get('excluded') and c.get('book') != 'stevenson']
 
-# 4. Update search_collocations to exclude quarantined records
-code = code.replace(
-    "    for item in COLLOCATIONS:\n        # Source filter",
-    "    for item in COLLOCATIONS:\n        if item.get('status') == 'excluded':\n            continue\n        # Source filter"
-)
+def get_active_collocations():
+    return [c for c in COLLOCATIONS if c.get('public_visible') is not False and c.get('status') not in ('rejected', 'excluded') and not c.get('excluded')]
 
-# 5. Remove fake MI / T-scores from prompt 1086 & 1253
-code = code.replace(
-    'f"5. Korpus statistik ko\'rsatkichlari (MI-score va T-score bahosi)."',
-    'f"5. Birikmaning lingvomadaniy tavsifi va lug‘aviy izohi."'
-)
-code = code.replace(
-    'f"5. Korpus statistik bahosi (MI Score, T-score, assotsiatsiya)."',
-    'f"5. Tarjima strategiyasi (adekvat, erkin, kompensatsiya) tavsifi."'
-)
+def get_active_dictionary():
+    return [d for d in DICTIONARY if d.get('public_visible') is not False and not d.get('needs_repair') and d.get('status') not in ('rejected', 'excluded')]"""
 
-# 6. Remove fake MI/T from fallback strings (lines 872-874, 1128-1136, 1323-1325)
-code = code.replace(
-    "- **Icy stare** (MI: 7.42, T-score: 9.15) - eng yuqori assotsiatsiya koeffitsientiga ega, hissizlik va g'azabni ifodalaydi.",
-    "- **Icy stare** — hissiy sovuqlik va g'azabni ifodalovchi barqaror birikma."
-)
-code = code.replace(
-    "- **Cold gaze** (MI: 6.85, T-score: 8.30) - barqaror adabiy birikma (Cho'lponning «Kecha va kunduz» tarjimasida Christopher Fort tomonidan qo'llangan: *«Razzoq Sufi's cold gaze...»*).",
-    "- **Cold gaze** — barqaror adabiy birikma (Cho'lponning «Kecha va kunduz» tarjimasida Christopher Fort tomonidan qo'llangan: *«Razzoq Sufi's cold gaze...»*)."
-)
-code = code.replace(
-    "- **Frosty glare** (MI: 6.20, T-score: 7.45) - o'ta dushmanona nigoh.",
-    "- **Frosty glare** — dushmanona nigoh."
-)
+if old_get_active in content:
+    content = content.replace(old_get_active, new_get_active)
 
-code = re.sub(
-    r'items_md\.append\(f"- \*\*take a \{raw_word\} / make \{raw_word\}\*\* ⟷ \*\*\{raw_word\} qilmoq\*\* \[Fe\'l \+ Ot\] — \*MI: 7\.80, T: 9\.10\*"[\s\S]*?items_md\.append\(f"- \*\*firm \{raw_word\}\*\* ⟷ \*\*mustahkam \{target_word\}\*\* \[Sifat \+ Ot\] — \*MI: 6\.85, T: 8\.10\*"',
-    '''if is_uz:
-                items_md.append(f"- **take a {raw_word} / make {raw_word}** ⟷ **{raw_word} qilmoq** [Fe'l + Ot]")
-                items_md.append(f"- **deep / strong {target_word}** ⟷ **kuchli {raw_word}** [Sifat + Ot]")
-            else:
-                items_md.append(f"- **take {raw_word}** ⟷ **{target_word} olmoq** [Fe'l + Ot]")
-                items_md.append(f"- **firm {raw_word}** ⟷ **mustahkam {target_word}** [Sifat + Ot]"''',
-    code
-)
+# 3. Update search_collocations to strictly use get_active_collocations
+old_search_colloc = "for item in COLLOCATIONS:\n        if item.get('status') == 'excluded':\n            continue"
+new_search_colloc = "active_items = get_active_collocations()\n    for item in active_items:"
+if old_search_colloc in content:
+    content = content.replace(old_search_colloc, new_search_colloc)
 
-code = code.replace(
-    'f"- **{item[\'english\']}** ⟷ **{item[\'uzbek\']}** [{item[\'pattern\']}] — *MI: {item.get(\'miScore\', 7.2)}, T: {item.get(\'tScore\', 8.5)}*{trap_note}"',
-    'f"- **{item[\'english\']}** ⟷ **{item[\'uzbek\']}** [{item[\'pattern\']}]{trap_note}"'
-)
+# 4. Update get_authenticated_user to check SESSIONS
+old_get_auth_user = """    def get_authenticated_user(self):
+        auth_header = self.headers.get('Authorization', '')"""
 
-code = code.replace(
-    '''            f"### 📊 Korpus Statistik Koʻrsatkichlari\\n"\n            f"- **Kollokatsion bogʻlanish kuchi:** `MI ≥ 6.8` (Kuchli assotsiativ bogʻliqlik)\\n"\n            f"- **Ishonchlilik indeksi (T-Score):** `t ≥ 8.1` (Statistik ishonchli)\\n"\n            f"- **logDice oʻlchami:** `9.4` (Teng matnlar parallel korpusi standarti)"''',
-    '''            f"### ℹ️ Eslatma\\n"\n            f"- **Metrikalar:** MI score va T-score dissertatsiya talabi bo‘yicha faqat tasdiqlangan annotatsiyalar asosida ko‘rsatiladi."'''
-)
-
-# 7. Add auth methods to AppRequestHandler
-auth_methods = """
-    def get_authenticated_user(self):
-        auth_header = self.headers.get('Authorization', '')
-        if auth_header.startswith('Basic '):
-            try:
-                raw = base64.b64decode(auth_header[6:].strip()).decode('utf-8')
-                u, p = raw.split(':', 1)
-                if AUTH_USERS.get(u) == p:
-                    return u
-            except Exception:
-                pass
-        elif auth_header.startswith('Bearer '):
-            token = auth_header[7:].strip()
-            if token == 'admin_token_2026':
-                return 'admin'
-            if token == 'reviewer_token_2026':
-                return 'reviewer'
-        
-        x_token = self.headers.get('X-Auth-Token', '')
-        if x_token == 'admin_token_2026':
-            return 'admin'
-        if x_token == 'reviewer_token_2026':
-            return 'reviewer'
-        
+new_get_auth_user = """    def get_authenticated_user(self):
         cookie_str = self.headers.get('Cookie', '')
-        if 'tilcor_session=admin' in cookie_str:
-            return 'admin'
-        if 'tilcor_session=reviewer' in cookie_str:
-            return 'reviewer'
-        return None
-
-    def require_auth(self, role=None):
-        user = self.get_authenticated_user()
-        if not user:
-            self.send_response(401)
-            self.send_header('WWW-Authenticate', 'Basic realm="TILCOR Korpus Tizimi (Tadqiqotchi va Ilmiy Rahbar uchun)"')
-            self.send_header('Content-Type', 'application/json; charset=utf-8' if self.path.startswith('/api/') else 'text/html; charset=utf-8')
-            self.send_header('X-Robots-Tag', 'noindex, nofollow')
-            self.end_headers()
-            if self.path.startswith('/api/'):
-                self.wfile.write(json.dumps({
-                    "error": "Avtorizatsiyadan o'tilmagan. Tizim faqat tadqiqotchi (admin) va ilmiy rahbar (reviewer) uchun ochiq."
-                }, ensure_ascii=False).encode('utf-8'))
+        token = extract_cookie_token(cookie_str)
+        if token and token in SESSIONS:
+            sess = SESSIONS[token]
+            if time.time() < sess['expires']:
+                return sess['user']
             else:
-                self.wfile.write(b\"\"\"<!DOCTYPE html>
-<html lang="uz">
-<head><meta charset="utf-8"><title>401 Ruxsat talab qilinadi | TILCOR</title><meta name="robots" content="noindex, nofollow"></head>
-<body style="font-family:system-ui,sans-serif;padding:60px 20px;text-align:center;background:#0f172a;color:#f8fafc;">
-  <div style="max-width:540px;margin:0 auto;background:#1e293b;padding:40px;border-radius:24px;border:1px solid #334155;">
-    <h2 style="color:#f43f5e;margin-top:0;">401 — Kirish Cheklangan</h2>
-    <p style="color:#94a3b8;line-height:1.6;">TILCOR parallel korpusi dissertatsiya himoyasiga qadar yopiq tizimda faoliyat yuritadi. Tizimga faqat tadqiqotchi va ilmiy rahbar kirishi mumkin.</p>
-    <p style="font-size:12px;color:#64748b;margin-top:20px;">Iltimos, tadqiqotchi yoki ilmiy rahbar login-paroli bilan tizimga kiring.</p>
-  </div>
-</body></html>\"\"\")
-            return None
+                del SESSIONS[token]
 
-        if role == 'admin' and user != 'admin':
-            self.send_response(403)
+        auth_header = self.headers.get('Authorization', '')"""
+
+if old_get_auth_user in content:
+    content = content.replace(old_get_auth_user, new_get_auth_user)
+
+# 5. Add /api/auth/login and /api/auth/logout in do_POST
+old_do_post_start = "    def do_POST(self):\n        user = self.get_authenticated_user()"
+new_do_post_start = """    def do_POST(self):
+        user = self.get_authenticated_user()
+
+        if self.path == '/api/auth/login':
+            client_ip = self.client_address[0]
+            if not check_login_rate_limit(client_ip):
+                self.send_response(429)
+                self.send_json({"error": "Ko'p urinishlar qilindi. 5 minutdan so'ng qayta urinib ko'ring."})
+                return
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                data = json.loads(body)
+                u = data.get('username', '').strip()
+                p = data.get('password', '').strip()
+                if verify_admin_login(u, p):
+                    token = secrets.token_hex(32)
+                    SESSIONS[token] = {
+                        "user": u,
+                        "created": time.time(),
+                        "expires": time.time() + 86400
+                    }
+                    self.send_response(200)
+                    is_secure = self.headers.get('X-Forwarded-Proto') == 'https'
+                    cookie_val = f"tilcor_session={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400"
+                    if is_secure:
+                        cookie_val += "; Secure"
+                    self.send_header('Set-Cookie', cookie_val)
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"success": True, "user": u}).encode('utf-8'))
+                    return
+                else:
+                    record_failed_login(client_ip)
+                    self.send_response(401)
+                    self.send_json({"error": "Login yoki parol noto'g'ri."})
+                    return
+            except Exception as e:
+                self.send_response(400)
+                self.send_json({"error": str(e)})
+                return
+
+        if self.path == '/api/auth/logout':
+            cookie_str = self.headers.get('Cookie', '')
+            token = extract_cookie_token(cookie_str)
+            if token and token in SESSIONS:
+                del SESSIONS[token]
+            self.send_response(200)
+            self.send_header('Set-Cookie', 'tilcor_session=; Path=/; HttpOnly; Max-Age=0')
             self.send_header('Content-Type', 'application/json; charset=utf-8')
-            self.send_header('X-Robots-Tag', 'noindex, nofollow')
             self.end_headers()
-            self.wfile.write(json.dumps({
-                "error": "Taqiqlangan. Ushbu amal faqat tadqiqotchi (admin) uchun ruxsat etilgan."
-            }, ensure_ascii=False).encode('utf-8'))
-            return None
+            self.wfile.write(json.dumps({"success": True}).encode('utf-8'))
+            return"""
 
-        return user
-"""
+if old_do_post_start in content:
+    content = content.replace(old_do_post_start, new_do_post_start)
 
-code = code.replace(
-    "    def __init__(self, *args, **kwargs):\n        super().__init__(*args, directory=DIRECTORY, **kwargs)\n",
-    "    def __init__(self, *args, **kwargs):\n        super().__init__(*args, directory=DIRECTORY, **kwargs)\n" + auth_methods
-)
+# 6. Add /api/auth/me and update /api/search in do_GET
+old_search_block = """        # 2. To'liq Korpus Qidiruv API (≤ 50 results)
+        if parsed.path == '/api/search':
+            query = params.get('q', [''])[0]
+            book = params.get('book', ['all'])[0]
+            raw_limit = int(params.get('limit', ['50'])[0])
+            limit = min(max(1, raw_limit), 50)
+            results = search_corpus(query, book, limit)
+            active_c = [c for c in FULL_CORPUS if c.get('status') == 'active' and c.get('book') != 'stevenson']
+            self.send_json({
+                "query": query,
+                "book": book,
+                "totalFound": len(results),
+                "totalCorpus": len(active_c),
+                "results": results
+            })
+            return"""
 
-# 8. Check auth at the start of do_GET and do_POST
-do_get_guard = """    def do_GET(self):
-        user = self.require_auth()
-        if not user:
+new_search_block = """        if parsed.path == '/api/auth/me':
+            u = self.get_authenticated_user()
+            self.send_json({"user": u or "guest", "isAdmin": (u == "admin")})
             return
 
-        parsed = urllib.parse.urlparse(self.path)
-        params = urllib.parse.parse_qs(parsed.query)
+        # 2. Qayta qurilgan Korpus & Leksikografik Qidiruv API (≤ 50 results)
+        if parsed.path == '/api/search':
+            query = params.get('q', [''])[0]
+            lang = params.get('lang', ['auto'])[0]
+            raw_limit = int(params.get('limit', ['50'])[0])
+            limit = min(max(1, raw_limit), 50)
+            page = int(params.get('page', ['1'])[0])
+            
+            from search_engine import execute_unified_search
+            active_c = get_active_corpus()
+            active_col = get_active_collocations()
+            active_d = get_active_dictionary()
+            
+            res = execute_unified_search(
+                query=query,
+                active_corpus=active_c,
+                active_collocations=active_col,
+                active_dictionary=active_d,
+                forced_lang=lang if lang in ('uz', 'en') else None,
+                limit=limit,
+                page=page
+            )
+            # Legacy field for backwards compatibility
+            res['results'] = res.get('corpus_sentences', [])
+            res['totalFound'] = res.get('summary', {}).get('corpus_occurrences', 0)
+            res['totalCorpus'] = len(active_c)
+            self.send_json(res)
+            return"""
 
-        # 0. Live Stats API (Stage 2)
-        if parsed.path == '/api/stats':
+if old_search_block in content:
+    content = content.replace(old_search_block, new_search_block)
+
+# 7. Update /api/stats
+old_stats_block = """        if parsed.path == '/api/stats':
             active_c = get_active_corpus()
             active_col = get_active_collocations()
             self.send_json({
                 "totalSegments": len(active_c),
                 "totalCollocations": len(active_col),
                 "totalDictionary": len(DICTIONARY),
-                "quarantinedSegments": len(FULL_CORPUS) - len(active_c),
-                "quarantinedCollocations": len(COLLOCATIONS) - len(active_col),
-                "authenticatedUser": user
+                "booksCount": 2,
+                "authenticatedUser": user or "guest"
             })
-            return
-"""
+            return"""
 
-code = re.sub(
-    r'    def do_GET\(self\):\s*parsed = urllib\.parse\.urlparse\(self\.path\)\s*params = urllib\.parse\.parse_qs\(parsed\.query\)',
-    do_get_guard,
-    code
-)
+new_stats_block = """        if parsed.path == '/api/stats':
+            active_c = get_active_corpus()
+            active_col = get_active_collocations()
+            active_d = get_active_dictionary()
+            self.send_json({
+                "totalSegments": len(active_c),
+                "totalCollocations": len(active_col),
+                "totalDictionary": len(active_d),
+                "booksCount": 2,
+                "authenticatedUser": user or "guest"
+            })
+            return"""
 
-# Guard do_POST:
-do_post_guard = """    def do_POST(self):
-        parsed = urllib.parse.urlparse(self.path)
-        user = self.require_auth()
-        if not user:
-            return
-"""
-code = re.sub(
-    r'    def do_POST\(self\):',
-    do_post_guard,
-    code
-)
-
-# Protect AI endpoints with admin role and rate limit
-code = code.replace(
-    "        # 5. PhD AI Assistent API (DeepSeek-v4 & Corpus Intelligence)\n        if parsed.path == '/api/ai':",
-    """        # 5. PhD AI Assistent API (Restricted to admin + Rate limit)
-        if parsed.path == '/api/ai':
-            if not self.require_auth('admin'):
-                return
-            if not check_ai_rate_limit():
-                self.send_response(429)
-                self.send_json({"error": "AI so'rovlar limiti (minutiga 10 ta) oshib ketdi."})
-                return"""
-)
-
-code = code.replace(
-    "        # 6. Kollokatsiyalar AI Analizator va Tarjimon API\n        if parsed.path in ['/api/collocations/ai-analyze', '/api/collocations/pos-analyze']:",
-    """        # 6. Kollokatsiyalar AI Analizator (Restricted to admin + Rate limit)
-        if parsed.path in ['/api/collocations/ai-analyze', '/api/collocations/pos-analyze']:
-            if not self.require_auth('admin'):
-                return
-            if not check_ai_rate_limit():
-                self.send_response(429)
-                self.send_json({"error": "AI so'rovlar limiti (minutiga 10 ta) oshib ketdi."})
-                return"""
-)
-
-code = code.replace(
-    "        # 7. Matn & Tarjima AI Diagnostikasi API\n        if parsed.path == '/api/checker/ai-diagnose':",
-    """        # 7. Matn & Tarjima AI Diagnostikasi API (Restricted to admin + Rate limit)
-        if parsed.path == '/api/checker/ai-diagnose':
-            if not self.require_auth('admin'):
-                return
-            if not check_ai_rate_limit():
-                self.send_response(429)
-                self.send_json({"error": "AI so'rovlar limiti (minutiga 10 ta) oshib ketdi."})
-                return"""
-)
-
-# In POST handlers:
-code = code.replace(
-    "        if self.path in ['/api/collocations/ai-analyze', '/api/collocations/pos-analyze']:",
-    """        if self.path in ['/api/collocations/ai-analyze', '/api/collocations/pos-analyze']:
-            if not self.require_auth('admin'):
-                return
-            if not check_ai_rate_limit():
-                self.send_response(429)
-                self.send_json({"error": "AI so'rovlar limiti (minutiga 10 ta) oshib ketdi."})
-                return"""
-)
-
-code = code.replace(
-    "        if self.path == '/api/checker/ai-diagnose':",
-    """        if self.path == '/api/checker/ai-diagnose':
-            if not self.require_auth('admin'):
-                return
-            if not check_ai_rate_limit():
-                self.send_response(429)
-                self.send_json({"error": "AI so'rovlar limiti (minutiga 10 ta) oshib ketdi."})
-                return"""
-)
-
-code = code.replace(
-    "        if self.path == '/api/ai':",
-    """        if self.path == '/api/ai':
-            if not self.require_auth('admin'):
-                return
-            if not check_ai_rate_limit():
-                self.send_response(429)
-                self.send_json({"error": "AI so'rovlar limiti (minutiga 10 ta) oshib ketdi."})
-                return"""
-)
-
-# 9. In send_json and do_GET headers: add noindex header
-code = code.replace(
-    "    def send_json(self, data):\n        self.send_response(200)\n        self.send_header('Content-Type', 'application/json; charset=utf-8')\n        self.send_header('Access-Control-Allow-Origin', '*')\n        self.end_headers()",
-    """    def send_json(self, data):
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json; charset=utf-8')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('X-Robots-Tag', 'noindex, nofollow')
-        self.send_header('X-Content-Type-Options', 'nosniff')
-        self.end_headers()"""
-)
-
-# 10. Update totalCorpus in /api/search response
-code = code.replace(
-    '"totalCorpus": len(FULL_CORPUS),',
-    '"totalCorpus": len(get_active_corpus()),'
-)
-
-# 11. Support CLI arguments for --port and --env
-cli_args_support = """
-def run():
-    os.chdir(DIRECTORY)
-    port_env = os.environ.get("PORT")
-    env_name = "production"
-    
-    # CLI args parse
-    args = sys.argv[1:]
-    port = None
-    if '--port' in args:
-        idx = args.index('--port')
-        if idx + 1 < len(args):
-            port = int(args[idx + 1])
-    if '--env' in args:
-        idx = args.index('--env')
-        if idx + 1 < len(args):
-            env_name = args[idx + 1]
-
-    if not port:
-        port = int(port_env) if port_env else find_available_port()
-        
-    socketserver.TCPServer.allow_reuse_address = True
-    
-    with socketserver.TCPServer(("", port), AppRequestHandler) as httpd:
-        url = f"http://localhost:{port}"
-        active_c = get_active_corpus()
-        active_col = get_active_collocations()
-        print("=" * 70)
-        print(f" TILCOR — O‘ZBEK–INGLIZ PARALLEL KORPUSI [{env_name.upper()} REJIMI]")
-        print(" Kollokatsiyalar Tarjimasi Tadqiqoti Uchun Platforma (PhD v2.0)")
-        print("=" * 70)
-        print(f" Muhit:            {env_name.upper()}")
-        print(f" Port:             {port}")
-        print(f" Veb Manzil:       {url}")
-        print(f" Himoya holati:    FAOL (Admin & Reviewer ruxsatnoma)")
-        print(f" Qidiruv indeksi:  NOINDEX, NOFOLLOW faollashtirilgan")
-        print(f" Faol Korpus:      {len(active_c)} ta jumla ({len(FULL_CORPUS) - len(active_c)} ta karantinda)")
-        print(f" Faol Kollokatsiya:{len(active_col)} ta birikma ({len(COLLOCATIONS) - len(active_col)} ta karantinda)")
-        print(f" Elektron Lug'at:  {len(DICTIONARY)} ta leksikografik maqola")
-        print(" Tizim xavfsiz holatda tayyor.")
-        print(" To'xtatish uchun: Ctrl + C bosing")
-        print("=" * 70)
-        try:
-            httpd.serve_forever()
-        except KeyboardInterrupt:
-            print("\\nServer to'xtatildi.")
-"""
-
-code = re.sub(
-    r'def run\(\):[\s\S]*?if __name__ == \'__main__\':',
-    cli_args_support + "\nif __name__ == '__main__':",
-    code
-)
+if old_stats_block in content:
+    content = content.replace(old_stats_block, new_stats_block)
 
 with open('server.py', 'w', encoding='utf-8') as f:
-    f.write(code)
+    f.write(content)
 
-print("-> server.py successfully patched with authentication, quarantine filtering, rate limiting and noindex!")
+print("Updated server.py successfully.")

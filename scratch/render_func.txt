@@ -1,0 +1,92 @@
+def render_localized_html(html_str, lang='uz', is_admin=False, query_params=None, req_path='/'):
+    """Key-based localisation only (TILCOR_08 Task 1). No word substitution inside strings."""
+    if not query_params:
+        query_params = {}
+
+    locales_file = os.path.join(DIRECTORY, 'locales', f'{lang}.json')
+    loc = {}
+    if os.path.exists(locales_file):
+        try:
+            with open(locales_file, 'r', encoding='utf-8') as f:
+                loc = json.load(f)
+        except Exception:
+            pass
+
+    Q = r"""["']"""
+    NQ = r"""[^"']"""
+
+    # 1. <html lang="...">
+    html_str = re.sub(r'<html\s+lang=' + Q + NQ + '*' + Q, f'<html lang="{lang}"', html_str, count=1)
+    if lang == 'en':
+        html_str = re.sub(r'<title>.*?TILCOR.*?</title>', '<title>TILCOR — Uzbek–English Parallel Corpus</title>', html_str, flags=re.DOTALL)
+    elif lang == 'ru':
+        html_str = re.sub(r'<title>.*?TILCOR.*?</title>', '<title>TILCOR — Узбекско-английский параллельный корпус</title>', html_str, flags=re.DOTALL)
+
+    # 2. hreflang + Tailwind (needed by the unified nav)
+    if '</head>' in html_str:
+        if 'hreflang="uz"' not in html_str:
+            hreflang_tags = (
+                '\n    <link rel="alternate" hreflang="uz" href="?lang=uz" />'
+                '\n    <link rel="alternate" hreflang="en" href="?lang=en" />'
+                '\n    <link rel="alternate" hreflang="ru" href="?lang=ru" />\n'
+            )
+            html_str = html_str.replace('</head>', hreflang_tags + '</head>', 1)
+        if 'cdn.tailwindcss.com' not in html_str:
+            html_str = html_str.replace('</head>', '\n    <script src="https://cdn.tailwindcss.com"></script>\n</head>', 1)
+
+    # 3. One navigation component (Task 3)
+    nav_html = ui_components.render_nav(lang, req_path, is_admin)
+    html_str = re.sub(r'<header\b[^>]*>.*?</header>', lambda m: nav_html, html_str, count=1, flags=re.DOTALL)
+
+    # 4. One footer
+    footer_html = ui_components.render_footer(lang)
+    html_str = re.sub(r'<footer\b[^>]*>.*?</footer>', lambda m: footer_html, html_str, count=1, flags=re.DOTALL)
+
+    # 5. Admin items out of public HTML (Task 2)
+    if not is_admin:
+        for sec in ('view-translator', 'view-checker', 'view-phd'):
+            html_str = re.sub(r'<section[^>]*id=' + Q + sec + Q + r'[^>]*>.*?</section>', '', html_str, flags=re.DOTALL)
+        for term in ('admin_collocations', 'preview_alignment_queue'):
+            html_str = re.sub(r'<a[^>]*href=' + Q + NQ + '*' + term + NQ + '*' + Q + r'[^>]*>.*?</a>', '', html_str, flags=re.DOTALL)
+
+    # 6. Live numbers, formatted per language
+    active_c = get_active_corpus()
+    cholpon_count = sum(1 for s in active_c if s.get('book') == 'cholpon')
+    hemingway_count = sum(1 for s in active_c if s.get('book') == 'hemingway')
+    total_segments = len(active_c)
+    c_fmt = ui_components.format_number(cholpon_count, lang)
+    h_fmt = ui_components.format_number(hemingway_count, lang)
+    t_fmt = ui_components.format_number(total_segments, lang)
+    for old in ['2 471', '2,471', '6 823', '6,823']:
+        html_str = html_str.replace(old, c_fmt)
+    for old in ['1 340', '1,340', '1 532', '1,532']:
+        html_str = html_str.replace(old, h_fmt)
+    for old in ['3 811', '3,811', '8 355', '8,355']:
+        html_str = html_str.replace(old, t_fmt)
+    html_str = html_str.replace('Ibrohim G‘afurov', 'Ibrohim G‘ofurov')
+
+    # 7. data-i18n keys (whole element content replaced by the key's full translation)
+    def repl_i18n(m):
+        tag_start, key, tag_close, inner, tag_end = m.group(1), m.group(2), m.group(3), m.group(4), m.group(5)
+        trans = loc.get(key)
+        if trans:
+            icon_match = re.search(r'(<i\s+data-lucide=[^>]+></i>)', inner)
+            if icon_match:
+                return f"{tag_start}{key}{tag_close}{trans} {icon_match.group(1)}{tag_end}"
+            return f"{tag_start}{key}{tag_close}{trans}{tag_end}"
+        return m.group(0)
+    html_str = re.sub(r'(<[^>]*\bdata-i18n=' + Q + r')(' + NQ + r'+)(' + Q + r'[^>]*>)(.*?)(</[^>]+>)', repl_i18n, html_str, flags=re.DOTALL)
+
+    # 8. data-i18n-placeholder (attribute order independent)
+    def repl_ph_tag(m):
+        tag = m.group(0)
+        km = re.search(r'data-i18n-placeholder=' + Q + '(' + NQ + '+)' + Q, tag)
+        if not km or not loc.get(km.group(1)):
+            return tag
+        trans = loc[km.group(1)].replace('"', '&quot;')
+        return re.sub(r'placeholder=' + Q + NQ + '*' + Q, lambda _: f'placeholder="{trans}"', tag, count=1)
+    html_str = re.sub(r'<input[^>]*data-i18n-placeholder=[^>]*>', repl_ph_tag, html_str)
+
+    return html_str
+
+

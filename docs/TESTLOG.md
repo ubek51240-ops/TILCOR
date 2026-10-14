@@ -7,7 +7,7 @@ Har bir bosqichda o‘tkazilgan avtomatlashtirilgan va qo‘lda bajarilgan sinov
 - **Natijalar (4/4 Test PASS — 100%):**
   - `TEST 1 (Hujjatlar butunligi)`: 10 ta rasmiy hujjat (`VALIDATION_REPORT`, `REPRODUCIBLE_CHAIN_EXAMPLE`, `USER_GUIDE`, `DATA_DICTIONARY`, `LIMITATIONS`, `BACKUP_RESTORE`, `ARCHITECTURE`, `DEFENCE_DEMO_SCRIPT`, `PLATFORM_FACTSHEET`, `platform_factsheet.html`) to‘liq mavjud va to‘ldirilgan (PASS).
   - `TEST 2 (Namunaviy zanjir)`: `occ-00002` kollokatsiyasi (`fished alone` ➔ `baliq ovlardi`) PDF 1-betdan boshlab eksport qatorigacha 100% takrorlanuvchan tarzda verifikatsiya qilindi (PASS).
-  - `TEST 3 (Oflayn himoya to‘plami)`: Kengash a'zolari uchun mehmon hisobi (`guest` / `tilcor_guest_2026`) va to‘liq lokal ishlash qobiliyati tasdiqlandi (PASS).
+  - `TEST 3 (Oflayn himoya to‘plami)`: Kengash a'zolari uchun mehmon hisobi (`guest` / `<parol kodda saqlanmaydi>`) va to‘liq lokal ishlash qobiliyati tasdiqlandi (PASS).
   - `TEST 4 (Baza yaxlitligi va halollik)`: 0 ta Foreign Key xatosi, Stevenson UZ 0 ta segment (karantinda), 2 ta sintetik demo birikma karantinda (PASS).
 
 ---

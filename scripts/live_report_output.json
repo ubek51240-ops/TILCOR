@@ -1,0 +1,24 @@
+{
+  "cert": {
+    "issuer": {
+      "countryName": "US",
+      "organizationName": "Let's Encrypt",
+      "commonName": "YE1"
+    },
+    "not_after": "Jan 10 11:39:48 2027 GMT"
+  },
+  "yurak": {
+    "total_word_forms": 16,
+    "corpus_occurrences": 32,
+    "collocations_count": 14,
+    "corpus_candidates_count": 14,
+    "reference_collocations_count": 0
+  },
+  "kongil": {
+    "total_word_forms": 22,
+    "corpus_occurrences": 116,
+    "collocations_count": 20,
+    "corpus_candidates_count": 20,
+    "reference_collocations_count": 0
+  }
+}

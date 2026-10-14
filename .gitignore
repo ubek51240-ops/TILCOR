@@ -31,4 +31,13 @@ __pycache__/
 # Backups & Temporary files
 backups/*.db
 backups/*.sha256
+backups/backup_step*
+backups/stage*
+backups/step*
 *.restore_tmp
+*.zip
+secrets/
+*.password
+
+# local backups made by cleaning scripts
+data/*.before_*.json

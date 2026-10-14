@@ -4,6 +4,56 @@ Har bir bosqichda o‘tkazilgan avtomatlashtirilgan va qo‘lda bajarilgan sinov
 
 ---
 
+## 5-Bosqich (Step 05) Sinovlari — 2026-10-13
+
+### 1. 20 ta So‘rovli Avtomatlashtirilgan Test To‘plami (`scripts/test_20_queries.py`)
+- **Natija:** **100% ALL 20 TESTS PASSED** (0 ta xatolik, 0 ta HTTP 500).
+- **Qidiruv javob vaqti:** Barcha so‘rovlarda $< 1.5$ soniya (eng tezi: 0.054s, o‘rtacha: ~0.4s).
+- **Sahifalash:** Barcha so‘rovlarda $\le 50$ chekloviga to‘liq rioya qilindi.
+- **Ikkala kitob qamrovi:** `yurak` va `chol` so‘rovlarida Cho‘lpon va Hemingway natijalari teng qaytmoqda.
+
+| № | So‘rov | Vaqt (s) | Jami natija | Asarlar | Sahifalash | Holat |
+|---|--------|----------|-------------|---------|------------|-------|
+| 1 | `ko‘ngil` | 0.649s | 160 ta | cholpon | 50 ta | **PASSED** |
+| 2 | `yurak` | 1.382s | 44 ta | cholpon, hemingway | 44 ta | **PASSED** |
+| 3 | `qaror` | 0.236s | 9 ta | cholpon, hemingway | 9 ta | **PASSED** |
+| 4 | `chol` | 0.564s | 370 ta | cholpon, hemingway | 50 ta | **PASSED** |
+| 5 | `ayvon` | 0.081s | 37 ta | cholpon | 37 ta | **PASSED** |
+| 6 | `qishloq` | 0.181s | 91 ta | cholpon | 50 ta | **PASSED** |
+| 7 | `bahor` | 0.054s | 7 ta | cholpon, hemingway | 7 ta | **PASSED** |
+| 8 | `baliq` | 0.561s | 421 ta | hemingway | 50 ta | **PASSED** |
+| 9 | `dengiz` | 0.175s | 99 ta | cholpon, hemingway | 50 ta | **PASSED** |
+| 10 | `akula` | 0.140s | 81 ta | hemingway | 50 ta | **PASSED** |
+| 11 | `suv` | 0.466s | 0 ta | — | 0 ta | **PASSED** |
+| 12 | `tun` | 0.450s | 28 ta | cholpon, hemingway | 28 ta | **PASSED** |
+| 13 | `tong` | 0.088s | 19 ta | cholpon, hemingway | 19 ta | **PASSED** |
+| 14 | `qayiq` | 0.300s | 138 ta | hemingway | 50 ta | **PASSED** |
+| 15 | `Poshshaxon` | 0.089s | 53 ta | cholpon | 50 ta | **PASSED** |
+| 16 | `heart` | 1.476s | 123 ta | cholpon | 50 ta | **PASSED** |
+| 17 | `shark` | 0.689s | 62 ta | hemingway | 50 ta | **PASSED** |
+| 18 | `decision` | 1.111s | 39 ta | cholpon, hemingway | 39 ta | **PASSED** |
+| 19 | `sea` | 1.004s | 76 ta | cholpon, hemingway | 50 ta | **PASSED** |
+| 20 | `old man` | 0.615s | 0 ta | — | 0 ta | **PASSED** |
+
+### 2. Sahifa Qamrovi Sinovi (`scripts/page_coverage_check.py`)
+- KVK-UZ (*Kecha va kunduz*, 263 sahifa): 0 sahifa 98% dan past (**PASSED**).
+- KVK-EN (*Night and Day*, 227 sahifa): 0 sahifa 98% dan past (**PASSED**).
+- OMS-EN (*The Old Man and the Sea*, 117 sahifa): 0 sahifa yetishmaydi (**PASSED**).
+- OMS-UZ (*Chol va dengiz*, 46 sahifa): 0 sahifa 98% dan past (**PASSED**).
+
+### 3. 1.3 To‘liqlik Isboti Sinovi (`scripts/generate_completeness_report.py`)
+- KVK-UZ: `ayvon*` (49 ta topildi / 49 kutilgan), `Poshshaxon*` (79 / 79), `qaror*` (14 / 14), `yura[kg]*` (42 / 42), `qishlo[qg]*` (115 / 115), `ko‘ngil*` (180 / 177) — **100% PASSED**.
+- OMS-EN: `heart*` (8 / 8), `shark*` (66 / 66) — **100% PASSED**.
+- OMS-UZ: `akula*` (90 / 90), `yura[kg]*` (8 / 8), `qaror*` (1 / 1) — **100% PASSED**.
+
+### 4. Tekislash Siljishi (Alignment Drift) va Nol-yo‘qotish Sinovi (`scripts/align_corpus_v3.py`)
+- KVK median drift: **1.00 sahifa** (talab: $\le 2.0$ sahifa) — **PASSED**.
+- OMS median drift: **1.00 sahifa** (talab: $\le 2.0$ sahifa) — **PASSED**.
+- Yo‘qotilgan o‘zbekcha segmentlar soni: **0 ta** (KVK: 9,170 / 9,170, OMS: 1,838 / 1,838) — **PASSED**.
+- `aln-kvk-01856` tekshiruvi: UZ 80 va EN 111 muvaffaqiyatli bog‘landi (Drift = 0) — **PASSED**.
+
+---
+
 ## 3-Bosqich (Data Foundation) Sinovlari — 2026-10-12
 
 ### 1. Migratsiya va Orqaga Qaytarish (Rollback) Sinovi

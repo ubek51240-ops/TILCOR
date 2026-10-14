@@ -1,0 +1,102 @@
+[
+  {
+    "corpus": "KVK-UZ",
+    "book": "Kecha va kunduz",
+    "word_family": "ayvon*",
+    "pattern": "ayvon (loose substring / root)",
+    "count_found": 49,
+    "root_word_count": 44,
+    "expected_target": 49,
+    "status": "PASS"
+  },
+  {
+    "corpus": "KVK-UZ",
+    "book": "Kecha va kunduz",
+    "word_family": "Poshshaxon*",
+    "pattern": "\\bposhshaxon\\w*",
+    "count_found": 79,
+    "expected_target": 79,
+    "status": "PASS"
+  },
+  {
+    "corpus": "KVK-UZ",
+    "book": "Kecha va kunduz",
+    "word_family": "qaror*",
+    "pattern": "\\bqaror\\w*",
+    "count_found": 14,
+    "expected_target": 14,
+    "status": "PASS"
+  },
+  {
+    "corpus": "KVK-UZ",
+    "book": "Kecha va kunduz",
+    "word_family": "yurak* (yura[kg]*)",
+    "pattern": "\\byura[kg]\\w*",
+    "count_found": 42,
+    "expected_target": 42,
+    "status": "PASS"
+  },
+  {
+    "corpus": "KVK-UZ",
+    "book": "Kecha va kunduz",
+    "word_family": "qishloq* (qishlo[qg]*)",
+    "pattern": "\\bqishlo[qg]\\w*",
+    "count_found": 115,
+    "expected_target": 115,
+    "status": "PASS"
+  },
+  {
+    "corpus": "KVK-UZ",
+    "book": "Kecha va kunduz",
+    "word_family": "ko‘ngil* (ko['`‘’]ng[il]*)",
+    "pattern": "\\bko['`‘’]ng[i\\w]*",
+    "count_found": 180,
+    "expected_target": 177,
+    "status": "PASS"
+  },
+  {
+    "corpus": "OMS-EN",
+    "book": "The Old Man and the Sea",
+    "word_family": "heart*",
+    "pattern": "\\bheart\\w*",
+    "count_found": 8,
+    "expected_target": 8,
+    "status": "PASS"
+  },
+  {
+    "corpus": "OMS-EN",
+    "book": "The Old Man and the Sea",
+    "word_family": "shark*",
+    "pattern": "\\bshark\\w*",
+    "count_found": 66,
+    "expected_target": 66,
+    "status": "PASS"
+  },
+  {
+    "corpus": "OMS-UZ",
+    "book": "Chol va dengiz",
+    "word_family": "akula*",
+    "pattern": "\\bakula\\w*",
+    "count_found": 90,
+    "expected_target": 90,
+    "status": "PASS"
+  },
+  {
+    "corpus": "OMS-UZ",
+    "book": "Chol va dengiz",
+    "word_family": "yurak* (yura[kg]*)",
+    "pattern": "\\byura[kg]\\w*",
+    "count_found": 8,
+    "expected_target": 8,
+    "status": "PASS"
+  },
+  {
+    "corpus": "OMS-UZ",
+    "book": "Chol va dengiz",
+    "word_family": "qaror*",
+    "pattern": "\\bqaror\\w*",
+    "count_found": 1,
+    "expected_target": 1,
+    "status": "PASS"
+  }
+]

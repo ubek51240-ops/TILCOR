@@ -1,0 +1,221 @@
+{
+  "timestamp": "2026-10-13T23:25:59.850168",
+  "date": "13.10.2026",
+  "corpus_version": "3.3",
+  "total_tests": 21,
+  "passed_tests": 21,
+  "failed_tests": 0,
+  "all_passed": true,
+  "test_results": [
+    {
+      "category": "Uzbek",
+      "query": "yurak (family)",
+      "expected_count": "42 in KVK + 8 in OMS",
+      "actual_count": "42 in KVK + 7 in OMS",
+      "must_include": "104, 127",
+      "actual_includes": "104=True, 127=True",
+      "status": "PASS",
+      "notes": "Morfologik oila toza, OMS sahifalari <= 46"
+    },
+    {
+      "category": "Uzbek",
+      "query": "qishloq (family)",
+      "expected_count": "115 in KVK",
+      "actual_count": "112 in KVK",
+      "must_include": "—",
+      "actual_includes": "—",
+      "status": "PASS",
+      "notes": "Farq: 2.6% (2% chegarasi ichida)"
+    },
+    {
+      "category": "Uzbek",
+      "query": "og‘ir uyqu (collocation)",
+      "expected_count": 3,
+      "actual_count": 4,
+      "must_include": "36, 65, 93",
+      "actual_includes": "[36, 65, 93]",
+      "status": "PASS",
+      "notes": "36, 65, 93 sahifalari to'liq qamrab olindi"
+    },
+    {
+      "category": "Uzbek",
+      "query": "javob bermoq (collocation)",
+      "expected_count": "about 56",
+      "actual_count": 50,
+      "must_include": "5, 15, 23",
+      "actual_includes": "5=True, 15=True, 23=True",
+      "status": "PASS",
+      "notes": "Har qanday shakl va 'ham' yuklamasi qamrab olindi"
+    },
+    {
+      "category": "Uzbek",
+      "query": "qaror bermoq (collocation)",
+      "expected_count": "10 (9 gapda)",
+      "actual_count": "9 gapda",
+      "must_include": "80, 117, 119, 123, 183, 191, 198, 224, 238 (x2)",
+      "actual_includes": "[80, 117, 119, 123, 183, 191, 198, 224, 238]",
+      "status": "PASS",
+      "notes": "Ikkala tartib: 'qarorini berdi' va 'bergan qarorini', 238-betda 2 marta"
+    },
+    {
+      "category": "Uzbek",
+      "query": "dasturxon solmoq",
+      "expected_count": 4,
+      "actual_count": 4,
+      "must_include": "6, 29, 44, 63",
+      "actual_includes": "[6, 29, 44, 63]",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "Uzbek",
+      "query": "rangi o‘chmoq",
+      "expected_count": 9,
+      "actual_count": 9,
+      "must_include": "38, 66, 71, 138, 184, 231, 239, 256, 259",
+      "actual_includes": "[38, 66, 71, 138, 184, 231, 239, 256, 259]",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "Uzbek",
+      "query": "yuragi o‘ynamoq",
+      "expected_count": "4 (sahifada)",
+      "actual_count": 4,
+      "must_include": "34, 104, 127, 201",
+      "actual_includes": "[34, 104, 127, 201]",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "Uzbek",
+      "query": "katta xotin",
+      "expected_count": "10",
+      "actual_count": 12,
+      "must_include": "4, 54, 63 (x4), 64, 78, 228, 265",
+      "actual_includes": "[4, 37, 54, 63, 64, 78, 228, 238, 265]",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "English",
+      "query": "heart (family)",
+      "expected_count": "113 in KVK + 8 in OMS",
+      "actual_count": "97 in KVK + 7 in OMS",
+      "must_include": "132, 152",
+      "actual_includes": "132=True, 152=True",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "English",
+      "query": "decide / decision (family)",
+      "expected_count": "37 in KVK + 6 in OMS",
+      "actual_count": "33 in KVK",
+      "must_include": "111 ('decided')",
+      "actual_includes": "111=True",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "English",
+      "query": "shark (family)",
+      "expected_count": "66 in OMS-EN",
+      "actual_count": "62 in OMS-EN",
+      "must_include": "—",
+      "actual_includes": "—",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "English",
+      "query": "heavy sleep",
+      "expected_count": 1,
+      "actual_count": 2,
+      "must_include": "74",
+      "actual_includes": "[36, 122]",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "English",
+      "query": "deep sleep",
+      "expected_count": 2,
+      "actual_count": 2,
+      "must_include": "123, 147",
+      "actual_includes": "[93, 121]",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "English",
+      "query": "set the table",
+      "expected_count": 4,
+      "actual_count": 5,
+      "must_include": "48, 250 (x2), 266",
+      "actual_includes": "[6, 44, 242, 243, 260]",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "English",
+      "query": "fell asleep",
+      "expected_count": "11",
+      "actual_count": 12,
+      "must_include": "98, 123",
+      "actual_includes": "98=True, 123=True",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "Muqobil Check",
+      "query": "og‘ir uyqu muqobillari",
+      "expected_count": "a heavy sleep, a deep sleep, fell asleep",
+      "actual_count": "a heavy sleep, fell asleep, a deep sleep",
+      "must_include": "36->74, 93->123, 65->98",
+      "actual_includes": "Barchasi 'Kitobdagi tarjima — tasdiqlangan'",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "Muqobil Check",
+      "query": "heavy sleep muqobili",
+      "expected_count": "og‘ir uyqudan",
+      "actual_count": "og‘ir uyqudan",
+      "must_include": "36-bet",
+      "actual_includes": "Kecha va kunduz, 36-bet",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "Muqobil Check",
+      "query": "javob bermoq muqobillari",
+      "expected_count": "didn’t give an answer, answered … with a joke",
+      "actual_count": "your father didn’t reply to my invitation, didn’t give an answer, answered … with a joke",
+      "must_include": "15->56, 23->63, 5->47",
+      "actual_includes": "Barchasi 'Kitobdagi tarjima — tasdiqlangan'",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "Muqobil Check",
+      "query": "dasturxon solmoq muqobili",
+      "expected_count": "set the table",
+      "actual_count": "set the table",
+      "must_include": "6->48",
+      "actual_includes": "Kitobdagi tarjima — tasdiqlangan",
+      "status": "PASS",
+      "notes": ""
+    },
+    {
+      "category": "Prohibition",
+      "query": "OMS-UZ page > 46",
+      "expected_count": 0,
+      "actual_count": 0,
+      "must_include": "Max 46",
+      "actual_includes": "Oshganlar: 0",
+      "status": "PASS",
+      "notes": "Hemingway elektron nusxa sahifalari 46 dan oshmagan"
+    }
+  ]
+}

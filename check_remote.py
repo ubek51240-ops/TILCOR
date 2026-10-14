@@ -4,7 +4,7 @@ import sys
 
 HOST = "189.74.100.111"
 USER = "root"
-PASS = "AcL0hzLOh16zDoM$"
+PASS = os.environ['TILCOR_VPS_PASSWORD']
 
 def run():
     client = paramiko.SSHClient()

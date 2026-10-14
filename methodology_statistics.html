@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TILCOR v2.0 — Metodologiya va Shaffof Statistika (Stage 8)</title>
+  <title>Metodologiya va statistika | TILCOR</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -169,12 +169,12 @@
 
   <header>
     <div class="header-title">
-      <h1><i class="fa-solid fa-chart-line"></i> TILCOR v2.0 — Metodologiya va Shaffof Statistika (Stage 8)</h1>
-      <p>PhD Ilmiy Tadqiqoti · Kirish parametrlar, Formulalar va III Bob Statistik Jadvallari</p>
+      <h1><i class="fa-solid fa-chart-line"></i> Metodologiya va statistika</h1>
+      <p>Kollokatsiya assotsiatsiya mezonlari va ilmiy korpus ko‘rsatkichlari</p>
     </div>
     <div class="header-actions">
-      <a href="annotation_workspace.html" class="nav-btn"><i class="fa-solid fa-layer-group"></i> Annotatsiya Ish Joyi</a>
-      <a href="annotation_guidelines.html" class="nav-btn"><i class="fa-solid fa-book-bookmark"></i> Yo‘riqnoma (v1.0)</a>
+      <a href="methodology.html" class="nav-btn"><i class="fa-solid fa-file-lines"></i> Metodologiya</a>
+      <a href="kwic_concordance.html" class="nav-btn"><i class="fa-solid fa-align-left"></i> KWIC Konkordans</a>
       <a href="index.html" class="nav-btn"><i class="fa-solid fa-arrow-left"></i> Bosh sahifa</a>
     </div>
   </header>
@@ -214,10 +214,10 @@
       </div>
 
       <div class="formula-box">
-        <div class="formula-title">Normallashtirilgan Chastota Formulasi (Kichik korpuslar uchun 10,000 tokenga):</div>
-        <p>$$\text{NormFreq} = \frac{\text{RawFreq}}{N} \times 10{,}000$$</p>
+        <div class="formula-title">Normallashtirilgan Chastota Formulasi (1.1.4, 3-jadval — 1,000,000 so‘zga):</div>
+        <p>$$\text{NormFreq} = \frac{\text{RawFreq}}{N} \times 1{,}000{,}000$$</p>
         <p style="font-size:0.85rem; color:var(--text-muted); margin-top:6px;">
-          Barcha chastotalar yonida uning maxraji (<i>denominator $N$</i>) qat'iy ko‘rsatiladi. Bu kichik hajmli badiiy korpuslarda chastotalarni ob'ektiv taqqoslash imkonini beradi.
+          Barcha chastotalar yonida uning maxraji (<i>denominator $N$</i>) qat'iy ko‘rsatiladi. Frequencies are normalised per million words.
         </p>
       </div>
     </div>
@@ -244,16 +244,21 @@
           <p>$$t = \frac{O_{11} - E_{11}}{\sqrt{O_{11}}}, \quad \text{bu yerda } E_{11} = \frac{R_1 \cdot C_1}{N}$$</p>
         </div>
         <div class="formula-box">
-          <div class="formula-title">Dunning Log-Likelihood (G², 1993):</div>
+          <div class="formula-title">logDice (Rychlý, 2008 — Asosiy leksikografik mezon):</div>
+          <p>$$\text{logDice} = 14 + \log_2 \left( \frac{2 \cdot O_{11}}{R_1 + C_1} \right)$$</p>
+          <div class="formula-title" style="margin-top:12px;">Dunning Log-Likelihood (G², 1993):</div>
           <p>$$G^2 = 2 \sum_{i=1}^2 \sum_{j=1}^2 O_{ij} \ln \left( \frac{O_{ij}}{E_{ij}} \right)$$</p>
           <p style="font-size:0.82rem; color:var(--text-muted); margin-top:8px;">
-            <b>Akademik izoh (1.1-fasl):</b> $MI$ ko‘rsatkichi kam uchraydigan noyob juftliklarga yuqori ball berishga moyil bo‘lsa, $t$-score esa yuqori chastotali grammatik kollokatsiyalarni afzal ko‘radi. Shu sababli Dunning $G^2$ ko‘rsatkichi kichik korpuslar uchun eng mustahkam mezon hisoblanadi.
+            <b>Akademik izoh (1.1-fasl):</b> Asosiy mezon sifatida korpus hajmiga bog'liq bo'lmagan $logDice$ qo‘llanadi; $MI$ kam uchraydigan juftliklarga yuqori ball beradi (faqat chastota filtri bilan olinadi), $t$-score faqat ishonchlilik ko‘rsatkichi sifatida qaraladi, chegara sifatida qo‘llanmaydi.
           </p>
         </div>
       </div>
 
       <!-- Live Contingency Calculator Form -->
-      <h3 style="font-size: 1rem; font-weight: 700; margin-top: 18px; color: #1e293b;">Shaffof 2×2 Kontingentlik Kalkulyatori:</h3>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:18px;">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b;">Shaffof 2×2 Kontingentlik Kalkulyatori:</h3>
+        <span class="badge badge-warning" style="font-size:0.75rem;">Hisoblash namunasi — korpus natijasi emas</span>
+      </div>
       <div class="calc-grid">
         <div class="calc-field">
           <label>O11 (Birga uchrash soni):</label>
@@ -275,10 +280,14 @@
       <button class="calc-btn" onclick="runCalculator()"><i class="fa-solid fa-calculator"></i> Ko‘rsatkichlarni Hisoblash</button>
 
       <!-- Results Grid -->
-      <div class="calc-results-grid" id="calcResults">
+      <div class="calc-results-grid" id="calcResults" style="grid-template-columns: repeat(5, 1fr);">
         <div class="res-card">
           <div class="res-label">Kutilgan (E11)</div>
           <div class="res-val" id="resE11">0.05</div>
+        </div>
+        <div class="res-card">
+          <div class="res-label">logDice</div>
+          <div class="res-val" id="resLogDice">7.8439</div>
         </div>
         <div class="res-card">
           <div class="res-label">MI Score</div>
@@ -303,15 +312,21 @@
           <p>Barcha hisoblangan birikmalar uchun kirish sonlari (O11, R1, C1, N) va natijaviy mezonlar</p>
         </div>
         <div style="display:flex; gap:10px; align-items:center;">
-          <label for="thresholdSelect" style="font-size:0.85rem; font-weight:600;">Min. chastota (f):</label>
-          <select id="thresholdSelect" onchange="loadAssocMeasures()" style="padding:6px 10px; border-radius:6px; border:1px solid var(--border);">
-            <option value="2">f ≥ 2</option>
-            <option value="3" selected>f ≥ 3 (Standart)</option>
-            <option value="5">f ≥ 5</option>
-          </select>
+          <span class="badge badge-primary" style="font-size:0.85rem; padding:6px 12px; background:#1e3a8a; color:white; border-radius:6px;">Avtomatik nomzodlar: f ≥ 2 (qatiy mezon)</span>
+          <input type="hidden" id="thresholdSelect" value="2">
           <input type="text" id="assocSearch" placeholder="So‘z qidiruvi..." onkeydown="if(event.key==='Enter') loadAssocMeasures()" style="padding:6px 10px; border-radius:6px; border:1px solid var(--border);">
           <button class="btn btn-secondary" onclick="loadAssocMeasures()"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
+      </div>
+
+      <div class="formula-box" style="margin: 0 0 16px 0;">
+        <div class="formula-title">1.1.4 Tayanch Korpus Saralash Parametrlari (Reference-corpus Parameters):</div>
+        <p style="font-size:0.85rem; color:var(--text-muted); line-height: 1.6;">
+          <b>Chastota chegarasi:</b> $f \ge 5$ (BNC va O‘zbek milliy korpusi). &nbsp;|&nbsp;
+          <b>Asosiy mezon:</b> $\text{logDice}$ (korpus hajmiga bog‘liq bo‘lmagan leksikografik tanlov). &nbsp;|&nbsp;
+          <b>MI:</b> Faqat chastota filtri ($f \ge 5$) bilan birga qo‘llanadi (kamchilikli past chastotali xatolarni chetlatish uchun). &nbsp;|&nbsp;
+          <b>t-score:</b> Faqat statistik ishonchlilik indikatori sifatida ($t \ge 1.96$), asosiy saralash chegarasi emas.
+        </p>
       </div>
 
       <div style="overflow-x: auto;">
@@ -328,7 +343,7 @@
               <th class="num">MI</th>
               <th class="num">t-score</th>
               <th class="num">Log-Likelihood (G²)</th>
-              <th class="num">Norm / 10k</th>
+              <th class="num">Norm / 1M</th>
             </tr>
           </thead>
           <tbody id="assocBody">
@@ -361,7 +376,7 @@
 
       <div style="margin-bottom: 24px;">
         <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
-          3.1-Jadval. Struktur Qoliplar Taqsimoti (Asarlar va Yo‘nalishlar Kesimida)
+          3.1-Jadval. Semantik-struktur tasnifi
         </h3>
         <table id="table31">
           <thead>
@@ -378,35 +393,35 @@
 
       <div style="margin-bottom: 24px;">
         <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
-          3.3-Jadval. Tarjima Ekvivalentligi Turlari Taqsimoti
+          3.2-Jadval. Kollokatsion birliklar tarjimasi va ekvivalentlik
+        </h3>
+        <table id="table32">
+          <thead>
+            <tr>
+              <th>Ekvivalentlik va Transformatsiya</th>
+              <th class="num">Cho‘lpon (UZ ➔ EN)</th>
+              <th class="num">Hemingway (EN ➔ UZ)</th>
+              <th class="num">Jami (n)</th>
+            </tr>
+          </thead>
+          <tbody id="body32"></tbody>
+        </table>
+      </div>
+
+      <div>
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
+          3.3-Jadval. Lingvomadaniy xususiyatlar
         </h3>
         <table id="table33">
           <thead>
             <tr>
-              <th>Ekvivalentlik Turi</th>
+              <th>Lingvomadaniy xususiyat</th>
               <th class="num">Cho‘lpon (UZ ➔ EN)</th>
               <th class="num">Hemingway (EN ➔ UZ)</th>
               <th class="num">Jami (n)</th>
             </tr>
           </thead>
           <tbody id="body33"></tbody>
-        </table>
-      </div>
-
-      <div>
-        <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
-          3.4-Jadval. Tarjima Strategiyalari Taqsimoti
-        </h3>
-        <table id="table34">
-          <thead>
-            <tr>
-              <th>Tarjima Strategiyasi</th>
-              <th class="num">Cho‘lpon (UZ ➔ EN)</th>
-              <th class="num">Hemingway (EN ➔ UZ)</th>
-              <th class="num">Jami (n)</th>
-            </tr>
-          </thead>
-          <tbody id="body34"></tbody>
         </table>
       </div>
     </div>
@@ -471,7 +486,7 @@
               <td class="num" style="color:var(--primary); font-weight:600;">${r.mi_score}</td>
               <td class="num">${r.t_score}</td>
               <td class="num" style="font-weight:700; color:#15803d;">${r.log_likelihood_g2}</td>
-              <td class="num">${r.normalized_freq_per_10k}</td>
+              <td class="num">${r.normalized_freq_per_million !== undefined ? r.normalized_freq_per_million : (r.normalized_freq_per_10k ? (r.normalized_freq_per_10k * 100).toFixed(1) : ((r.o11 / r.corpus_size_n) * 1000000).toFixed(1))}</td>
             `;
             tbody.appendChild(tr);
           });
@@ -510,6 +525,7 @@
         const data = await res.json();
         if (data.success) {
           document.getElementById('resE11').innerText = data.expected_frequencies.e11;
+          document.getElementById('resLogDice').innerText = data.metrics.log_dice !== undefined ? data.metrics.log_dice : '—';
           document.getElementById('resMI').innerText = data.metrics.mi_score;
           document.getElementById('resT').innerText = data.metrics.t_score;
           document.getElementById('resG2').innerText = data.metrics.log_likelihood_g2;
@@ -533,9 +549,13 @@
       try {
         const res = await fetch('/api/stage8/chapter3-tables');
         const data = await res.json();
-        if (data.success && data.tables) {
+        const b31 = document.getElementById('body31');
+        const b32 = document.getElementById('body32');
+        const b33 = document.getElementById('body33');
+        const emptyRow = '<tr><td colspan="4" style="text-align:center; padding:18px; color:var(--text-muted); font-style:italic;">— (Tasdiqlangan annotatsiyalar hali yo‘q)</td></tr>';
+
+        if (data.success && data.tables && Object.keys(data.tables).length > 0 && data.total_confirmed > 0) {
           // Table 3.1
-          const b31 = document.getElementById('body31');
           b31.innerHTML = "";
           (data.tables.table_3_1_patterns || []).forEach(r => {
             b31.innerHTML += `
@@ -548,11 +568,10 @@
             `;
           });
 
-          // Table 3.3
-          const b33 = document.getElementById('body33');
-          b33.innerHTML = "";
-          (data.tables.table_3_3_equivalence || []).forEach(r => {
-            b33.innerHTML += `
+          // Table 3.2
+          b32.innerHTML = "";
+          (data.tables.table_3_2_equivalence || []).forEach(r => {
+            b32.innerHTML += `
               <tr>
                 <td><b>${r.category}</b></td>
                 <td class="num">${r.cholpon_repr}</td>
@@ -562,11 +581,10 @@
             `;
           });
 
-          // Table 3.4
-          const b34 = document.getElementById('body34');
-          b34.innerHTML = "";
-          (data.tables.table_3_4_strategies || []).forEach(r => {
-            b34.innerHTML += `
+          // Table 3.3
+          b33.innerHTML = "";
+          (data.tables.table_3_3_culture || []).forEach(r => {
+            b33.innerHTML += `
               <tr>
                 <td><b>${r.category}</b></td>
                 <td class="num">${r.cholpon_repr}</td>
@@ -575,6 +593,10 @@
               </tr>
             `;
           });
+        } else {
+          b31.innerHTML = emptyRow;
+          b32.innerHTML = emptyRow;
+          b33.innerHTML = emptyRow;
         }
       } catch (err) {
         console.error(err);

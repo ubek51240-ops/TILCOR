@@ -1,5 +1,5 @@
 /**
- * KORPUS.LINGVO — Jonli Tarjimon va Kollokatsion Tahlil Tizimi
+ * TILCOR — Jonli Tarjimon va Kollokatsion Tahlil Tizimi
  * O'zbekcha <-> Inglizcha ikki tomonlama neyron tarjima
  */
 
@@ -15,22 +15,22 @@ class TranslatorManager {
             {
                 lang: 'uz',
                 text: "Chol qayiqda yolgʻiz oʻzi Golfstrimda baliq ovlardi.",
-                label: "Xeminguey: Chol va dengiz"
+                label: "Ernest Hemingway: «Chol va dengiz» (I. G‘ofurov tarjimasi)"
             },
             {
                 lang: 'uz',
                 text: "Zebi onasining javobini kutar ekan, yuragi duk-duk urardi.",
-                label: "Choʻlpon: Kecha va kunduz"
+                label: "Abdulhamid Cho‘lpon: «Kecha va kunduz»"
             },
             {
                 lang: 'en',
-                text: "The ship dropped anchor in the quiet cove at dusk.",
-                label: "Stevenson: Treasure Island"
+                text: "He was an old man who fished alone in a skiff in the Gulf Stream.",
+                label: "Ernest Hemingway: The Old Man and the Sea"
             },
             {
                 lang: 'en',
                 text: "The committee finally made a firm decision and took immediate steps.",
-                label: "Rasmiy: Kollokatsion namuna"
+                label: "Akademik kollokatsion namuna"
             }
         ];
 
@@ -94,7 +94,9 @@ class TranslatorManager {
                 const targetText = document.getElementById('transTargetOutput');
                 if (targetText && targetText.textContent) {
                     navigator.clipboard.writeText(targetText.textContent).then(() => {
-                        app.showToast("Tarjima nusxalandi!", "success");
+                        if (window.app && typeof window.app.showToast === 'function') {
+                            window.app.showToast("Tarjima nusxalandi!", "success");
+                        }
                     });
                 }
             });
@@ -298,7 +300,12 @@ class TranslatorManager {
             }
 
             if (translated) {
-                outputEl.innerHTML = `<span class="text-slate-900 dark:text-white leading-relaxed">${translated}</span>`;
+                outputEl.innerHTML = `
+                    <div class="mb-2 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs font-semibold inline-block">
+                        Mashina tarjimasi (Google / MyMemory) — tekshirilmagan
+                    </div>
+                    <div class="text-slate-900 dark:text-white leading-relaxed">${translated}</div>
+                `;
                 this.analyzeTranslationCollocations(text, translated);
                 this.saveHistory(text, translated);
             } else {
@@ -315,25 +322,27 @@ class TranslatorManager {
         const intelEl = document.getElementById('transCollocIntel');
         if (!intelEl) return;
 
-        const combinedText = `${sourceText} ${targetText}`.toLowerCase();
+        const norm = (s) => (window.normalizeApostrophes ? normalizeApostrophes(s) : s);
+        const combinedText = norm(`${sourceText} ${targetText}`).toLowerCase();
         const matched = [];
         const traps = [];
 
-        collocationsDatabase.forEach(item => {
-            const uzKey = item.nodeUz.toLowerCase();
-            const enKey = item.nodeEn.toLowerCase();
-            if (combinedText.includes(uzKey) || combinedText.includes(enKey)) {
-                matched.push(item);
-            }
+        if (typeof collocationsDatabase !== 'undefined' && Array.isArray(collocationsDatabase)) {
+            collocationsDatabase.forEach(item => {
+                const uzKey = norm(item.nodeUz || item.uzbek || '').toLowerCase();
+                const enKey = norm(item.nodeEn || item.english || '').toLowerCase();
+                if (uzKey && combinedText.includes(uzKey)) matched.push(item);
+                else if (enKey && combinedText.includes(enKey)) matched.push(item);
 
-            // Check if user's text contains literal trap
-            const trapList = ["accept a decision", "strong rain", "do a crime", "throw anchor", "heart wants"];
-            trapList.forEach(t => {
-                if (combinedText.includes(t)) {
-                    traps.push({ trap: t, correct: item.english, explanation: item.literalTrap });
-                }
+                // Check if user's text contains literal trap
+                const trapList = ["accept a decision", "strong rain", "do a crime", "heart wants"];
+                trapList.forEach(t => {
+                    if (combinedText.includes(t)) {
+                        traps.push({ trap: t, correct: item.english, explanation: item.literalTrap });
+                    }
+                });
             });
-        });
+        }
 
         if (matched.length === 0 && traps.length === 0) {
             intelEl.classList.add('hidden');

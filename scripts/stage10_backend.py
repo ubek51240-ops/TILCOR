@@ -48,6 +48,7 @@ def get_texts_licences():
         FROM texts t
         JOIN editions e ON t.edition_id = e.id
         JOIN works w ON t.work_id = w.id
+        WHERE w.id IN ('work-cholpon-kk', 'work-hemingway-oms')
         ORDER BY w.id, t.role DESC
     ''')
     rows = [dict(r) for r in cur.fetchall()]

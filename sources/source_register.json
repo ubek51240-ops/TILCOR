@@ -1,0 +1,34 @@
+[
+  {
+    "id": "KVK-UZ",
+    "filename": "cholpon-kecha-va-kunduz.pdf",
+    "size_bytes": 840434,
+    "sha256": "b07ed5e50ac9921caae61381d50c80e573e92647606cde14881f47b4ca1d6d64",
+    "page_count": 272,
+    "has_text_layer": true
+  },
+  {
+    "id": "KVK-EN",
+    "filename": "night-and-day-a-novel-9781644690482_compress-pages.pdf",
+    "size_bytes": 1564140,
+    "sha256": "b8ccf054e56d2b490c24ffb2267e5d4c827ca6b476811c2ebb9c21eb544d12cb",
+    "page_count": 235,
+    "has_text_layer": true
+  },
+  {
+    "id": "OMS-EN",
+    "filename": "oldmansea.pdf",
+    "size_bytes": 380238,
+    "sha256": "0ad1d820761a5aca9df52c22ea1cfc4ca5dad64923f51270dbe8f106f3817eef",
+    "page_count": 52,
+    "has_text_layer": true
+  },
+  {
+    "id": "OMS-UZ",
+    "filename": "Chol_va_dengiz__Ernst.pdf",
+    "size_bytes": 629981,
+    "sha256": "dc0d4dd94e37c9a508a703c8099511f1194aaf1c4e600f48399ce632cec8ae00",
+    "page_count": 46,
+    "has_text_layer": true
+  }
+]

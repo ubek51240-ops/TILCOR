@@ -411,9 +411,14 @@
       <p>PhD Ilmiy Tadqiqoti · III Bob: Kollokatsiyalar Tarjima Ekvivalentligi va Strategiyalari</p>
     </div>
     <div class="header-actions">
-      <span class="badge badge-user"><i class="fa-solid fa-user-tie"></i> Foydalanuvchi: <span id="currentUser">admin (Tadqiqotchi)</span></span>
-      <button class="nav-btn" onclick="openMatrixModal()"><i class="fa-solid fa-table-cells"></i> Tarjima Mutanosibligi Matritsasi</button>
-      <button class="nav-btn" onclick="openGuidelineModal()"><i class="fa-solid fa-book-bookmark"></i> Annotatsiya Yo‘riqnomasi</button>
+      <select id="annotatorRoleSelect" onchange="switchAnnotatorRole(this.value)" class="nav-btn" style="background:white; color:var(--text); border:1px solid var(--border); font-weight:600; cursor:pointer;">
+        <option value="admin">👤 Annotator 1 (Bosh tadqiqotchi)</option>
+        <option value="annotator2">👥 Annotator 2 (Mustaqil ekspert)</option>
+      </select>
+      <button class="nav-btn" onclick="exportAnnotations('csv')"><i class="fa-solid fa-file-csv"></i> CSV</button>
+      <button class="nav-btn" onclick="exportAnnotations('xlsx')"><i class="fa-solid fa-file-excel"></i> XLSX</button>
+      <button class="nav-btn" onclick="openMatrixModal()"><i class="fa-solid fa-table-cells"></i> Matritsa</button>
+      <button class="nav-btn" onclick="openGuidelineModal()"><i class="fa-solid fa-book-bookmark"></i> Yo‘riqnoma & Kappa</button>
       <a href="index.html" class="nav-btn"><i class="fa-solid fa-arrow-left"></i> Bosh sahifa</a>
     </div>
   </header>
@@ -709,17 +714,31 @@
       <div class="modal-body">
         <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
           <div>
-            <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: var(--primary);">Kollokatsiyalarni Beligilash Qoidalari (Guideline v1.0)</h3>
-            <p style="font-size: 0.88rem; line-height: 1.6; margin-bottom: 12px;">
-              Ushbu yo‘riqnoma dissertatsiyaning 1.2, 3.1, 3.2 va 3.3-fasllari talablariga to‘liq mos keladi. Barcha ta'riflar va misollar faqat korpusning o‘zidan olingan.
+            <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; color: var(--primary);">Kollokatsiyalarni Belgilash Qoidalari va 1.1.4 Qaror Protsedurasi</h3>
+            <p style="font-size: 0.85rem; line-height: 1.5; margin-bottom: 12px; color: #475569;">
+              Har bir birlik bo‘yicha qaror qabul qilish dissertatsiyaning 1.1.4-bandida belgilangan 4 qadamli qat’iy ketma-ketlik asosida amalga oshiriladi:
             </p>
-            <ul style="font-size: 0.85rem; line-height: 1.7; padding-left: 20px; margin-bottom: 20px;">
-              <li><b>Kollokatsiya vs Erkin birikma:</b> Agar tarkibiy qismlardan biri leksik jihatdan chegaralangan yoki odatiy turg‘un bo‘lsa — kollokatsiya (masalan, <i>baliq ovlamoq</i>, <i>chuqur xo‘rsinmoq</i>). Erkin birikma umumiy sintaktik modelga ega (<i>stol ustida</i>).</li>
-              <li><b>To‘liq ekvivalentlik:</b> Ma'no va grammatik shakl ikki tilda bir xil (<i>take a fish ➔ baliq tutmoq</i>).</li>
-              <li><b>Qisman ekvivalentlik:</b> Birikuvchanlik doirasi yoki leksik komponentda farq mavjud (<i>deep sigh ➔ og‘ir xo‘rsinish</i>).</li>
-              <li><b>Strukturaviy transformatsiya:</b> Birikmaning bir so‘zga (fe'lga) siqilishi yoki boshqa so‘z turkumiga o‘tishi.</li>
-              <li><b>Realiyalar:</b> O‘zbek yoki ingliz xalqining milliy madaniyatiga xos tushunchalar (etnografik, geografik, diniy).</li>
-            </ul>
+            <div style="display:flex; flex-direction:column; gap:10px; font-size:0.83rem; line-height:1.5;">
+              <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; border-left:4px solid #3b82f6;">
+                <strong>1-QADAM. Birlik turini aniqlash (Kollokatsiya filtri):</strong><br>
+                Birikuvchi komponentlar leksik jihatdan chegaralangan yoki turg‘unmi? Erkin sintaktik birikma yoki frazeologik idiomadan farqlanadi. (Masalan, <i>baliq ovlamoq</i>, <i>chuqur xo‘rsinmoq</i> — kollokatsiya; <i>stol ustida</i> — erkin birikma; <i>oyoqni qo‘lga olmoq</i> — frazema).
+              </div>
+              <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; border-left:4px solid #10b981;">
+                <strong>2-QADAM. Struktur qolipni belgilash:</strong><br>
+                Qolip aniqlanadi: <b>Sifat + ot</b> (<i>og‘ir sukunat</i>), <b>Fe‘l + ot</b> (<i>qaror qilmoq</i>), <b>Ravish + fe‘l</b> (<i>qattiq sevmoq</i>), <b>Ega + kesim</b> (3-shaxs egalik: <i>ko‘ngli tushmoq</i>, <i>yuragi urmoq</i>), <b>Ot + ot</b> (admin-only).
+              </div>
+              <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; border-left:4px solid #f59e0b;">
+                <strong>3-QADAM. Tarjima ekvivalentligi turini tanlash:</strong><br>
+                <b>To‘liq ekvivalent:</b> Denotativ ma’no va qolip teng (<i>take a fish ➔ baliq tutmoq</i>).<br>
+                <b>Qisman ekvivalent:</b> Komponentlar yoki birikuvchanlik doirasida farq (<i>deep sigh ➔ og‘ir xo‘rsinish</i>).<br>
+                <b>Transformatsiya:</b> Leksik-grammatik o‘zgarish yoki fe‘lga siqilish (<i>make up one's mind ➔ qaror qilmoq</i>).<br>
+                <b>Kontekstual:</b> Asar kontekstiga xos erkin uslubiy tarjima.
+              </div>
+              <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; border-left:4px solid #8b5cf6;">
+                <strong>4-QADAM. Lingvokulturema va madaniy kategoriya:</strong><br>
+                Birikmada milliy kolorit (realia) mavjud bo‘lsa belgilanadi: <i>Etnografik</i> (to‘y, kiyim, taom), <i>Geografik</i> (joy nomlari), <i>Diniy-ma’naviy</i> (eshon, azayimxon), <i>Ijtimoiy-tarixiy</i> (mingboshi).
+              </div>
+            </div>
           </div>
 
           <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 18px;">
@@ -1127,6 +1146,20 @@
       } catch (err) {
         box.innerText = "Kelishuvni hisoblashda xatolik: " + err.message;
       }
+    }
+
+    // Annotator Role Switching (Part 7: annotator2 role)
+    function switchAnnotatorRole(role) {
+      window.currentUserRole = role;
+      const selectEl = document.getElementById('annotatorRoleSelect');
+      if (selectEl) selectEl.value = role;
+      loadOccurrences();
+      loadKappa();
+    }
+
+    // Export Annotations (Part 7: CSV & XLSX)
+    function exportAnnotations(format) {
+      window.location.href = `/api/stage7/export?format=${format}`;
     }
 
     // On Load

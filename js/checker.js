@@ -6,16 +6,12 @@ class CollocationChecker {
     constructor() {
         this.sampleTexts = [
             {
-                title: "Choʻlpon («Kecha va kunduz»)",
+                title: "Abdulhamid Cho‘lpon («Kecha va kunduz»)",
                 text: "Zebi onasining javobini kutar ekan, uning yuragi duk-duk urardi. Uzoqda qirlar koʻrinib, koʻngli olis joylarni tusay boshladi. Otasi esa unga sovuq nigohi bilan tikildi."
             },
             {
-                title: "E. Xeminguey («Chol va dengiz»)",
+                title: "Ernest Hemingway («The Old Man and the Sea»)",
                 text: "The old man fished alone in the Gulf Stream. He had deep wrinkles in his neck and looked at the sail of permanent defeat. But he still had faith in taking a fish."
-            },
-            {
-                title: "R. L. Stivenson («Xazinalar oroli»)",
-                text: "The ship dropped anchor in the cove. When the captain entered the inn, a dead silence fell upon the men. He lowered his voice to whisper the secret of the sea-chest."
             }
         ];
 
@@ -109,15 +105,16 @@ class CollocationChecker {
             console.warn("Lab API offline or failed, using local fallback", e);
         }
 
-        const lowerText = text.toLowerCase();
+        const norm = (s) => (window.normalizeApostrophes ? normalizeApostrophes(s) : s);
+        const lowerText = norm(text.toLowerCase());
         const foundCollocations = [];
         const detectedTraps = [];
 
         // Check against collocations database
         if (window.collocationsDatabase && Array.isArray(collocationsDatabase)) {
             collocationsDatabase.forEach(item => {
-                const uzTerms = (item.uzbek || '').toLowerCase().split('/').map(s => s.trim());
-                const enTerms = (item.english || '').toLowerCase().split('/').map(s => s.trim());
+                const uzTerms = norm(item.uzbek || '').toLowerCase().split('/').map(s => s.trim());
+                const enTerms = norm(item.english || '').toLowerCase().split('/').map(s => s.trim());
 
                 uzTerms.forEach(term => {
                     if (!term) return;
@@ -345,12 +342,12 @@ class CollocationChecker {
                 <!-- Detected collocations list -->
                 <div>
                     <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-3 flex items-center justify-between">
-                        <span>Korpus Bazasidagi Mos Kelgan Birikmalar (${collocations.length} ta):</span>
-                        <span class="text-xs text-slate-400 font-normal">MI, T-Score & Ekvivalentlik</span>
+                        <span>Bazada Mos Kelgan Birikmalar (${collocations.length} ta):</span>
+                        <span class="text-xs text-slate-400 font-normal">Tarkibiy qolip & Ekvivalentlik</span>
                     </h4>
 
                     ${collocations.length === 0 ? `
-                        <p class="text-sm text-slate-500 italic p-4 bg-slate-50 dark:bg-slate-900/40 rounded-xl">Matnda korpus bazasidagi mavjud 6,546 ta kollokatsiyalardan toʻgʻridan-toʻgʻri mos kelganlari topilmadi.</p>
+                        <p class="text-sm text-slate-500 italic p-4 bg-slate-50 dark:bg-slate-900/40 rounded-xl">Matnda faol kollokatsiyalar bazasidan toʻgʻridan-toʻgʻri mos kelgan birliklar topilmadi.</p>
                     ` : `
                         <div class="grid sm:grid-cols-2 gap-3">
                             ${collocations.map(col => `
@@ -358,8 +355,7 @@ class CollocationChecker {
                                     <div class="flex items-center justify-between">
                                         <span class="text-[11px] font-mono font-semibold px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">${col.data.pattern}</span>
                                         <div class="flex items-center gap-1.5 text-xs font-mono">
-                                            <span class="font-bold text-emerald-600">MI: ${col.data.miScore}</span>
-                                            <span class="text-indigo-600">T: ${col.data.tScore || '2.14'}</span>
+                                            <span class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px]">Statistika: 10-bosqichda</span>
                                         </div>
                                     </div>
                                     <div class="font-bold text-sm text-slate-900 dark:text-white">
@@ -369,7 +365,7 @@ class CollocationChecker {
                                         ⟷ ${col.data.english}
                                     </div>
                                     <div class="text-[10px] text-slate-400 font-semibold flex items-center justify-between">
-                                        <span>Manba: ${col.data.sourceBook || "Badiiy korpus"}</span>
+                                        <span>Manba: ${col.data.sourceMeta || col.data.sourceBook || "Manba aniqlanmagan"}</span>
                                         <span class="text-indigo-500">${col.data.equivalenceType || 'Mos ekvivalent'}</span>
                                     </div>
                                     <p class="text-[11px] text-slate-500 border-t border-slate-100 dark:border-slate-700/60 pt-1 mt-1">
@@ -489,17 +485,17 @@ class CollocationChecker {
             container.innerHTML = `
                 <div class="space-y-6">
                     <!-- Top Diagnostics Bar -->
-                    <div class="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-gradient-to-r from-purple-500/10 via-indigo-500/10 to-slate-50 dark:to-slate-800 border border-purple-500/20 text-xs">
+                    <div class="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs">
                         <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span class="font-bold text-slate-900 dark:text-white">DeepSeek AI & PhD Matn Diagnostikasi</span>
-                            <span class="px-2 py-0.5 rounded-lg bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-mono text-[11px]">
+                            <span class="px-2.5 py-1 rounded-md bg-amber-500 text-white font-bold text-[11px]">AI-taklif (tekshirilmagan)</span>
+                            <span class="font-bold text-slate-900 dark:text-white">Leksik & Kollokatsion Diagnostika</span>
+                            <span class="px-2 py-0.5 rounded-lg bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 font-mono text-[11px]">
                                 ${data.sourceLang.toUpperCase()} ➔ ${data.targetLang.toUpperCase()}
                             </span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-slate-500 font-mono text-[11px]">${data.provider}</span>
-                            <button id="checkerCopyAiBtn" class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center gap-1 shadow-sm transition">
+                            <span class="text-slate-500 font-mono text-[11px]">Model tavsiyasi (ekspert tasdig'isiz qabul qilinmaydi)</span>
+                            <button id="checkerCopyAiBtn" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-1 shadow-sm transition">
                                 <i data-lucide="copy" class="w-3.5 h-3.5"></i> Nusxalash
                             </button>
                         </div>

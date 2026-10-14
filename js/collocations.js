@@ -1,6 +1,6 @@
 /**
  * Kollokatsiyalar Matritsasi va Qidiruv Tizimi
- * 4 ta asosiy kitob bazasi (6,533 ta birikma) bilan to'liq integratsiya
+ * 4 ta asosiy kitob bazasi (6,537 ta birikma) bilan to'liq integratsiya
  */
 
 class CollocationManager {
@@ -235,9 +235,19 @@ class CollocationManager {
         } catch (err) {
             console.warn("API orqali yuklashda xatolik, lokal fallback ishlatilmoqda:", err);
             if (typeof collocationsDatabase !== 'undefined' && collocationsDatabase.length > 0) {
-                this.dataset = [...collocationsDatabase];
+                let list = [...collocationsDatabase];
+                if (this.searchTerm) {
+                    const norm = (str) => (window.normalizeApostrophes ? normalizeApostrophes(str) : str);
+                    const normQ = norm(this.searchTerm).toLowerCase();
+                    list = list.filter(item => {
+                        const uz = norm(item.uzbek || '').toLowerCase();
+                        const en = norm(item.english || '').toLowerCase();
+                        return uz.includes(normQ) || en.includes(normQ);
+                    });
+                }
+                this.dataset = list;
                 this.totalFound = this.dataset.length;
-                this.totalDatabase = this.dataset.length;
+                this.totalDatabase = collocationsDatabase.length;
             }
         } finally {
             this.isLoading = false;
@@ -461,13 +471,13 @@ class CollocationManager {
                         <!-- 3.1 & 3.2 Tasnif Badgelari -->
                         <div class="flex flex-wrap items-center justify-between gap-1.5 mb-2.5">
                             <span class="text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
-                                3.1 ${item.pattern || 'Birikma'}
+                                ${item.pattern || 'Birikma'}
                             </span>
                             <span class="text-[10px] font-mono px-2 py-0.5 rounded font-bold border ${catBadgeColor}">
-                                3.2 ${eqType}
+                                ${eqType}
                             </span>
-                            <span class="text-xs font-semibold text-slate-400 font-mono">
-                                f=${item.freq || 25}
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/60">
+                                AI-taklif
                             </span>
                         </div>
 
@@ -480,12 +490,12 @@ class CollocationManager {
                             ` : ''}
                             ${item.isLingvocultural ? `
                                 <span class="text-[10px] px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 font-bold">
-                                    🏛️ 3.3 Lingvomadaniy
+                                    🏛️ Lingvomadaniy
                                 </span>
                             ` : ''}
                         </div>
 
-                        <!-- Source Badge (PDF 5-bo'lim) -->
+                        <!-- Source Badge (D-bo'lim) -->
                         <div class="mb-3">
                             <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-700/70 text-slate-600 dark:text-slate-300 border border-slate-200/50 dark:border-slate-600/50 line-clamp-1" title="${sourceBadge}">
                                 <i data-lucide="book-open" class="w-3 h-3 text-indigo-500"></i>
@@ -493,7 +503,7 @@ class CollocationManager {
                             </span>
                         </div>
 
-                        <!-- English and Uzbek pair (PDF 3-bo'lim namunasi) -->
+                        <!-- English and Uzbek pair -->
                         <div class="space-y-2 mb-3 bg-slate-50/70 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
                             <div>
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">English Collocation</span>
@@ -505,7 +515,7 @@ class CollocationManager {
                             </div>
                         </div>
 
-                        <!-- 3.3 Lingvomadaniy izoh yoki Kalka ogohlantirishi -->
+                        <!-- Kalka ogohlantirishi -->
                         ${item.literalTrap ? `
                             <div class="p-2.5 rounded-lg bg-rose-50/80 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-[11px] text-rose-800 dark:text-rose-300 mb-3">
                                 <span class="font-bold flex items-center gap-1">
@@ -515,14 +525,14 @@ class CollocationManager {
                             </div>
                         ` : ''}
 
-                        <!-- Live Parallel Context Example (PDF 3-bo'lim namunasi) -->
-                        ${item.example ? `
+                        <!-- Real Context Example (if verified) -->
+                        ${item.example && item.example.book ? `
                             <div class="p-3 rounded-xl bg-indigo-50/40 dark:bg-slate-900/90 border border-indigo-100 dark:border-slate-800 space-y-2 mb-3">
                                 <div class="flex items-center justify-between pb-1 border-b border-indigo-100/60 dark:border-slate-800">
                                     <span class="flex items-center gap-1 text-[11px] font-bold text-indigo-700 dark:text-indigo-400">
                                         <i data-lucide="split" class="w-3 h-3"></i> Kontekst (Parallel Jumla):
                                     </span>
-                                    <span class="text-[10px] font-mono text-slate-500 dark:text-slate-400">${item.example.book || 'Badiiy Korpus'}</span>
+                                    <span class="text-[10px] font-mono text-slate-500 dark:text-slate-400">${item.example.book}</span>
                                 </div>
                                 <div class="space-y-1.5 text-xs leading-relaxed">
                                     <p class="text-slate-900 dark:text-slate-100 font-medium flex items-start gap-1.5">
@@ -539,28 +549,14 @@ class CollocationManager {
                     </div>
 
                     <div>
-                        <!-- 3 ta Statistik Ko'rsatkich (PDF 4-bo'lim) -->
-                        <div class="grid grid-cols-3 gap-1.5 pt-2.5 border-t border-slate-100 dark:border-slate-700/80 mb-3 text-center text-xs">
-                            <div class="p-1.5 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
-                                <span class="text-slate-400 block text-[9px] uppercase font-mono">MI Score</span>
-                                <span class="font-bold font-mono text-indigo-600 dark:text-indigo-400 text-xs">${item.miScore}</span>
-                            </div>
-                            <div class="p-1.5 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
-                                <span class="text-slate-400 block text-[9px] uppercase font-mono">T-Score</span>
-                                <span class="font-bold font-mono text-emerald-600 dark:text-emerald-400 text-xs">${item.tScore}</span>
-                            </div>
-                            <div class="p-1.5 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
-                                <span class="text-slate-400 block text-[9px] uppercase font-mono">Log-Like</span>
-                                <span class="font-bold font-mono text-purple-600 dark:text-purple-400 text-xs">${item.logLikelihood || 24.5}</span>
-                            </div>
+                        <!-- Statistik ko'rsatkichlar Step 10 da chiqariladi -->
+                        <div class="p-2 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800 mb-3 text-center">
+                            <span class="text-slate-500 dark:text-slate-400 text-[11px] block">Statistik maqom (logDice): <strong>10-bosqichda kalibrlanadi</strong></span>
                         </div>
 
                         <div class="flex items-center gap-2">
                             <button onclick="collocationManager.showDetailModal('${item.id}')" class="flex-1 py-2 px-3 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition text-slate-700 dark:text-slate-200 flex items-center justify-center gap-1.5">
                                 <i data-lucide="info" class="w-3.5 h-3.5"></i> Tafsilot
-                            </button>
-                            <button onclick="collocationManager.askAiForCollocation('${item.id}')" class="flex-1 py-2 px-3 text-xs font-bold rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white transition flex items-center justify-center gap-1.5 shadow-sm">
-                                <i data-lucide="bot" class="w-3.5 h-3.5"></i> DeepSeek AI
                             </button>
                         </div>
                     </div>
@@ -596,10 +592,10 @@ class CollocationManager {
                             <td class="p-3 font-mono text-slate-500">${item.pattern}</td>
                             <td class="p-3 text-slate-500">${item.semanticGroup || 'Leksik'}</td>
                             <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">${item.equivalenceType || item.category}</span></td>
-                            <td class="p-3 font-mono font-bold text-indigo-600 dark:text-indigo-400">${item.miScore}</td>
-                            <td class="p-3 font-mono font-bold text-emerald-600 dark:text-emerald-400">${item.tScore}</td>
-                            <td class="p-3 font-mono font-bold text-purple-600 dark:text-purple-400">${item.logLikelihood || 24.5}</td>
-                            <td class="p-3 font-mono text-slate-500">${item.freq}</td>
+                            <td class="p-3 font-mono font-bold text-indigo-600 dark:text-indigo-400">${item.miScore ?? "—"}</td>
+                            <td class="p-3 font-mono font-bold text-emerald-600 dark:text-emerald-400">${item.tScore ?? "—"}</td>
+                            <td class="p-3 font-mono font-bold text-purple-600 dark:text-purple-400">${item.logLikelihood ?? "—"}</td>
+                            <td class="p-3 font-mono text-slate-500">${item.freq ?? "—"}</td>
                             <td class="p-3 text-slate-500 max-w-xs truncate">${item.sourceBook || 'Badiiy korpus'}</td>
                             <td class="p-3 text-right">
                                 <div class="flex items-center justify-end gap-1">
@@ -654,15 +650,15 @@ class CollocationManager {
                 <div class="grid grid-cols-4 gap-2 text-center">
                     <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl">
                         <span class="text-[10px] uppercase text-slate-400 block">Chastota</span>
-                        <span class="font-mono font-bold text-base text-slate-800 dark:text-slate-100">${item.freq} marta</span>
+                        <span class="font-mono font-bold text-base text-slate-800 dark:text-slate-100">${item.freq ?? "—"} marta</span>
                     </div>
                     <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl">
                         <span class="text-[10px] uppercase text-slate-400 block">MI Score</span>
-                        <span class="font-mono font-bold text-base text-indigo-600 dark:text-indigo-400">${item.miScore}</span>
+                        <span class="font-mono font-bold text-base text-indigo-600 dark:text-indigo-400">${item.miScore ?? "—"}</span>
                     </div>
                     <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl">
                         <span class="text-[10px] uppercase text-slate-400 block">T-Score</span>
-                        <span class="font-mono font-bold text-base text-emerald-600 dark:text-emerald-400">${item.tScore}</span>
+                        <span class="font-mono font-bold text-base text-emerald-600 dark:text-emerald-400">${item.tScore ?? "—"}</span>
                     </div>
                     <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl">
                         <span class="text-[10px] uppercase text-slate-400 block">Ekvivalentlik</span>
@@ -675,7 +671,7 @@ class CollocationManager {
                     <h5 class="text-xs font-bold uppercase tracking-wider text-rose-800 dark:text-rose-300 flex items-center gap-1.5 mb-1">
                         <i data-lucide="alert-circle" class="w-4 h-4 text-rose-600"></i> Tarjimadagi tipik kalka va leksik toʻsiq:
                     </h5>
-                    <p class="text-sm font-mono text-rose-700 dark:text-rose-200">${item.literalTrap || "Barqaror birikma sifatida to'liq ekvivalent beriladi."}</p>
+                    <p class="text-sm font-mono text-rose-700 dark:text-rose-200">${item.literalTrap || "—"}</p>
                 </div>
 
                 <!-- Translation Note -->
@@ -920,7 +916,7 @@ Iltimos, ushbu birikmaning:
                                     <div class="text-[11px] text-slate-500 truncate">➔ ${item.uzbek}</div>
                                 </div>
                                 <div class="flex-shrink-0 text-right">
-                                    <span class="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-mono text-[10px] font-bold">MI: ${item.miScore}</span>
+                                    <span class="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-mono text-[10px] font-bold">MI: ${item.miScore ?? "—"}</span>
                                 </div>
                             </div>
                         `).join('')}
@@ -1083,9 +1079,9 @@ Iltimos, ushbu birikmaning:
             `"${(item.semanticGroup || '').replace(/"/g, '""')}"`,
             `"${(item.equivalenceType || item.category || '').replace(/"/g, '""')}"`,
             `"${(item.culturalNote || '').replace(/"/g, '""')}"`,
-            item.miScore || 0,
-            item.tScore || 0,
-            item.logLikelihood || 0,
+            item.miScore ?? '',
+            item.tScore ?? '',
+            item.logLikelihood ?? '',
             item.freq || 0,
             `"${(item.sourceBook || '').replace(/"/g, '""')}"`,
             `"${(item.literalTrap || '').replace(/"/g, '""')}"`,
@@ -1120,9 +1116,9 @@ Iltimos, ushbu birikmaning:
                 `"${(item.semanticGroup || '').replace(/"/g, '""')}"`,
                 `"${(item.equivalenceType || item.category || '').replace(/"/g, '""')}"`,
                 `"${(item.culturalNote || '').replace(/"/g, '""')}"`,
-                item.miScore || 0,
-                item.tScore || 0,
-                item.logLikelihood || 0,
+                item.miScore ?? '',
+                item.tScore ?? '',
+                item.logLikelihood ?? '',
                 item.freq || 0,
                 `"${(sm.bookName || item.sourceBook || '').replace(/"/g, '""')}"`,
                 `"${(sm.author || '').replace(/"/g, '""')}"`,

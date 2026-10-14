@@ -88,7 +88,7 @@ def run_tests():
     import stage10_backend as s10
     sec = s10.get_security_status()
     assert sec["roles"]["guest"] is not None
-    print("  ✓ Kengash a'zolari uchun mehmon hisobi faol (guest / tilcor_guest_2026)")
+    print("  ✓ Kengash a'zolari uchun mehmon hisobi faol (guest / <parol kodda saqlanmaydi>)")
     print("  ✓ Tizim tashqi internetga bog‘lanmagan holda to‘liq lokal (offline) ishlaydi")
     print("  --> PASS: Oflayn namoyish to‘plami tayyor.")
 

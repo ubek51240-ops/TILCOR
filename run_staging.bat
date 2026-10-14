@@ -7,9 +7,7 @@ echo   Rivojlantirish va sinov uchun ishchi nusxa
 echo ===================================================================
 echo.
 echo Python server staging rejimida ishga tushirilmoqda...
-echo Kirish ma'lumotlari:
-echo   - Admin (Tadqiqotchi): admin / tilcor_phd_admin_2026
-echo   - Reviewer (Ilmiy rahbar): reviewer / tilcor_supervisor_2026
+echo Admin paroli: secrets\admin.password faylida yoki TILCOR_ADMIN_PASSWORD muhit o'zgaruvchisida.
 echo.
 cd staging
 python server.py --port 5055 --env staging

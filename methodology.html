@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="uz" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metodologiya — TILCOR Parallel Korpus & Leksikografik Tahlil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#eef2ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/tokens.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Header -->
+    <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-black text-sm shadow-md">
+                        TC
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-base tracking-tight text-white">TILCOR</span>
+                        <p class="text-[11px] text-slate-400">Parallel korpus va leksikografik tahlil</p>
+                    </div>
+                </a>
+
+                <nav class="hidden md:flex items-center space-x-2 text-xs font-semibold">
+                    <a href="/" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">Bosh sahifa</a>
+                    <a href="/#corpus" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">Korpus</a>
+                    <a href="/#collocations" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">Kollokatsiyalar</a>
+                    <a href="/#dictionary" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">Lug‘at</a>
+                    <a href="methodology.html" class="px-3 py-2 rounded-xl bg-slate-800 text-indigo-400 font-bold border border-slate-700">Metodologiya</a>
+                    <a href="sources_rights.html" class="px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">Manbalar</a>
+                </nav>
+
+                <div class="flex items-center gap-2">
+                    <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 transition flex items-center gap-1.5">
+                        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                        <span>Asosiy portal</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+        
+        <!-- Header -->
+        <div class="space-y-3">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-400 uppercase tracking-wider">
+                <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Dissertatsiya Ilmiy Apparati
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                Metodologiya va Tizim Arxitekturasi
+            </h1>
+            <p class="text-sm text-slate-400 leading-relaxed">
+                TILCOR platformasida amalda joriy etilgan lingvistik mezonlar, dasturiy taʼminot algoritmlari va empirik korpus qoidalari bayoni.
+            </p>
+        </div>
+
+        <!-- 1.1 Kollokatsiya mezonlari -->
+        <section class="space-y-4 bg-slate-800/60 border border-slate-700/80 rounded-2xl p-6 sm:p-8">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center text-xs font-mono font-bold">1.1</span>
+                Kollokatsiya Mezonlari (Ishchi Taʼrif, Shartlar va Statuslar)
+            </h2>
+            <div class="text-sm text-slate-300 space-y-4 leading-relaxed">
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-indigo-900/60 text-slate-200 space-y-2">
+                    <p class="font-semibold text-white">Tadqiqotda birikma quyidagi to‘rt lingvistik shart bir vaqtda bajarilganda kollokatsiya deb hisoblanadi:</p>
+                    <ol class="list-decimal pl-5 space-y-1.5 text-xs sm:text-sm text-slate-300">
+                        <li>u kamida ikki mustaqil so‘zdan iborat bo‘lib, komponentlari o‘zaro bevosita sintaktik aloqada bo‘ladi;</li>
+                        <li>asos komponenti o‘z to‘g‘ri ma’nosini saqlaydi;</li>
+                        <li>kollokat tanlovi til an’anasi bilan cheklangan, ya’ni uning o‘rniga ma’nodosh so‘z qo‘yilganda birikma g‘ayritabiiy bo‘ladi;</li>
+                        <li>birikma yaxlit obrazli ko‘chma ma’noga ega emas.</li>
+                    </ol>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="font-semibold text-white text-xs sm:text-sm">Tadqiqotchi ekspertizasidan keyingi 5 ta qatʼiy status (1.1.4):</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-emerald-900/60">
+                            <span class="text-xs font-bold text-emerald-400 block mb-1">tasdiqlangan kollokatsiya</span>
+                            <p class="text-xs text-slate-300">Tildagi odatiyligi tayanch korpusdagi chastota va assotsiatsiya ko‘rsatkichlari bilan tasdiqlangan birlik.</p>
+                        </div>
+                        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-amber-900/60">
+                            <span class="text-xs font-bold text-amber-400 block mb-1">kollokatsiya nomzodi</span>
+                            <p class="text-xs text-slate-300">Lingvistik shartlarga javob beradigan, lekin statistik tasdig‘i hali olinmagan yoki tayanch korpusda kam uchragani sababli yetarli bo‘lmagan birlik.</p>
+                        </div>
+                        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-blue-900/60">
+                            <span class="text-xs font-bold text-blue-400 block mb-1">barqaror erkin birikma</span>
+                            <p class="text-xs text-slate-300">Kollokat erkin almashadigan, lekin matnda takroriy va tarjimada tayyor qolip bilan beriladigan birikma.</p>
+                        </div>
+                        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-purple-900/60">
+                            <span class="text-xs font-bold text-purple-400 block mb-1">frazeologik birlik</span>
+                            <p class="text-xs text-slate-300">Yaxlit obrazli ko‘chma ma’noga ega birikma.</p>
+                        </div>
+                        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-rose-900/60 sm:col-span-2">
+                            <span class="text-xs font-bold text-rose-400 block mb-1">chegaraviy holat</span>
+                            <p class="text-xs text-slate-300">Almashtirish testi bo‘yicha bahs saqlanib qolgan birlik; natijalar u bilan va usiz alohida hisoblanadi.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-700/60 text-xs text-slate-300 space-y-1.5">
+                    <p><strong>Tahlildan chiqarilgan birliklar (istisnolar):</strong> Maqol va matallar, to‘liq gaplar, o‘xshatishlar (anorday qizarmoq), nutq formulalari, atoqli otlar va laqablar, juft va takroriy so‘zlar, ko‘makchi fe’lli grammatik qurilmalar (chiqib ketmoq, olib kelmoq) tahlil birligi sifatida olinmaydi.</p>
+                    <p><strong>Tahlil birligi:</strong> Tahlil birligi — kontekstual ma’nosi bilan birga olingan kollokatsiya uchrashi.</p>
+                    <p><strong>Avtomatik ajratilgan juftliklar:</strong> Matndan dastlabki statistik oraliq bilan olingan birliklar «Avtomatik nomzod — lingvistik tekshiruvdan o‘tmagan» deb yuritiladi (aslo «kollokatsiya nomzodi» deb atalmaydi).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.1 Korpus tarkibi -->
+        <section class="space-y-4 bg-slate-800/60 border border-slate-700/80 rounded-2xl p-6 sm:p-8">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center text-xs font-mono font-bold">2.1</span>
+                Korpus Tarkibi va Bibliografik Asos
+            </h2>
+            <div class="text-sm text-slate-300 space-y-3 leading-relaxed">
+                <p>
+                    Tadqiqotchi qaroriga (13.10.2026) binoan empirik korpus qatʼiy <strong>IKKITA JUFTLIKDAN</strong> iborat:
+                </p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left border border-slate-700 rounded-xl overflow-hidden">
+                        <thead class="bg-slate-900 text-slate-300 font-semibold border-b border-slate-700">
+                            <tr>
+                                <th class="p-3">Juftlik / Asar</th>
+                                <th class="p-3">Yoʻnalish</th>
+                                <th class="p-3">Nashr maʼlumotlari</th>
+                                <th class="p-3">Sahifalar qoidasi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/60 bg-slate-900/40">
+                            <tr>
+                                <td class="p-3 font-semibold text-white">Abdulhamid Cho‘lpon, <em>Kecha va kunduz</em> ↔ <em>Night and Day</em></td>
+                                <td class="p-3 text-indigo-400 font-medium">o‘zbekchadan inglizchaga</td>
+                                <td class="p-3">O‘zbek original: Toshkent: «Sharq» NMK, 2000 (roman matni 3–265-betlar).<br>Ingliz tarjima: C. Fort, Academic Studies Press, 2019 (roman matni bosma 45–271-betlar, PDF 3–229-betlar).</td>
+                                <td class="p-3">Asliyat: Ziyouz kolontituli raqami (3–265); Tarjima: bosma sahifa kolontituli (45–271).</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-white">Ernest Hemingway, <em>The Old Man and the Sea</em> ↔ <em>Chol va dengiz</em></td>
+                                <td class="p-3 text-indigo-400 font-medium">inglizchadan o‘zbekchaga</td>
+                                <td class="p-3">Ingliz original: Charles Scribner's Sons nashri (narrativ matn, [9]–[125] inline bosma sahifa belgilari).<br>O‘zbek tarjima: Ibrohim G‘ofurov («G‘afurov» qidiruv aliasi bilan), «Yosh gvardiya», elektron nusxa (kutubxonachi.uz).</td>
+                                <td class="p-3">Ingliz asliyat: bosma [9]–[125] belgilari; O‘zbek tarjima: «Chol va dengiz, elektron nusxa, N-bet» tarzida ko‘rsatiladi.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-xs text-slate-400">
+                    <em>Qiyoslash tamoyili:</em> Har bir asar faqat oʻzining autentik tarjimasi bilan solishtiriladi (dissertatsiya 3.1–3.3-kichik boblari).
+                </p>
+            </div>
+        </section>
+
+        <!-- 2.2 Lingvistik va dasturiy ta'minot -->
+        <section class="space-y-4 bg-slate-800/60 border border-slate-700/80 rounded-2xl p-6 sm:p-8">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center text-xs font-mono font-bold">2.2</span>
+                Lingvistik va Dasturiy Taʼminot
+            </h2>
+            <div class="text-sm text-slate-300 space-y-3 leading-relaxed">
+                <ul class="list-disc pl-5 space-y-2 text-xs sm:text-sm">
+                    <li>
+                        <strong>Oʻzbek matnini normallashtirish (<code class="text-indigo-400">uz_norm</code>):</strong> Asl kitob matnlari aslo oʻzgartirilmaydi. Qidiruvda yashirin kalit sifatida U+02BB (ʻ) va U+02BC (ʼ) belgilari qoʻllanadi, kirill yozuvidagi soʻrovlar avtomatik lotinlashtiriladi. Belgilar kesimi (offset map) orqali ajratib koʻrsatish (highlighting) aynan asl kitob harflariga bogʻlanadi.
+                    </li>
+                    <li>
+                        <strong>Morfologik lemma va so‘z turkumlari:</strong> Oʻzbek tili uchun fe’llar to‘liq lug‘at infinitiv shaklida (-moq: <em>qaror bermoq, ko‘ngli bo‘lmoq, o‘ylamoq</em>), otlar bosh kelishikda (<em>tashvish</em>) taqdim etiladi. Hech qanday qisqartma yoki kesilgan o‘zak interfeysda ko‘rsatilmaydi.
+                    </li>
+                    <li>
+                        <strong>Nomzodlarni ajratish oraliq o‘lchami va qoliplari (1.1.4, 3-jadval):</strong> Qidirilgan soʻz ishtirok etgan gaplardan <strong>±4 soʻz oraligʻi</strong>da, qat’iy 5 ta sintaktik qolip bo‘yicha ajratiladi: <em>Ot + fe’l</em> (asos: ot), <em>Ega + kesim</em> (asos: ot), <em>Sifat + ot</em> (asos: ot), <em>Ravish + fe’l</em> (asos: fe’l), <em>Ot + ot</em>. Qolipga kirmagan juftliklar yashirin ro‘yxatga olinadi. Tadqiqot korpusida kamida 2 marta uchrash talab etiladi.
+                    </li>
+                    <li>
+                        <strong>Maʼlumotnoma bazasining maqomi:</strong> 5 377 ta ko‘rinadigan maʼlumotnoma birligi korpus maʼlumoti hisoblanmaydi va III bob statistikalariga kiritilmaydi; ular faqat qidiruv hamda «Lug‘atdagi muqobil vs Kitobdagi tarjima» qiyosiy tahlili uchun xizmat qiladi.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 2.3 Platforma imkoniyatlari -->
+        <section class="space-y-4 bg-slate-800/60 border border-slate-700/80 rounded-2xl p-6 sm:p-8">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center text-xs font-mono font-bold">2.3</span>
+                Platforma Imkoniyatlari va Interfeys
+            </h2>
+            <div class="text-sm text-slate-300 space-y-3 leading-relaxed">
+                <p>
+                    Qidiruv natijalari qatʼiy uch mustaqil boʻlimga ajratilgan:
+                </p>
+                <ol class="list-decimal pl-5 space-y-1.5 text-xs sm:text-sm">
+                    <li><strong>1. So‘zlar:</strong> Qidirilgan oʻzakning korpus va lugʻatdagi barcha shakllari (toza soʻz boshliklari, buzilgan parchalar chiqarib tashlangan).</li>
+                    <li><strong>2. Kollokatsiyalar:</strong> Korpusdan ajratilgan avtomatik nomzodlar va maʼlumotnoma birliklari (har bir variant manba yorligʻi bilan: KORPUS, LUG‘AT, AI-taklif, tasdiqlangan).</li>
+                    <li><strong>3. Korpusdagi gaplar:</strong> Parallel korpusdagi autentik jumlalar juftligi (xavfsiz HTML xavfsizligi va orfografik moslashuv bilan).</li>
+                </ol>
+                <p class="text-xs text-slate-400 pt-2">
+                    Interfeys tili (Oʻzbekcha, English, Русский) va Qidiruv tili (UZ / EN) bir-biridan toʻliq mustaqil boshqariladi.
+                </p>
+            </div>
+        </section>
+
+        <!-- Cheklovlar -->
+        <section class="space-y-4 bg-rose-950/30 border border-rose-800/60 rounded-2xl p-6 sm:p-8">
+            <h2 class="text-lg font-bold text-rose-300 flex items-center gap-2.5">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-rose-400"></i>
+                Hozirgi Cheklovlar (Ilmiy Xolislik)
+            </h2>
+            <div class="text-xs sm:text-sm text-rose-200/90 space-y-2 leading-relaxed">
+                <p>
+                    • <strong>Segmentlarni tekislash:</strong> Hozirgi bosqichda tarjima juftliklari tekislash tekshiruvida turibdi ("Tarjima juftligi: tekislash tekshirilmoqda"). Toʻliq avtomatik va qoʻlda tekislangan korpus juftliklari 4-bosqichda tadqiqotchi tomonidan tasdiqlanadi.
+                </p>
+                <p>
+                    • <strong>Statistik koʻrsatkichlar:</strong> Qiyosiy leksikografik va tarjimashunoslik statistikasi (III bob) faqat 4-bosqichda tekislash tasdiqlangach hisoblanadi. Tayanch maʼlumotnomadagi namunaviy raqamlar aslo korpus statistikasi sifatida talqin qilinmaydi.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-6 px-4 text-center text-xs text-slate-500">
+        TILCOR · 2026 — Parallel korpus va leksikografik tahlil platformasi. Barcha huquqlar himoyalangan.
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -6,6 +6,7 @@ For Streamlit MVP and high-performance querying
 import json
 import sqlite3
 import os
+import re
 
 def build_sqlite_db():
     db_path = 'data/corpus.db'
@@ -36,6 +37,17 @@ def build_sqlite_db():
 
         for item in corpus_items:
             meta = item.get('meta', {})
+            uz_text = item.get('uz') or item.get('uzbek') or ''
+            en_text = item.get('en') or item.get('english') or ''
+            author = item.get('author') or meta.get('author') or ''
+            translator = item.get('translator') or meta.get('translator') or ''
+            pub_year = item.get('pubYear') or meta.get('pubYear') or 0
+            if isinstance(pub_year, str):
+                m_yr = re.search(r'\b(19\d\d|20\d\d)\b', pub_year)
+                pub_year = int(m_yr.group(1)) if m_yr else 0
+            publisher = item.get('publisher') or meta.get('publisher') or ''
+            license_val = item.get('license') or meta.get('license') or ''
+
             cur.execute('''
             INSERT INTO corpus (id, book, segment_id, uzbek, english, author, translator, pub_year, publisher, license)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -43,13 +55,13 @@ def build_sqlite_db():
                 str(item.get('id', '')),
                 item.get('book', ''),
                 item.get('segmentId', ''),
-                item.get('uzbek', ''),
-                item.get('english', ''),
-                meta.get('author', ''),
-                meta.get('translator', ''),
-                int(meta.get('pubYear') or 0),
-                meta.get('publisher', ''),
-                meta.get('license', '')
+                uz_text,
+                en_text,
+                author,
+                translator,
+                int(pub_year),
+                publisher,
+                license_val
             ))
 
     cur.execute('''

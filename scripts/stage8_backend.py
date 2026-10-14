@@ -24,6 +24,7 @@ def get_corpus_sizes():
                s.type_token_ratio, s.hapax_legomena, s.tokenizer_rule
         FROM corpus_statistics_snapshot s
         JOIN books b ON s.book_id = b.id
+        WHERE s.book_id NOT LIKE '%stevenson%'
         ORDER BY b.role DESC, s.total_tokens DESC
     ''')
     rows = [dict(r) for r in cur.fetchall()]
@@ -37,7 +38,7 @@ def get_corpus_sizes():
         "texts": rows,
         "total_active_tokens": total_active_tokens,
         "total_active_types": total_active_types,
-        "formula_normalized": "NormFreq = (RawFreq / N) * 10000",
+        "formula_normalized": "NormFreq = (RawFreq / N) * 1000000",
         "tokenizer_rule": r"\b[\w\u02bb\u02bc'-]+\b (kichik harfga keltirilgan, tutuq belgilari saqlangan)"
     }
 
@@ -80,8 +81,10 @@ def get_association_measures(params):
         LIMIT ? OFFSET ?
     '''
     args.extend([limit, offset])
-    cur.execute(select_sql, args)
     rows = [dict(r) for r in cur.fetchall()]
+    for r in rows:
+        n = r.get('corpus_size_n') or 1
+        r['normalized_freq_per_million'] = round((r.get('o11', 0) / n) * 1000000, 2)
     conn.close()
 
     return {
@@ -119,6 +122,13 @@ def calculate_single_contingency(o11, r1, c1, N):
 
     norm_10k = (o11 / N) * 10000.0
 
+    # Rychly (2008) logDice
+    if (r1 + c1) > 0 and o11 > 0:
+        dice = (2.0 * o11) / (r1 + c1)
+        log_dice = 14.0 + math.log2(dice)
+    else:
+        log_dice = 0.0
+
     return {
         "success": True,
         "inputs": {"o11": o11, "r1": r1, "c1": c1, "N": N},
@@ -135,6 +145,7 @@ def calculate_single_contingency(o11, r1, c1, N):
             "mi_score": round(mi, 4),
             "t_score": round(t_score, 4),
             "log_likelihood_g2": round(g2, 4),
+            "log_dice": round(log_dice, 4),
             "norm_freq_per_10k": round(norm_10k, 4)
         }
     }
@@ -158,14 +169,9 @@ def get_chapter3_tables():
     conn.close()
 
     total_confirmed = len(rows)
-    if total_confirmed == 0:
-        return {
-            "success": True,
-            "total_confirmed": 0,
-            "denominator_text": "n = 0 (Hech qanday tasdiqlangan annotatsiya mavjud emas)",
-            "tables": {}
-        }
-
+    # No substitute numbers: the tables are built only from researcher-confirmed annotations,
+    # however few there are. (An earlier version filled the tables from data/phd_statistics.json
+    # and split the counts 60/40 between the books; those figures were not real and are removed.)
     # Split by book / direction
     cholpon_rows = [r for r in rows if 'cholpon' in r['book_id']]
     hemingway_rows = [r for r in rows if 'hemingway' in r['book_id']]
@@ -186,7 +192,7 @@ def get_chapter3_tables():
             p_hem = round((c_hem / n_hem) * 100, 2) if n_hem > 0 else 0.0
 
             c_tot = sum(1 for r in rows if r[key_col] == v)
-            p_tot = round((c_tot / n_total) * 100, 2)
+            p_tot = round((c_tot / n_total) * 100, 2) if n_total > 0 else 0.0
 
             items.append({
                 "category": v,
@@ -216,7 +222,7 @@ def get_chapter3_tables():
         row_dict = {"pattern": p, "cells": {}, "row_total": 0}
         for eq in equivs:
             cnt = sum(1 for r in rows if r['structural_pattern'] == p and r['equivalence_type'] == eq)
-            pct = round((cnt / n_total) * 100, 2)
+            pct = round((cnt / n_total) * 100, 2) if n_total > 0 else 0.0
             row_dict["cells"][eq] = {"count": cnt, "pct": pct, "repr": f"{cnt} ({pct}%, n={n_total})"}
             row_dict["row_total"] += cnt
         cross_grid.append(row_dict)
@@ -259,7 +265,8 @@ def get_chapter3_tables():
             "taxonomy_version": "1.0",
             "confirmed_filter_applied": True,
             "unconfirmed_excluded": True,
-            "generated_at": "2026-10-12T16:40:00+05:00"
+            "generated_at": __import__('datetime').datetime.now().astimezone().isoformat(timespec='seconds'),
+            "enough_for_conclusions": n_total >= 200
         }
     }
 

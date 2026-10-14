@@ -1,0 +1,141 @@
+/**
+ * TILCOR — Design Tokens & Navigation Styles
+ * Ilmiy / akademik uslub: To'q ko'k (#1e3a5f), oq, och kulrang (#f8fafc), qora matn (#0f172a).
+ */
+
+:root {
+  --tilcor-primary: #1e3a5f;
+  --tilcor-primary-hover: #152a45;
+  --tilcor-primary-light: #eef2ff;
+  --tilcor-bg: #f8fafc;
+  --tilcor-surface: #ffffff;
+  --tilcor-surface-alt: #f1f5f9;
+  --tilcor-border: #e2e8f0;
+  --tilcor-border-strong: #cbd5e1;
+  --tilcor-text: #0f172a;
+  --tilcor-text-muted: #475569;
+  --tilcor-text-subtle: #64748b;
+  --tilcor-accent: #0f766e;
+  --tilcor-accent-light: #f0fdfa;
+  --tilcor-danger: #b91c1c;
+  --tilcor-success: #15803d;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Noto Serif', Georgia, Cambria, serif;
+  --font-mono: ui-monospace, Menlo, Monaco, Consolas, monospace;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--tilcor-bg);
+  color: var(--tilcor-text);
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+/* Desktop Dropdown Navigation */
+.tilcor-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.tilcor-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #ffffff;
+  border: 1px solid var(--tilcor-border);
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  padding: 6px 0;
+  z-index: 50;
+}
+
+.dark .tilcor-dropdown-menu {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.tilcor-dropdown:hover .tilcor-dropdown-menu,
+.tilcor-dropdown:focus-within .tilcor-dropdown-menu,
+.tilcor-dropdown.active .tilcor-dropdown-menu {
+  display: block;
+}
+
+.tilcor-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--tilcor-text);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.dark .tilcor-dropdown-item {
+  color: #e2e8f0;
+}
+
+.tilcor-dropdown-item:hover {
+  background-color: #f1f5f9;
+  color: var(--tilcor-primary);
+}
+
+.dark .tilcor-dropdown-item:hover {
+  background-color: #1e293b;
+  color: #ffffff;
+}
+
+/* Mobile Accordion */
+.mobile-accordion-content {
+  display: none;
+  padding-left: 16px;
+}
+
+.mobile-accordion.open .mobile-accordion-content {
+  display: block;
+}
+
+/* Compact Stats Strip */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.stats-card {
+  background: var(--tilcor-surface);
+  border: 1px solid var(--tilcor-border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dark .stats-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+/* Compact Feature Cards */
+.feature-card {
+  background: var(--tilcor-surface);
+  border: 1px solid var(--tilcor-border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dark .feature-card {
+  background: #0f172a;
+  border-color: #1e293b;
+}
+
+.feature-card:hover {
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}

@@ -1,0 +1,8 @@
+{
+  "timestamp": 1791942539.8986876,
+  "sender_id": 946220712,
+  "sender_name": "Ibrohim Vakhidov",
+  "prompt_text": "Stage 1 is still not visible on https://tilcor.uz (checked 06:50): \"Corpusni ochish\", admin items and \"#\" links are still there, and /korpus does not open. Finish the deployment to the VPS, restart the service, and report the public curl outputs from task 13.",
+  "file_path": null,
+  "update_id": 393393577
+}

@@ -1,6 +1,108 @@
-# TILCOR v2.0 — O‘zgarishlar Jurnali (CHANGELOG.md)
+# TILCOR — O‘zgarishlar jurnali (CHANGELOG.md)
 
 Ushbu hujjat doktorlik dissertatsiyasi talablari doirasida har bir bosqichda kiritilgan o‘zgarishlarning to‘liq audit izini aks ettiradi.
+
+---
+
+## [v3.3] — Yangi dizayn («tungi ko‘k») — 2026-10-14
+
+- To‘q ko‘k fon (yorug‘lik dog‘lari va nuqtali to‘r), shaffof «shisha» panellar, oq sarlavhalar; kitob matni serif shriftda qoldi.
+- Yuqori qator: joy, tadqiqot, asarlar; bo‘limlarga havolalar; bayroqli til almashtirgich. Uning ostida ko‘k chiziq.
+- Sarlavha: TILCOR muhri (ikki sahifa: qidirilgan so‘z — oltin, muqobil — firuza), yumaloq qidiruv va menyu tugmalari.
+- Butun ekranli qidiruv oynasi: qidiruv turi (so‘z va kollokatsiya, KWIC, kollokatsiyalar ro‘yxati), namuna so‘rovlar; «/» tugmasi ochadi, Esc yopadi.
+- Yon menyu (barcha bo‘limlar, til), «yuqoriga» tugmasi.
+- Bosh sahifa: katta sarlavha, qidiruv, ikki tugma, raqamli kartochkalar; ichki sahifalarda sarlavha bandi va bo‘lim belgisi,
+  korpus va kollokatsiyalar sahifalarida raqamli kartochkalar.
+- KWIC: kontekst kengligi surgich bilan (1–15 so‘z), qo‘yib yuborilganda natija yangilanadi.
+- Barcha belgilar SVG da chizilgan (tashqi rasm yoki xizmat yo‘q); `assets/tilcor-emblem.svg` — sayt belgisi.
+
+## [v3.2] — Ikkinchi o‘tish tekislash, adabiyotlar tuzatildi — 2026-10-14
+
+- Gaplar hunalign bilan ikkinchi marta tekislandi: lug‘atga birinchi o‘tishning so‘z tekislashidan olingan 1 114 ta
+  so‘z jufti qo‘shildi (`scripts/build_hunalign_lexicon.py`, `realign_hunalign.py --lexicon --base`). 10 076 juftlik;
+  taxminan 1 000 juftlik o‘zgardi. Farq qilgan 30 joyning 22 tasida ikkinchi o‘tish to‘g‘riroq, 6 tasida birinchisi.
+- So‘z tekislash, kollokatsiyalar (2 529 ta: o‘zbekcha 967, inglizcha 1 562) va juftsiz gaplar (321 ta) qayta tuzildi.
+  Muqobil qamrovi: o‘zbekcha 30,7 %, inglizcha 41,2 %.
+- Yangi tanlab tekshiruvlar (AI yordamida): `notes/tanlab_tekshiruv_2-otish_2026-10-14.md`.
+- Adabiyotlar: Varga va boshq. — tekshirilgan 2007-yilgi nashr (pp. 247–258), mualliflar tartibi tuzatildi;
+  Yarowsky va boshq. (2001) — ACL Anthology havolasi bilan. Saytda «[MANBANI TEKSHIRISH KERAK]» belgilari qolmadi.
+  Ingliz va rus interfeysida bibliografik izohlar shu tilda.
+- Kollokatsiya ro‘yxatida muqobil topilgan uchrashlar soni ko‘rsatiladi («7 ta uchrashdan 6 tasida»).
+
+## [v3.1] — Tarjima ekvivalentlari, korpus kollokatsiyalari, yangi interfeys — 2026-10-14
+
+**Yangi ma’lumot (oflayn tuzilgan, ishga tushirishda qo‘shimcha kutubxona kerak emas):**
+- `data/word_alignment.json`, `data/lexical_table.json` — har bir juftlikda so‘z darajasidagi tekislash
+  (eflomal, ikki yo‘nalish, grow-diag-final-and; `scripts/build_word_alignment.py`).
+- `data/collocation_index.json` — korpusdan ajratilgan 2 501 ta kollokatsiya (f ≥ 2), har biri tarjimadagi
+  ekvivalentlari, kitoblar bo‘yicha ekvivalent statistikasi va korpus ichidagi MI, t-score, logDice, G² bilan
+  (`scripts/build_collocation_index.py`). Metodologiyadagi istisnolar avtomatik qo‘llanadi: juft va takroriy
+  so‘zlar, ravishdosh + ko‘makchi fe’l qurilmalari, atoqli otlar.
+- `data/unpaired_sentences.json` — tekislashda juft topilmagan 343 ta gap; qidiruvga izoh bilan kiradi,
+  juftliklar soniga kirmaydi (`scripts/build_unpaired.py`).
+
+**Platforma:**
+- Har bir gap juftligida tarjimonning so‘zi ajratib ko‘rsatiladi; ekvivalentlar ulushi va kitobdan misoli bilan.
+- So‘z yoki kollokatsiya qidirilganda: shu so‘z bilan tuzilgan barcha korpus kollokatsiyalari, so‘z shakllari va
+  yasama so‘zlar, har biri misol bilan.
+- «Kollokatsiyalar» sahifasi: qolip bo‘yicha va uchrash soni, logDice, MI, t-score, G² bo‘yicha tartiblash;
+  har bir kollokatsiya sahifasida assotsiatsiya ko‘rsatkichlari va barcha misollar.
+- «Statistika»: kollokatsiyalarning tarjimada berilishi (to‘rt yo‘nalish, qoliplar bo‘yicha), eng ko‘p
+  uchragan kollokatsiyalar va ekvivalentlari, assotsiatsiya o‘lchovlarini qiyoslash (Spirmen ρ, birinchi 50 talik).
+- Metodologiya: so‘z darajasidagi tekislash bandi, tanlab tekshiruv natijalari (AI yordamida; 50 tadan 45 to‘g‘ri),
+  ekvivalent qamrovi (o‘zbekcha 29,7 %, inglizcha 39,8 % mustaqil so‘zlar).
+- Yangi dizayn (`css/tilcor.css`), uch tilli interfeys; saytda «tasdiqlanmagan», «tekshirilmagan» kabi yozuvlar yo‘q.
+- Ko‘rinishdagi tozalash: elektron nusxalardagi sahifa belgilari («- 31 -») va izoh raqamlari («Hast1») matnda
+  saqlanadi, lekin ko‘rsatilmaydi.
+- `/kirish.html` yangi kirish sahifasiga yo‘naltiriladi; admin sahifalarida yagona menyu uslubi.
+
+**Ishchi hujjat:** `notes/tanlab_tekshiruv_muqobillar_2026-10-14.md` — 50 ta ekvivalentning tanlab tekshiruvi.
+
+---
+
+## [Step 05] — Korpus v3, Tayanch Nuqtali Tekislash va Qidiruv Barqarorligi — 2026-10-13
+
+### Part 0 & 1: Korpus 3-Versiyasi va Sahifa Qamrovi (Page Coverage)
+- **Defect 1 sababi aniqlandi va tuzatildi:** Oldingi `align_corpus_v2.py` da inglizcha jumlalar kamligi tufayli while loop erta to‘xtab, 3,643 ta o‘zbekcha jumlani tashlab ketgan edi. Yangi qoidalar bo‘yicha har bir o‘zbekcha jumla 100% to‘liq saqlandi.
+- **Sahifa qamrovi 100% verifikatsiya qilindi (`data/page_coverage_v3.json`):**
+  - KVK-UZ (*Kecha va kunduz*, 3–265-betlar): 263 sahifadan 0 tasi 98% dan past! (100% to‘liq qamrov).
+  - KVK-EN (*Night and Day*, 45–271-betlar): 227 sahifadan 0 tasi 98% dan past!
+  - OMS-EN (*The Old Man and the Sea*, [9]–[125]): 117 sahifadan 0 tasi yetishmaydi.
+  - OMS-UZ (*Chol va dengiz*, 1–46-betlar): 46 sahifadan 0 tasi 98% dan past!
+- **1.3 To‘liqlik Isboti (Completeness Proof - `data/completeness_proof_v3.json`):**
+  - KVK-UZ: `ayvon*` (49 ta), `Poshshaxon*` (79 ta), `qaror*` (14 ta), `yura[kg]*` (42 ta), `qishlo[qg]*` (115 ta), `ko‘ngil*` (180 ta) — 100% PASS!
+  - OMS-EN: `heart*` (8 ta), `shark*` (66 ta) — 100% PASS!
+  - OMS-UZ: `akula*` (90 ta), `yura[kg]*` (8 ta), `qaror*` (1 ta) — 100% PASS!
+- **Chol va dengiz OCR xatolari reestri (`data/ocr_errors_oms.json`):**
+  - 26 ta xato turi (`chnqishim` ➔ `chiqishim`, `uchui` ➔ `uchun`, `unnng` ➔ `uning`) aniqlandi va tuzatildi. Ismlar lug‘atiga `santyago` qo‘shildi.
+
+### Part 2: Tayanch Nuqtalarga Asoslangan Tekislash (Anchored Alignment v3)
+- **18 ta tayanch nuqta (Fixed anchors) bo‘yicha bo‘laklab tekislash amalga oshirildi:**
+  - KVK 18 ta tayanch nuqtasi (UZ 3 ↔ EN 46 dan UZ 265 ↔ EN 271 gacha) va OMS 2 ta tayanch nuqtasi qat'iy bog'landi (100% o‘tdi).
+  - Kutilgan sahifadan median mutlaq siljish (drift): **KVK: 0.54 sahifa**, **OMS: 1.03 sahifa** (talab: $\le 2.0$ sahifa — to‘liq bajarildi).
+  - Bitta ham o‘zbekcha segment tashlab ketilmadi (Zero-loss qoidasi): tarjimasi topilmagan segmentlar 1:0 qilib saqlandi.
+  - **Defect 2 tuzatildi (`aln-kvk-01789`):** UZ 80 *Ancha nari-beri gaplardan keyin ertaga erta bilan Xadichaxonni cho‘loq azayimxonnikiga yuborishga qaror berildi...* to‘g‘ri bog‘landi: EN 111 *After several impractical suggestions, they decided that Xadichaxon would go to the healer tomorrow morning.* (Drift: 0 sahifa).
+  - V2 ➔ V3 ID xaritasi (`data/v2_to_v3_mapping.json`) tuzildi, oldingi tekshiruv belgilari saqlandi.
+  - Jami toza va tekislangan korpus hajmi: **8,355 ta parallel juftlik** (KVK: 6,823 ta, OMS: 1,532 ta).
+
+### Part 3 & 4: Qidiruv Barqarorligi va Nomzodlar 2-Raundi
+- **20 ta so‘rovli test to‘plami (`scripts/test_20_queries.py`): 100% PASS.**
+  - 0 ta HTTP 500 xatosi; qidiruv javob vaqti barcha so‘rovlarda < 1.5 soniya (o‘rtacha 0.4s).
+  - Ikkala kitob qidiruvda teng ishtirok etmoqda (`yurak` va `chol` so‘rovlarida Cho‘lpon va Hemingway natijalari mavjud).
+  - Sahifalash $\le 50$ chekloviga to‘liq mos.
+- **Nomzodlar filtri va qoliplar yangilandi:**
+  - Yopiq so‘z turkumlari (olmoshlar, ko‘makchilar, bog‘lovchilar, yuklamalar, modal so‘zlar, sonlar) nomzodlardan chetlatildi.
+  - So‘z turkumi noma’lum so‘zlar "so‘z turkumi aniqlanmagan" deb belgilandi (hech qachon "ot" deb xato standartlashtirilmaydi).
+  - Ega + kesim: 3-shaxs egalik shaklida lemmalashtirildi (`ko‘ngli tushmoq`, `yuragi urmoq`).
+  - Yordamchi fe’llar (`-a/-y boshlamoq`, `-ib qo‘ymoq`, `-ib ketmoq`) bosh leksik fe’lga qaytarildi.
+  - `Ot + ot` qoliplari ommaviy ko‘rinishdan ajratilib, faqat admin ko‘rinishiga o‘tkazildi.
+  - Shovqin birliklar (`ko‘ngil uni`, `ikkala ko‘ngil`, `nomer qaror`, `chol yurak`, `ko‘ngil boshlamoq`) bartaraf etildi.
+
+### Part 5, 6, 7 & S4: Ma'lumotnoma Bazasi, Interfeys, Ish Maydoni va Qoidalar
+- **Ma'lumotnoma bazasi:** Rad etilgan yozuvlar yashirildi (`public_visible: false`), `col-gen-1` soxta manbadan tozalandi va haqiqiy korpus misoli ulandi, `colloc-6159` va `colloc-6257` tuzatildi.
+- **Interfeys:** Barcha `javascript:void(0)` dead-end havolalari olib tashlandi, URL `?lang=uz|en|ru` orqali to‘liq boshqariladi, "Manbalar va huquqlar" sahifasida aniq 4 ta asar pasporti qoldirildi, Statistika sahifasida 3.1, 3.2, 3.3 jadvallari live hisoblangan empirik sonlar bilan to‘ldirildi.
+- **Annotatsiya ish maydoni:** 1.1.4 4 qadamli qaror protsedurasi joriy etildi, `annotator2` roli va Cohen's Kappa hisoblash integratsiya qilindi, CSV va XLSX formatlarida eksport tugmalari qo‘shildi.
+- **Doimiy qoidalar (Section S4):** `PROJECT_CONTEXT.md` ga 7 ta doimiy qoida kiritildi.
 
 ---
 

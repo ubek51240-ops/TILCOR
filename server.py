@@ -1,3 +1,6 @@
+import html
+import ui_components
+import content_pages
 import http.server
 import socketserver
 import webbrowser
@@ -17,6 +20,9 @@ DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(DIRECTORY, 'data')
 if os.path.join(DIRECTORY, 'scripts') not in sys.path:
     sys.path.insert(0, os.path.join(DIRECTORY, 'scripts'))
+
+from word_family import normalize_apostrophes, APOSTROPHE_CHARS
+from search_engine import execute_unified_search
 
 # Load full corpus and dictionary into memory on server start
 FULL_CORPUS = []
@@ -39,16 +45,141 @@ try:
         print(f"[*] Lug'at yuklandi: {len(DICTIONARY)} ta so'z")
 except Exception as e:
     print(f"[!] Lug'at yuklashda xatolik: {e}")
-
+try:
+    from word_family import detect_query_language
+    detect_query_language('warmup')
+    print("[*] NLTK WordNet va til aniqlagich oldindan yuklandi")
+except Exception as e:
+    print(f"[!] WordNet warmupda xatolik: {e}")
 
 # =====================================================================
 # STAGE 2 AUTHENTICATION & ACCESS CONTROL
 # =====================================================================
+import hashlib
+import secrets
+
+# Passwords are NEVER stored in the code.
+# Order of lookup for each role: environment variable -> secrets/<role>.password file.
+# If neither exists for "admin", a random password is generated once and written to
+# secrets/admin.password (file mode 600). The value itself is never printed to the log.
+SECRETS_DIR = os.path.join(DIRECTORY, 'secrets')
+
+
+def _load_secret(role: str, env_name: str, generate: bool = False):
+    val = os.environ.get(env_name, '').strip()
+    if val:
+        return val
+    path = os.path.join(SECRETS_DIR, f'{role}.password')
+    try:
+        if os.path.exists(path):
+            with open(path, 'r', encoding='utf-8') as f:
+                val = f.read().strip()
+            if val:
+                return val
+        if generate:
+            os.makedirs(SECRETS_DIR, exist_ok=True)
+            val = secrets.token_urlsafe(18)
+            with open(path, 'w', encoding='utf-8') as f:
+                f.write(val + '\n')
+            try:
+                os.chmod(path, 0o600)
+            except Exception:
+                pass
+            print(f"[!] '{role}' paroli yaratildi va {path} fayliga yozildi (qiymat logga chiqarilmaydi).")
+            return val
+    except Exception as e:
+        print(f"[!] '{role}' parolini o'qishda xatolik: {e}")
+    return None
+
+
 AUTH_USERS = {
-    "admin": os.environ.get("TILCOR_ADMIN_PASSWORD", "tilcor_phd_admin_2026"),      # Researcher (Tadqiqotchi)
-    "reviewer": os.environ.get("TILCOR_REVIEWER_PASSWORD", "tilcor_supervisor_2026"), # Supervisor (Ilmiy rahbar)
-    "guest": os.environ.get("TILCOR_GUEST_PASSWORD", "tilcor_guest_2026")          # Guest / Council (Kengash a'zolari / mehmon)
+    "admin": _load_secret('admin', 'TILCOR_ADMIN_PASSWORD', generate=True),   # Tadqiqotchi
+    "reviewer": _load_secret('reviewer', 'TILCOR_REVIEWER_PASSWORD'),          # Ilmiy rahbar (ixtiyoriy)
+    "guest": _load_secret('guest', 'TILCOR_GUEST_PASSWORD'),                   # Kengash a'zosi (ixtiyoriy)
 }
+AUTH_USERS = {u: p for u, p in AUTH_USERS.items() if p}
+
+AUTH_SALT = secrets.token_bytes(16)   # per-process salt; hashes live only in memory
+AUTH_HASHES = {
+    u: hashlib.pbkdf2_hmac('sha256', p.encode('utf-8'), AUTH_SALT, 100000).hex()
+    for u, p in AUTH_USERS.items()
+}
+
+
+def verify_login(username: str, password: str) -> bool:
+    expected = AUTH_HASHES.get(username)
+    if not expected or not password:
+        return False
+    calc = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), AUTH_SALT, 100000).hex()
+    return secrets.compare_digest(calc, expected)
+
+
+# ---------------------------------------------------------------------
+# What may be served to the public. Anything not listed here returns 404.
+# ---------------------------------------------------------------------
+PUBLIC_HTML_PAGES = {
+    '/', '/index.html', '/kwic_concordance.html', '/methodology.html',
+    '/methodology_statistics.html', '/sources_rights.html', '/kirish.html',
+    '/annotation_guidelines.html', '/about_project.html',
+}
+ADMIN_HTML_PAGES = {
+    '/preview_alignment_queue.html', '/annotation_workspace.html', '/admin_collocations.html',
+    '/platform_factsheet.html', '/preview_prototype.html', '/component_gallery.html',
+}
+PUBLIC_STATIC_PREFIXES = ('/css/', '/js/', '/assets/', '/locales/')
+PUBLIC_STATIC_FILES = {'/favicon.ico', '/robots.txt'}
+PRIVATE_SUFFIXES = ('.py', '.pyc', '.md', '.bat', '.db', '.bak', '.sql', '.sh', '.ps1', '.txt', '.env', '.password')
+
+
+def is_public_static_path(path: str) -> bool:
+    p = urllib.parse.unquote(path or '')
+    if '..' in p or '/.' in p:
+        return False
+    if p in PUBLIC_STATIC_FILES:
+        return True
+    if p.startswith(PUBLIC_STATIC_PREFIXES):
+        return not p.lower().endswith(PRIVATE_SUFFIXES)
+    return False
+
+
+def get_client_ip(handler) -> str:
+    """Real client IP. Behind nginx the connection comes from 127.0.0.1; then the
+    X-Real-IP header set by nginx is used. Headers from direct clients are ignored,
+    so the login limit cannot be bypassed by sending a fake X-Forwarded-For."""
+    peer = handler.client_address[0]
+    if peer in ('127.0.0.1', '::1'):
+        real = handler.headers.get('X-Real-IP', '').strip()
+        if real:
+            return real
+        xff = handler.headers.get('X-Forwarded-For', '')
+        if xff:
+            return xff.split(',')[-1].strip()
+    return peer
+
+SESSIONS = {}        # token -> {"user": str, "created": float, "expires": float}
+FAILED_LOGINS = {}   # ip -> [timestamps]
+
+def check_login_rate_limit(ip: str) -> bool:
+    now = time.time()
+    attempts = [t for t in FAILED_LOGINS.get(ip, []) if now - t < 900]
+    FAILED_LOGINS[ip] = attempts
+    return len(attempts) < 5
+
+def record_failed_login(ip: str):
+    now = time.time()
+    FAILED_LOGINS.setdefault(ip, []).append(now)
+
+def verify_admin_login(username: str, password: str) -> bool:
+    return username == 'admin' and verify_login(username, password)
+
+def extract_cookie_token(cookie_str: str):
+    if not cookie_str:
+        return None
+    for part in cookie_str.split(';'):
+        part = part.strip()
+        if part.startswith('tilcor_session='):
+            return part.split('=', 1)[1]
+    return None
 
 AI_REQUEST_LOG = []
 
@@ -73,10 +204,125 @@ except Exception as e:
 
 
 def get_active_corpus():
-    return [c for c in FULL_CORPUS if c.get('status') != 'excluded']
+    return [c for c in FULL_CORPUS if c.get('status') != 'excluded' and not c.get('excluded') and c.get('book') != 'stevenson']
+
+
+_UNPAIRED = []
+
+def get_unpaired_sentences():
+    """Sentences of the books that have no counterpart in the other book (data/unpaired_sentences.json).
+    They are searched together with the pairs, so that every occurrence of a word is found; they are not
+    counted as pairs anywhere."""
+    if not _UNPAIRED:
+        try:
+            with open(os.path.join(DATA_DIR, 'unpaired_sentences.json'), encoding='utf-8') as f:
+                for u in json.load(f):
+                    rec = {'id': u['id'], 'book': u['book'], 'status': 'juftsiz', 'unpaired': True,
+                           'uz': '', 'en': '', 'uz_page': None, 'en_page': None}
+                    rec[u['lang']] = u['text']
+                    rec[u['lang'] + '_page'] = u.get('page')
+                    _UNPAIRED.append(rec)
+        except Exception as e:
+            print(f"[!] unpaired sentences not loaded: {e}")
+            _UNPAIRED.append({'id': '_none', 'book': 'none', 'uz': '', 'en': ''})
+    return [u for u in _UNPAIRED if u.get('book') != 'none']
+
+
+def get_search_corpus():
+    return get_active_corpus() + get_unpaired_sentences()
 
 def get_active_collocations():
-    return [c for c in COLLOCATIONS if c.get('status') != 'excluded']
+    return [c for c in COLLOCATIONS if c.get('public_visible') is not False and c.get('status') not in ('rejected', 'excluded') and not c.get('excluded')]
+
+def get_active_dictionary():
+    return [d for d in DICTIONARY if d.get('public_visible') is not False and not d.get('needs_repair') and d.get('status') not in ('rejected', 'excluded')]
+
+_SITE_STATS_CACHE = {}
+_TOKEN_RE = re.compile(r"\w+(?:[\'\u2018\u2019\u02bb\u02bc`]\w+)*", re.UNICODE)
+
+def get_site_stats():
+    """Live counts for the public pages. Computed once from the loaded data, never hard-coded.
+    Token = a run of word characters; an inner apostrophe (o‘zbek, don't) keeps it one token."""
+    key = (id(FULL_CORPUS), len(FULL_CORPUS), id(COLLOCATIONS), len(COLLOCATIONS))
+    if _SITE_STATS_CACHE.get('key') == key:
+        return _SITE_STATS_CACHE['stats']
+    corpus = get_active_corpus()
+    st = {'pairs_total': len(corpus),
+          'pairs_confirmed': sum(1 for c in corpus if c.get('status') == 'tasdiqlangan'),
+          'reference_active': len(get_active_collocations())}
+    for book, short, src_lang, tgt_lang in (('cholpon', 'kvk', 'uz', 'en'), ('hemingway', 'oms', 'en', 'uz')):
+        rows = [c for c in corpus if c.get('book') == book]
+        st[f'pairs_{short}'] = len(rows)
+        st[f'confirmed_{short}'] = sum(1 for c in rows if c.get('status') == 'tasdiqlangan')
+        st[f'auto_good_{short}'] = sum(1 for c in rows if c.get('status') == 'avtomatik — ikki usul mos')
+        st[f'auto_one_{short}'] = sum(1 for c in rows if c.get('status') == 'avtomatik — faqat hunalign')
+        st[f'auto_pin_{short}'] = sum(1 for c in rows if c.get('status') == 'avtomatik — tayanch nuqta')
+        # any other automatic status (for example from an older data file)
+        st[f'auto_low_{short}'] = len(rows) - st[f'confirmed_{short}'] - st[f'auto_good_{short}'] - st[f'auto_one_{short}'] - st[f'auto_pin_{short}']
+        for lng in (src_lang, tgt_lang):
+            st[f'tokens_{short}_{lng}'] = sum(len(_TOKEN_RE.findall(c.get(lng) or '')) for c in rows)
+    # corpus size = tokens of the whole segmented text (same figures as the statistics page)
+    sizes = get_text_sizes()
+    for short, book_ids in (('kvk', {'uz': 'book-cholpon-uz', 'en': 'book-cholpon-en'}),
+                            ('oms', {'en': 'book-hemingway-en', 'uz': 'book-hemingway-uz'})):
+        for lng, bid in book_ids.items():
+            if sizes.get(bid):
+                st[f'tokens_{short}_{lng}'] = sizes[bid]['tokens']
+    st['pairs_auto_good'] = st['auto_good_kvk'] + st['auto_good_oms']
+    st['pairs_auto_low'] = st['auto_low_kvk'] + st['auto_low_oms']
+    st['pairs_auto_one'] = st['auto_one_kvk'] + st['auto_one_oms']
+    st['pairs_auto_pin'] = st['auto_pin_kvk'] + st['auto_pin_oms']
+    st['unpaired'] = len(get_unpaired_sentences())
+    st['tokens_total'] = sum(v.get('tokens', 0) for v in sizes.values())
+    _SITE_STATS_CACHE.update(key=key, stats=st)
+    return st
+
+_TEXT_SIZES_CACHE = {}
+_SIZE_TOKEN_RE = re.compile(r"\b[\w\u02bb\u02bc'-]+\b", re.UNICODE)
+
+def get_text_sizes():
+    """Tokens, word forms and hapaxes of each segmented text, recomputed from phd_corpus.db."""
+    if _TEXT_SIZES_CACHE.get('sizes') is not None:
+        return _TEXT_SIZES_CACHE['sizes']
+    sizes = {}
+    db_path = os.path.join(DATA_DIR, 'phd_corpus.db')
+    try:
+        import sqlite3
+        from collections import Counter
+        conn = sqlite3.connect(f'file:{db_path}?mode=ro', uri=True)
+        counters = {}
+        for book_id, text in conn.execute("SELECT book_id, raw_text FROM segments WHERE book_id NOT LIKE '%stevenson%'"):
+            c = counters.setdefault(book_id, Counter())
+            c.update(t.lower() for t in _SIZE_TOKEN_RE.findall(text or ''))
+        conn.close()
+        for book_id, c in counters.items():
+            sizes[book_id] = {'tokens': sum(c.values()), 'types': len(c), 'hapax': sum(1 for v in c.values() if v == 1)}
+    except Exception as e:
+        print(f"[!] Matn hajmini hisoblashda xatolik: {e}")
+    _TEXT_SIZES_CACHE['sizes'] = sizes
+    return sizes
+
+def get_annotation_counts():
+    """Confirmed annotations and units annotated by both annotators (admin and reviewer)."""
+    out = {'confirmed': 0, 'shared': 0}
+    try:
+        import sqlite3
+        conn = sqlite3.connect(f"file:{os.path.join(DATA_DIR, 'phd_corpus.db')}?mode=ro", uri=True)
+        out['confirmed'] = conn.execute('SELECT count(*) FROM phd_annotations WHERE is_confirmed = 1').fetchone()[0]
+        out['shared'] = conn.execute("""SELECT count(DISTINCT a1.occurrence_id) FROM phd_annotations a1
+                                          JOIN phd_annotations a2 ON a1.occurrence_id = a2.occurrence_id
+                                          WHERE a1.annotator_user = 'admin' AND a2.annotator_user = 'reviewer'""").fetchone()[0]
+        conn.close()
+    except Exception as e:
+        print(f"[!] Annotatsiya sonini o‘qishda xatolik: {e}")
+    return out
+
+def safe_int(value, default=1, minimum=1, maximum=100000):
+    try:
+        v = int(str(value).strip())
+    except (TypeError, ValueError):
+        return default
+    return max(minimum, min(maximum, v))
 
 def find_corpus_example(word_or_phrase, uz_hint=''):
     if not FULL_CORPUS:
@@ -112,32 +358,21 @@ def find_corpus_example(word_or_phrase, uz_hint=''):
                     "source": "Parallel matn konteksti"
                 }
 
-    # 3. Clean contextual sentence
-    clean_uz = uz_hint.split(';')[0].split(',')[0].strip() if uz_hint else ''
-    if clean_uz and clean_uz != q:
-        return {
-            "en": f"The term '{q}' plays a vital semantic role in literary context.",
-            "uz": f"Asarda «{clean_uz}» birligi muhim mazmuniy va uslubiy vazifani bajargan.",
-            "book": "Ilmiy-adabiy korpus",
-            "source": "Kontekstual qiyosiy model"
-        }
-    else:
-        return {
-            "en": f"In parallel corpus analysis, '{q}' illustrates high collocational strength.",
-            "uz": f"Parallel korpus tahlilida «{q}» birikmasi yuqori kollokatsion bogʻlanishga ega.",
-            "book": "Xalqaro Korpus Standarti",
-            "source": "Leksik-assotsiativ tahlil"
-        }
+    # No fabrication: if not found in real corpus, return None per EQUIVALENT PRINCIPLE
+    return None
 
-def search_corpus(query='', book='all', limit=100):
-    if not FULL_CORPUS:
+def search_corpus(query='', book='all', limit=50):
+    active = get_active_corpus()
+    if not active:
         return []
+    limit = min(max(1, limit), 50)
     q = query.lower().strip() if query else ''
     matches = []
-    for c in FULL_CORPUS:
-        if c.get('status') == 'excluded':
+    for c in active:
+        b_key = (c.get('book') or '').lower()
+        if c.get('status') in ['excluded', 'removed_by_researcher'] or b_key == 'stevenson':
             continue
-        if book != 'all' and c.get('book') != book:
+        if book != 'all' and b_key != book.lower():
             continue
         uz = (c.get('uzbek') or c.get('uz') or '')
         en = (c.get('english') or c.get('en') or '')
@@ -145,13 +380,22 @@ def search_corpus(query='', book='all', limit=100):
         if q:
             if q not in uz.lower() and q not in en.lower() and q not in cid.lower():
                 continue
-        item = dict(c)
-        item['uzbek'] = uz
-        item['uz'] = uz
-        item['english'] = en
-        item['en'] = en
-        item['segmentId'] = cid
-        item['id'] = cid
+        item = {
+            "id": cid,
+            "segmentId": cid,
+            "book": b_key,
+            "bookTitle": c.get('bookTitle', ''),
+            "author": c.get('author', ''),
+            "translator": c.get('translator', ''),
+            "pubYear": c.get('pubYear', ''),
+            "publisher": c.get('publisher', ''),
+            "license": c.get('license', 'Mualliflik huquqi egalariga tegishli. Faqat ilmiy tadqiqot uchun cheklangan parcha.'),
+            "direction": c.get('direction', 'UZ → EN' if b_key == 'cholpon' else 'EN → UZ'),
+            "uz": uz,
+            "uzbek": uz,
+            "en": en,
+            "english": en
+        }
         matches.append(item)
         if len(matches) >= limit:
             break
@@ -198,17 +442,16 @@ def extract_collocation_candidates(text):
                 "pattern": matched.get('pattern', 'Sifat + Ot (Adj + Noun)'),
                 "semanticGroup": matched.get('semanticGroup', 'Umumiy leksika'),
                 "equivalenceType": matched.get('equivalenceType', 'Mos ekvivalent (Toʻliq ekvivalent)'),
-                "mi_score": matched.get('miScore', 5.8),
-                "t_score": matched.get('tScore', 4.2),
-                "log_likelihood": matched.get('logLikelihood', 18.5),
+                "mi_score": None,   # not computed from a reference corpus yet
+                "t_score": None,
+                "log_likelihood": None,
                 "status": "Verifikatsiyalangan",
                 "equivalent": f"{matched.get('uzbek', '')} ⟷ {matched.get('english', '')}"
             })
         else:
-            # Statistical candidate heuristic
-            mi = round(min(9.5, 3.2 + (freq * 0.8)), 2)
-            t_val = round(min(12.0, 2.1 + (freq * 1.1)), 2)
-            ll = round(mi * 2.8 + t_val * 1.9, 2)
+            # No invented association scores: a real MI / t-score needs the 2x2 table
+            # from a reference corpus (step 09). Until then the value is "not computed".
+            mi = t_val = ll = None
             raw_candidates.append({
                 "ngram": pair,
                 "freq": freq,
@@ -394,13 +637,16 @@ COMMON_IDIOMATIC_COLLOCS = {
 }
 
 def clean_word(token):
-    return re.sub(r'^[^\w\'‘ʻ]+|[^\w\'‘ʻ]+$', '', token.lower().strip())
+    if not token:
+        return ''
+    norm = normalize_apostrophes(token.lower().strip())
+    return re.sub(r'^[^\w\']+|[^\w\']+$', '', norm)
 
 def detect_language_smart(tokens):
     uz_score = 0
     en_score = 0
     for tok in tokens:
-        c = clean_word(tok).replace('ʻ', "'").replace('‘', "'")
+        c = clean_word(tok)
         if any(marker in c for marker in ["o'", "g'", "sh", "ch", "q", "x"]):
             uz_score += 3
         if c in UZ_VERB_ROOTS or c in UZ_NOUN_ROOTS or c in UZ_PRON_ROOTS or c in UZ_CONJ_PREP:
@@ -418,7 +664,7 @@ def parse_uzbek_token(raw_word, prev_token=None):
     clean = clean_word(raw_word)
     if not clean:
         return None
-    normalized = clean.replace('ʻ', "'").replace('‘', "'")
+    normalized = clean
 
     # 1. Pronoun
     if normalized in UZ_PRON_ROOTS:
@@ -690,7 +936,7 @@ def analyze_pos_and_collocation(text):
 
     summary_text = " | ".join(summary_parts)
 
-    clean_full = text.lower().strip()
+    clean_full = normalize_apostrophes(text.lower().strip())
     idiom_info = COMMON_IDIOMATIC_COLLOCS.get(clean_full)
 
     return {
@@ -711,14 +957,13 @@ def analyze_pos_and_collocation(text):
     }
 
 def search_collocations(query='', source='all', pattern='all', category='all', semantic='all', equivalence='all', cultural='all', lang='all', sort='mi', limit=60, page=1):
-    q = query.lower().strip() if query else ''
+    q = normalize_apostrophes(query.lower().strip()) if query else ''
     filtered = []
     pos_res = analyze_pos_and_collocation(query) if query else None
 
     
-    for item in COLLOCATIONS:
-        if item.get('status') == 'excluded':
-            continue
+    active_items = get_active_collocations()
+    for item in active_items:
         # Source filter
         if source != 'all':
             item_src = item.get('sourceBook', '')
@@ -754,23 +999,23 @@ def search_collocations(query='', source='all', pattern='all', category='all', s
                 
         # Language & Search query
         if q:
-            en = item.get('english', '').lower()
-            uz = item.get('uzbek', '').lower()
+            en = normalize_apostrophes(item.get('english', '').lower())
+            uz = normalize_apostrophes(item.get('uzbek', '').lower())
             
             if lang == 'en':
                 if q not in en:
-                    clean_trap = item.get('literalTrap', '').lower().replace('barqaror', '')
+                    clean_trap = normalize_apostrophes(item.get('literalTrap', '').lower()).replace('barqaror', '')
                     if q not in clean_trap:
                         continue
             elif lang == 'uz':
                 if q not in uz:
-                    clean_note = item.get('culturalNote', '').lower().replace('barqaror', '')
+                    clean_note = normalize_apostrophes(item.get('culturalNote', '').lower()).replace('barqaror', '')
                     if q not in clean_note:
                         continue
             else:
                 if q not in en and q not in uz:
-                    clean_trap = item.get('literalTrap', '').lower().replace('barqaror', '')
-                    clean_note = item.get('culturalNote', '').lower().replace('barqaror', '')
+                    clean_trap = normalize_apostrophes(item.get('literalTrap', '').lower()).replace('barqaror', '')
+                    clean_note = normalize_apostrophes(item.get('culturalNote', '').lower()).replace('barqaror', '')
                     if q not in clean_trap and q not in clean_note:
                         continue
                 
@@ -796,8 +1041,8 @@ def search_collocations(query='', source='all', pattern='all', category='all', s
         for item in get_active_collocations():
             if item.get('id') in seen_ids:
                 continue
-            en = item.get('english', '').lower()
-            uz = item.get('uzbek', '').lower()
+            en = normalize_apostrophes(item.get('english', '').lower())
+            uz = normalize_apostrophes(item.get('uzbek', '').lower())
             if any(k in en or k in uz for k in keywords):
                 filtered.append(item)
                 seen_ids.add(item.get('id'))
@@ -820,17 +1065,20 @@ def search_collocations(query='', source='all', pattern='all', category='all', s
     start_idx = (page - 1) * limit
     paginated = filtered[start_idx:start_idx + limit]
     
-    # Attach live corpus examples if not already present
     enriched_results = []
     for item in paginated:
         item_copy = dict(item)
-        if not item_copy.get('example'):
-            item_copy['example'] = find_corpus_example(item.get('english', ''), item.get('uzbek', ''))
+        # Hide uncalibrated statistics until step 10
+        item_copy['miScore'] = None
+        item_copy['tScore'] = None
+        item_copy['freq'] = None
+        item_copy['logLikelihood'] = None
         enriched_results.append(item_copy)
     
+    active_collocs = [c for c in COLLOCATIONS if c.get('status') == 'active' and c.get('public_visible') != False]
     response = {
         "totalFound": total_found,
-        "totalDatabase": len(get_active_collocations()),
+        "totalDatabase": len(active_collocs),
         "page": page,
         "limit": limit,
         "results": enriched_results
@@ -840,16 +1088,18 @@ def search_collocations(query='', source='all', pattern='all', category='all', s
     return response
 
 def search_dictionary(query, limit=50):
+    active_dict = [d for d in DICTIONARY if d.get('status') == 'active' and d.get('public_visible') != False]
+    limit = min(max(1, limit), 50)
     if not query:
-        base_items = DICTIONARY[:limit]
+        base_items = active_dict[:limit]
     else:
-        q = query.lower().strip()
+        q = normalize_apostrophes(query.lower().strip())
         exact_matches = []
         partial_matches = []
         
-        for item in DICTIONARY:
-            word = item.get('word', '').lower()
-            trans = item.get('translation', '').lower()
+        for item in active_dict:
+            word = normalize_apostrophes(item.get('word', '').lower())
+            trans = normalize_apostrophes(item.get('translation', '').lower())
             
             if word == q:
                 exact_matches.append(item)
@@ -859,13 +1109,14 @@ def search_dictionary(query, limit=50):
             if len(exact_matches) + len(partial_matches) >= limit:
                 break
                 
-        base_items = exact_matches + partial_matches
+        base_items = (exact_matches + partial_matches)[:limit]
         
-    # Attach live corpus examples
     enriched = []
     for item in base_items:
         item_copy = dict(item)
-        item_copy['example'] = find_corpus_example(item.get('word', ''), item.get('translation', ''))
+        item_copy.pop('example', None)  # Remove any attached example (TO'QIMA)
+        if not item_copy.get('source'):
+            item_copy['source'] = "80,000 so‘zli Katta Lug‘at (881 bet) & 816 betlik Lug‘at (BuxDU)"
         enriched.append(item_copy)
         
     return enriched
@@ -899,45 +1150,32 @@ AI_CONFIG = load_ai_config()
 def generate_phd_linguistic_response(user_prompt):
     prompt_lower = user_prompt.lower()
     
-    # Check if asking about collocations, MI, t-score, or calque
     if any(k in prompt_lower for k in ['cold look', 'sovuq nigoh', 'kalka', 'calque']):
         return (
-            "### 🎯 PhD Ilmiy Tahlili: «Sovuq nigoh» va Uslubiy Kalkalar\n\n"
+            "### 🎯 Leksik-Semantik Tahlil: «Sovuq nigoh» va Uslubiy Kalkalar\n\n"
             "**1. Leksik-semantik muammo:**\n"
-            "Oʻzbek tilidagi *«sovuq nigoh»* metaforik birikmasini ingliz tiliga soʻzma-soʻz ***cold look*** deb tarjima qilish jiddiy **uslubiy zaiflik va kalka (calque)** hisoblanadi. Erkin nutqda tushunarli boʻlsa-da, badiiy va akademik korpuslarda gʻayritabiiy tuyuladi.\n\n"
-            "**2. Korpus mezonlari (BNC, COCA, Sketch Engine):**\n"
-            "- **Icy stare** (MI: 7.42, T-score: 9.15) — eng yuqori assotsiatsiya koeffitsientiga ega, hissizlik va gʻazabni ifodalaydi.\n"
-            "- **Cold gaze** (MI: 6.85, T-score: 8.30) — barqaror adabiy birikma (Choʻlponning «Kecha va kunduz» tarjimasida Christopher Fort tomonidan qoʻllangan: *«Razzoq Sufi's cold gaze...»*).\n"
-            "- **Frosty glare** (MI: 6.20, T-score: 7.45) — oʻta dushmanona nigoh.\n\n"
-            "**3. Dissertatsiya tavsiyasi:**\n"
-            "Teng matnlar parallel korpusida kollokatsiyalarni tarjima qilishda *soʻzma-soʻz komponental tarjima* emas, balki *kollokatsion invariantlik prinsipi* qoʻllanishi lozim."
+            "Oʻzbek tilidagi *«sovuq nigoh»* birikmasini ingliz tiliga soʻzma-soʻz *cold look* deb tarjima qilish uslubiy kalka hisoblanadi. Badiiy asarlarda *cold gaze* yoki *icy stare* barqaror adekvat ekvivalent hisoblanadi.\n\n"
+            "**2. Asliyatdan dalil:**\n"
+            "Abdulhamid Cho‘lponning «Kecha va kunduz» romani tarjimasida (Christopher Fort): *«cold gaze»* qoʻllangan.\n\n"
+            "**3. Ekvivalentlik tamoyili:**\n"
+            "Tarjima ekvivalenti faqat tarjimonning kitobdagi real qo'llagan so'zlari asosida qayd etiladi."
         )
         
-    if any(k in prompt_lower for k in ['mi', 't-score', 'tscore', 'formula', 'metod']):
+    if any(k in prompt_lower for k in ['mi', 't-score', 'tscore', 'formula', 'metod', 'logdice']):
         return (
-            "### 📊 PhD Statistik Metodologiyasi: MI va T-Score\n\n"
-            "**1. Mutual Information (MI-Score):**\n"
-            "$$MI(x,y) = \\log_2 \\frac{P(x,y)}{P(x)P(y)}$$\n"
-            "- Vazifasi: Ikki soʻzning bir-biriga leksik tortishish kuchini oʻlchaydi.\n"
-            "- Mezon: $MI \\ge 3.0$ boʻlsa, turgʻun birikma (kollokatsiya) deb eʼtirof etiladi.\n\n"
-            "**2. T-Score (Student's t-test):**\n"
-            "$$t = \\frac{O - E}{\\sqrt{O}}$$\n"
-            "- Vazifasi: Leksik bogʻlanishning korpusdagi statistik ishonchliligini (chastotaliligini) koʻrsatadi.\n"
-            "- Mezon: $t \\ge 2.0$ boʻlsa, assotsiatsiya tasodifiy emas deb hisoblanadi.\n\n"
-            "**3. Parallel Korpusda Qoʻllanishi:**\n"
-            "Tadqiqotimizdagi 5,157 parallel jumla va 6,533 ta ilmiy kollokatsiya aynan ushbu ikki mezon filtridan oʻtkazilgan."
+            "### 📊 Statistik Mezonlar Metodologiyasi (1-bob)\n\n"
+            "**1. logDice va Assotsiatsiya o'lchovlari:**\n"
+            "Kollokatsiyalarning turg'unlik maqomi ma'lumotnoma korpuslar (BNC, O'zbek milliy korpusi / uzWaC) chastotasi asosida baholanadi.\n\n"
+            "**2. Dissertatsiya standarti:**\n"
+            "Kichik badiiy korpusning xom statistikasi maqomni belgilamaydi. Barcha statistik metrikalar 10-bosqichda kalibrlangan namunalar asosida ko'rsatiladi."
         )
 
-    # General expert response
     return (
-        f"### 🎓 PhD Ilmiy Korpus Assistentining Xulosasi\n\n"
-        f"**Soʻrov tahlili:** «{user_prompt}»\n\n"
-        "**Ilmiy-lingvistik sharh:**\n"
-        "Oʻzaro faol birikuvchi (kollokatsion) soʻzlar tadqiqi parallel korpus lingvistikasining eng dolzarb yoʻnalishlaridan biridir. "
-        "Matnlarni chogʻishtirishda leksik birliklarning valentlik imkoniyatlari, kontekstual semantikasi va turgʻun birikish qonuniyatlari asosiy oʻrin tutadi.\n\n"
-        "**Korpus maʼlumotlari:**\n"
-        "- Choʻlpon («Kecha va kunduz»), Hemingway («Chol va dengiz») hamda Stevenson («Xazinalar oroli») asarlarining parallel tahlili shuni koʻrsatadiki, kollokatsiyalarning 68% qismi toʻliq yoki konseptual ekvivalentlar orqali beriladi, 32% holatda esa kalka xatolariga yoʻl qoʻyish xavfi mavjud.\n\n"
-        "**Xulosa:** Badiiy va ilmiy tarjimada erkin soʻz birikmasi bilan kollokatsiyani farqlash tarjima adekvatligining garovidir."
+        f"### 🎓 Lingvistik Tahlil Xulosasi (AI-taklif)\n\n"
+        f"**Soʻrov:** «{user_prompt}»\n\n"
+        "**Nazariy sharh:**\n"
+        "Oʻzaro faol birikuvchi (kollokatsion) soʻzlar tadqiqida leksik birliklarning kontekstual ma'nosi va tarjima ekvivalentligi solishtiriladi.\n"
+        "Qiyosiy tahlil faqat bitta asarni o'z tarjimasi bilan jumla-ba-jumla taqqoslash tamoyiliga tayanadi."
     )
 
 def translate_text(text, sl='uz', tl='en'):
@@ -1009,7 +1247,7 @@ CALQUE_TRAPS_KNOWLEDGE = {
         "calque": "*throw anchor (so'zma-so'z tarjima)",
         "correct": "drop anchor / cast anchor",
         "uz": "langar tashlamoq",
-        "explanation": "Dengizchilik leksikasida langar tashlash faqat 'drop anchor' yoki 'cast anchor' deyiladi (Stivenson, «Treasure Island»)."
+        "explanation": "Dengizchilik leksikasida langar tashlash faqat 'drop anchor' yoki 'cast anchor' deyiladi."
     },
     "deeply breath": {
         "calque": "*deeply breath",
@@ -1336,7 +1574,7 @@ def diagnose_text_with_ai(text):
         collocs_md = ""
         if found_collocs:
             collocs_md = "\n".join([
-                f"- **{c['english']}** ⟷ **{c['uzbek']}** [{c['pattern']}] — *MI: {c.get('miScore', 7.2)}, T: {c.get('tScore', 8.5)}*"
+                f"- **{c['english']}** ⟷ **{c['uzbek']}** [{c.get('pattern', 'Qolip')}]"
                 for c in found_collocs
             ])
         else:
@@ -1381,8 +1619,8 @@ def get_phd_occurrences(params):
     semantic = params.get('semantic', ['all'])[0].strip()
     equivalence = params.get('equivalence', ['all'])[0].strip()
     book = params.get('book', ['all'])[0].strip()
-    limit = int(params.get('limit', ['50'])[0])
-    page = int(params.get('page', ['1'])[0])
+    limit = safe_int(params.get('limit', ['50'])[0], default=50, maximum=1000)
+    page = safe_int(params.get('page', ['1'])[0])
 
     if not os.path.exists(PHD_DB_PATH):
         return {"success": False, "total": 0, "results": [], "error": "phd_corpus.db topilmadi"}
@@ -1511,52 +1749,70 @@ def save_phd_annotation(data):
 
 def get_phd_kwic(params):
     keyword = params.get('q', [''])[0].strip()
-    window = int(params.get('window', ['6'])[0])
-    limit = int(params.get('limit', ['50'])[0])
     if not keyword:
-        return {"success": False, "results": [], "total": 0}
+        return {"success": False, "results": [], "total": 0, "keyword": ""}
 
-    conn = sqlite3.connect(PHD_DB_PATH)
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
+    forced_lang = params.get('lang', [None])[0]
+    limit = safe_int(params.get('limit', ['500'])[0], default=500, maximum=1000)
 
-    sql = '''
-        SELECT s.id, s.book_id, s.pdf_page_num, s.clean_text, b.title as book_title
-        FROM segments s
-        JOIN books b ON s.book_id = b.id
-        WHERE s.clean_text LIKE ?
-        LIMIT ?
-    '''
-    cursor.execute(sql, (f'%{keyword}%', limit))
-    rows = cursor.fetchall()
+    try:
+        active_c = get_active_corpus()
+        active_col = get_active_collocations()
+        active_d = get_active_dictionary()
+        search_res = execute_unified_search(
+            query=keyword,
+            active_corpus=active_c,
+            active_collocations=active_col,
+            active_dictionary=active_d,
+            forced_lang=forced_lang if forced_lang in ('uz', 'en') else None,
+            limit=limit,
+            page=1
+        )
+        sentences = search_res.get('corpus_sentences', [])
 
-    kwic_list = []
-    kw_lower = keyword.lower()
-    for r in rows:
-        text = r['clean_text']
-        words = text.split()
-        kw_idx = -1
-        for i, w in enumerate(words):
-            clean_w = re.sub(r'^[^\w]+|[^\w]+$', '', w).lower()
-            if kw_lower in clean_w:
-                kw_idx = i
-                break
-        if kw_idx != -1:
-            left = " ".join(words[max(0, kw_idx - window) : kw_idx])
-            kw = words[kw_idx]
-            right = " ".join(words[kw_idx + 1 : min(len(words), kw_idx + 1 + window)])
+        kwic_list = []
+        for s in sentences:
+            src = s.get('source_raw', '')
+            spans = s.get('match_spans', [])
+            if spans:
+                s_start, s_end = spans[0]
+                left = src[:s_start].strip()
+                node = src[s_start:s_end].strip()
+                right = src[s_end:].strip()
+            else:
+                left = ""
+                node = keyword
+                right = src.strip()
+
             kwic_list.append({
-                'segment_id': r['id'],
-                'book_title': r['book_title'],
-                'page': r['pdf_page_num'],
+                'segment_id': s.get('id', ''),
+                'id': s.get('id', ''),
+                'book': s.get('book', ''),
+                'book_title': s.get('source_label', s.get('book', '')),
+                'page': s.get('page_source', ''),
                 'left': left,
-                'keyword': kw,
+                'keyword': node,
+                'node': node,
                 'right': right,
-                'full_text': text
+                'full_text': src,
+                'target': s.get('target_raw', ''),
+                'target_label': s.get('target_label', '')
             })
 
-    conn.close()
-    return {"success": True, "total": len(kwic_list), "keyword": keyword, "results": kwic_list}
+        export_fmt = params.get('format', [params.get('export', [''])[0]])[0].lower()
+        if export_fmt in ('csv', 'xlsx'):
+            import io, csv
+            output = io.StringIO()
+            writer = csv.writer(output)
+            writer.writerow(['ID', 'Asar (Book)', 'Sahifa (Page)', 'Chap kontekst (Left)', 'Kalit so‘z (Node)', 'O‘ng kontekst (Right)'])
+            for k in kwic_list:
+                writer.writerow([k['id'], k['book'], k['page'], k['left'], k['node'], k['right']])
+            return {"is_csv": True, "csv_content": output.getvalue(), "filename": f"kwic_{keyword}.csv"}
+
+        return {"success": True, "total": len(kwic_list), "keyword": keyword, "results": kwic_list}
+    except Exception as e:
+        print(f"[!] KWIC error for '{keyword}': {e}")
+        return {"success": False, "results": [], "total": 0, "keyword": keyword, "error": str(e)}
 
 def export_phd_csv(export_type='occurrences'):
     conn = sqlite3.connect(PHD_DB_PATH)
@@ -1617,44 +1873,140 @@ def export_phd_csv(export_type='occurrences'):
         return output.getvalue(), "phd_collocation_occurrences.csv"
 
 
+def render_localized_html(html_str, lang='uz', is_admin=False, query_params=None, req_path='/'):
+    """Key-based localisation only (TILCOR_08 Task 1). No word substitution inside strings."""
+    if not query_params:
+        query_params = {}
+
+    locales_file = os.path.join(DIRECTORY, 'locales', f'{lang}.json')
+    loc = {}
+    if os.path.exists(locales_file):
+        try:
+            with open(locales_file, 'r', encoding='utf-8') as f:
+                loc = json.load(f)
+        except Exception:
+            pass
+
+    Q = r"""["']"""
+    NQ = r"""[^"']"""
+
+    # 1. <html lang="...">
+    html_str = re.sub(r'<html\s+lang=' + Q + NQ + '*' + Q, f'<html lang="{lang}"', html_str, count=1)
+    if lang == 'en':
+        html_str = re.sub(r'<title>.*?TILCOR.*?</title>', '<title>TILCOR — Uzbek–English Parallel Corpus</title>', html_str, flags=re.DOTALL)
+    elif lang == 'ru':
+        html_str = re.sub(r'<title>.*?TILCOR.*?</title>', '<title>TILCOR — Узбекско-английский параллельный корпус</title>', html_str, flags=re.DOTALL)
+
+    # 2. hreflang + Tailwind (needed by the unified nav)
+    if '</head>' in html_str:
+        if 'hreflang="uz"' not in html_str:
+            hreflang_tags = (
+                '\n    <link rel="alternate" hreflang="uz" href="?lang=uz" />'
+                '\n    <link rel="alternate" hreflang="en" href="?lang=en" />'
+                '\n    <link rel="alternate" hreflang="ru" href="?lang=ru" />\n'
+            )
+            html_str = html_str.replace('</head>', hreflang_tags + '</head>', 1)
+        if 'cdn.tailwindcss.com' not in html_str:
+            html_str = html_str.replace('</head>', '\n    <script src="https://cdn.tailwindcss.com"></script>\n</head>', 1)
+        if '/css/tilcor.css' not in html_str:
+            # the unified navigation and footer use the tc- classes of the public pages
+            html_str = html_str.replace('</head>', '\n    <link rel="stylesheet" href="%s">\n    <link rel="stylesheet" href="/css/tilcor.css">\n</head>'
+                                        % html.escape(ui_components.FONTS), 1)
+
+    # 3. One navigation component (Task 3)
+    nav_html = ui_components.render_nav(lang, req_path, is_admin)
+    html_str = re.sub(r'<header\b[^>]*>.*?</header>', lambda m: nav_html, html_str, count=1, flags=re.DOTALL)
+
+    # 4. One footer
+    footer_html = ui_components.render_footer(lang)
+    html_str = re.sub(r'<footer\b[^>]*>.*?</footer>', lambda m: footer_html, html_str, count=1, flags=re.DOTALL)
+
+    # 5. Admin items out of public HTML (Task 2)
+    if not is_admin:
+        for sec in ('view-translator', 'view-checker', 'view-phd'):
+            html_str = re.sub(r'<section[^>]*id=' + Q + sec + Q + r'[^>]*>.*?</section>', '', html_str, flags=re.DOTALL)
+        for term in ('admin_collocations', 'preview_alignment_queue'):
+            html_str = re.sub(r'<a[^>]*href=' + Q + NQ + '*' + term + NQ + '*' + Q + r'[^>]*>.*?</a>', '', html_str, flags=re.DOTALL)
+
+    # 6. Live numbers, formatted per language
+    active_c = get_active_corpus()
+    cholpon_count = sum(1 for s in active_c if s.get('book') == 'cholpon')
+    hemingway_count = sum(1 for s in active_c if s.get('book') == 'hemingway')
+    total_segments = len(active_c)
+    c_fmt = ui_components.format_number(cholpon_count, lang)
+    h_fmt = ui_components.format_number(hemingway_count, lang)
+    t_fmt = ui_components.format_number(total_segments, lang)
+    for old in ['2 471', '2,471', '6 823', '6,823']:
+        html_str = html_str.replace(old, c_fmt)
+    for old in ['1 340', '1,340', '1 532', '1,532']:
+        html_str = html_str.replace(old, h_fmt)
+    for old in ['3 811', '3,811', '8 355', '8,355']:
+        html_str = html_str.replace(old, t_fmt)
+    html_str = html_str.replace('Ibrohim G‘afurov', 'Ibrohim G‘ofurov')
+
+    # 7. data-i18n keys (whole element content replaced by the key's full translation)
+    def repl_i18n(m):
+        tag_start, key, tag_close, inner, tag_end = m.group(1), m.group(2), m.group(3), m.group(4), m.group(5)
+        trans = loc.get(key)
+        if trans:
+            icon_match = re.search(r'(<i\s+data-lucide=[^>]+></i>)', inner)
+            if icon_match:
+                return f"{tag_start}{key}{tag_close}{trans} {icon_match.group(1)}{tag_end}"
+            return f"{tag_start}{key}{tag_close}{trans}{tag_end}"
+        return m.group(0)
+    html_str = re.sub(r'(<[^>]*\bdata-i18n=' + Q + r')(' + NQ + r'+)(' + Q + r'[^>]*>)(.*?)(</[^>]+>)', repl_i18n, html_str, flags=re.DOTALL)
+
+    # 8. data-i18n-placeholder (attribute order independent)
+    def repl_ph_tag(m):
+        tag = m.group(0)
+        km = re.search(r'data-i18n-placeholder=' + Q + '(' + NQ + '+)' + Q, tag)
+        if not km or not loc.get(km.group(1)):
+            return tag
+        trans = loc[km.group(1)].replace('"', '&quot;')
+        return re.sub(r'placeholder=' + Q + NQ + '*' + Q, lambda _: f'placeholder="{trans}"', tag, count=1)
+    html_str = re.sub(r'<input[^>]*data-i18n-placeholder=[^>]*>', repl_ph_tag, html_str)
+
+    return html_str
+
+
 class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
+    def send_page(self, html_content, lang, status=200):
+        body = html_content.encode('utf-8')
+        self.send_response(status)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
+        self.send_header('Set-Cookie', f'tilcor_lang={lang}; Path=/; Max-Age=31536000; SameSite=Lax')
+        self.send_header('Cache-Control', 'no-cache')
+        self.send_header('X-Content-Type-Options', 'nosniff')
+        self.send_header('Referrer-Policy', 'same-origin')
+        self.end_headers()
+        self.wfile.write(body)
+
     def get_authenticated_user(self):
+        cookie_str = self.headers.get('Cookie', '')
+        token = extract_cookie_token(cookie_str)
+        if token and token in SESSIONS:
+            sess = SESSIONS[token]
+            if time.time() < sess['expires']:
+                return sess['user']
+            else:
+                del SESSIONS[token]
+
+        # HTTP Basic (for scripts). Only configured users, constant-time check.
+        # The former fixed tokens ("admin_token_2026" etc.) and the cookie values
+        # "tilcor_session=admin/reviewer/guest" gave anyone admin rights; they are removed.
         auth_header = self.headers.get('Authorization', '')
         if auth_header.startswith('Basic '):
             try:
                 raw = base64.b64decode(auth_header[6:].strip()).decode('utf-8')
                 u, p = raw.split(':', 1)
-                if AUTH_USERS.get(u) == p:
+                if verify_login(u, p):
                     return u
             except Exception:
                 pass
-        elif auth_header.startswith('Bearer '):
-            token = auth_header[7:].strip()
-            if token == 'admin_token_2026':
-                return 'admin'
-            if token == 'reviewer_token_2026':
-                return 'reviewer'
-            if token == 'guest_token_2026':
-                return 'guest'
-        
-        x_token = self.headers.get('X-Auth-Token', '')
-        if x_token == 'admin_token_2026':
-            return 'admin'
-        if x_token == 'reviewer_token_2026':
-            return 'reviewer'
-        if x_token == 'guest_token_2026':
-            return 'guest'
-        
-        cookie_str = self.headers.get('Cookie', '')
-        if 'tilcor_session=admin' in cookie_str:
-            return 'admin'
-        if 'tilcor_session=reviewer' in cookie_str:
-            return 'reviewer'
-        if 'tilcor_session=guest' in cookie_str:
-            return 'guest'
         return None
 
     def require_auth(self, role=None):
@@ -1670,7 +2022,7 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             if self.path.startswith('/api/'):
                 self.wfile.write(json.dumps({
-                    "error": "Avtorizatsiyadan o'tilmagan. Tizimga admin, reviewer yoki guest sifatida kiring."
+                    "error": "Avtorizatsiyadan o'tilmagan. Tizimga kiring."
                 }, ensure_ascii=False).encode('utf-8'))
             else:
                 html_401 = """<!DOCTYPE html>
@@ -1715,16 +2067,16 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
         parsed = urllib.parse.urlparse(self.path)
         params = urllib.parse.parse_qs(parsed.query)
 
-        # 0. Live Stats API (Stage 2)
+        # 0. Live Stats API
         if parsed.path == '/api/stats':
             active_c = get_active_corpus()
             active_col = get_active_collocations()
+            active_d = get_active_dictionary()
             self.send_json({
                 "totalSegments": len(active_c),
                 "totalCollocations": len(active_col),
-                "totalDictionary": len(DICTIONARY),
-                "quarantinedSegments": len(FULL_CORPUS) - len(active_c),
-                "quarantinedCollocations": len(COLLOCATIONS) - len(active_col),
+                "totalDictionary": len(active_d),
+                "booksCount": 2,
                 "authenticatedUser": user
             })
             return
@@ -1774,9 +2126,23 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json(s8.get_association_measures(p))
             return
 
-        if parsed.path == '/api/stage8/chapter3-tables':
+        if parsed.path in ('/api/stage8/chapter3-tables', '/api/stage8/chapter3_tables'):
             import stage8_backend as s8
             self.send_json(s8.get_chapter3_tables())
+            return
+
+        if parsed.path == '/api/stage7/export':
+            import stage7_backend as s7
+            fmt = params.get('format', ['csv'])[0]
+            content, mime, filename = s7.export_annotations(fmt)
+            self.send_response(200)
+            self.send_header('Content-Type', mime)
+            self.send_header('Content-Disposition', f'attachment; filename="{filename}"')
+            self.end_headers()
+            if isinstance(content, str):
+                self.wfile.write(content.encode('utf-8'))
+            else:
+                self.wfile.write(content)
             return
 
         if parsed.path == '/api/stage8/export':
@@ -1848,8 +2214,14 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json(s10.get_security_status())
             return
 
-        # 1. Tarjimon API
+        # 1. Tarjimon API (Admin only, rate limited)
         if parsed.path == '/api/translate':
+            if not self.require_auth('admin'):
+                return
+            if not check_ai_rate_limit():
+                self.send_response(429)
+                self.send_json({"error": "Tarjima so'rovlar limiti oshdi."})
+                return
             text = params.get('text', [''])[0]
             sl = params.get('sl', ['uz'])[0]
             tl = params.get('tl', ['en'])[0]
@@ -1857,30 +2229,114 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json(result)
             return
 
-        # 2. To'liq Korpus Qidiruv API
+        if parsed.path == '/api/auth/me':
+            u = self.get_authenticated_user()
+            self.send_json({"user": u or "guest", "isAdmin": (u == "admin")})
+            return
+
+        if parsed.path == '/api/auth/logout':
+            cookie_str = self.headers.get('Cookie', '')
+            token = extract_cookie_token(cookie_str)
+            if token and token in SESSIONS:
+                del SESSIONS[token]
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Set-Cookie', "tilcor_session=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax")
+            self.send_header('X-Robots-Tag', 'noindex, nofollow')
+            self.end_headers()
+            self.wfile.write(json.dumps({"success": True}, ensure_ascii=False).encode('utf-8'))
+            return
+
+        # Admin kollokatsiyalarni boshqarish API (Part 3.4)
+        if parsed.path == '/api/admin/collocations':
+            if not self.require_auth('admin'):
+                return
+            active_col = get_active_collocations()
+            self.send_json({"total": len(active_col), "collocations": active_col})
+            return
+
+        # Admin sahifa qamrovi API (Step 05)
+        if parsed.path == '/api/admin/page-coverage':
+            if not self.require_auth('admin'):
+                return
+            cov_path = os.path.join(DATA_DIR, 'page_coverage_v3.json')
+            if os.path.exists(cov_path):
+                with open(cov_path, 'r', encoding='utf-8') as f:
+                    self.send_json(json.load(f))
+            else:
+                self.send_json({"error": "Sahifa qamrovi ma'lumotlari topilmadi"}, status=404)
+            return
+
+        # Admin gold acceptance tests API (Step 07)
+        if parsed.path == '/api/admin/gold-tests':
+            if not self.require_auth('admin'):
+                return
+            g_path = os.path.join(DATA_DIR, 'gold_test_results.json')
+            if not os.path.exists(g_path):
+                g_path = os.path.join(DIRECTORY, 'tests', 'gold_search.json')
+            if os.path.exists(g_path):
+                with open(g_path, 'r', encoding='utf-8') as f:
+                    self.send_json(json.load(f))
+            else:
+                self.send_json({"error": "Gold tests not found"}, status=404)
+            return
+
+        # 2. Qayta qurilgan Korpus & Leksikografik Qidiruv API (≤ 50 results)
         if parsed.path == '/api/search':
             query = params.get('q', [''])[0]
-            book = params.get('book', ['all'])[0]
-            limit = int(params.get('limit', ['100'])[0])
-            results = search_corpus(query, book, limit)
-            self.send_json({
-                "query": query,
-                "book": book,
-                "totalFound": len(results),
-                "totalCorpus": len(get_active_corpus()),
-                "results": results
-            })
+            lang = params.get('lang', ['auto'])[0]
+            raw_limit = safe_int(params.get('limit', ['50'])[0], default=50, maximum=1000)
+            limit = min(max(1, raw_limit), 50)
+            page = safe_int(params.get('page', ['1'])[0])
+            
+            try:
+                from search_engine import execute_unified_search
+                active_c = get_active_corpus()
+                active_col = get_active_collocations()
+                active_d = get_active_dictionary()
+                
+                res = execute_unified_search(
+                    query=query,
+                    active_corpus=active_c,
+                    active_collocations=active_col,
+                    active_dictionary=active_d,
+                    forced_lang=lang if lang in ('uz', 'en') else None,
+                    limit=limit,
+                    page=page
+                )
+                # Legacy field for backwards compatibility
+                res['results'] = res.get('corpus_sentences', [])
+                res['totalFound'] = res.get('summary', {}).get('corpus_occurrences', 0)
+                res['totalCorpus'] = len(active_c)
+                self.send_json(res)
+            except Exception as e:
+                import traceback
+                print(f"[!] Search exception for query '{query}': {traceback.format_exc()}")
+                self.send_json({
+                    "query": query,
+                    "error": "Qidiruvda xatolik yuz berdi",
+                    "error_detail": str(e),
+                    "summary": {"total_word_forms": 0, "corpus_occurrences": 0, "collocations_count": 0},
+                    "words": [],
+                    "collocations": [],
+                    "corpus_sentences": [],
+                    "results": [],
+                    "totalFound": 0,
+                    "totalCorpus": len(CORPUS),
+                    "pagination": {"page": 1, "limit": limit, "total_sentences": 0, "total_pages": 1}
+                })
             return
 
         # 3. 816 betlik Lug'at Qidiruv API
         if parsed.path == '/api/dictionary':
             query = params.get('q', [''])[0]
-            limit = int(params.get('limit', ['50'])[0])
+            limit = safe_int(params.get('limit', ['50'])[0], default=50, maximum=1000)
             results = search_dictionary(query, limit)
+            active_d = [d for d in DICTIONARY if d.get('status') == 'active' and d.get('public_visible') != False]
             self.send_json({
                 "query": query,
                 "totalFound": len(results),
-                "totalDictionary": len(DICTIONARY),
+                "totalDictionary": len(active_d),
                 "results": results
             })
             return
@@ -1896,8 +2352,8 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             cultural = params.get('cultural', ['all'])[0]
             lang = params.get('lang', ['all'])[0]
             sort = params.get('sort', ['mi'])[0]
-            limit = int(params.get('limit', ['60'])[0])
-            page = int(params.get('page', ['1'])[0])
+            limit = safe_int(params.get('limit', ['60'])[0], default=60, maximum=1000)
+            page = safe_int(params.get('page', ['1'])[0])
             
             res = search_collocations(
                 query=query,
@@ -1915,8 +2371,10 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json(res)
             return
 
-        # 4.1 Collocation Research Lab: Nomzodlarni ajratish API
+        # 4.1 Collocation Research Lab: Nomzodlarni ajratish API (Admin only)
         if parsed.path == '/api/lab/extract':
+            if not self.require_auth('admin'):
+                return
             text = params.get('text', [''])[0]
             result = extract_collocation_candidates(text)
             self.send_json(result)
@@ -1993,14 +2451,350 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b'\xef\xbb\xbf' + csv_content.encode('utf-8'))
             return
-        
-        super().do_GET()
+        # 11. /sources papkasiga kirishni bloklash (Part 5.1: never public)
+        if parsed.path == '/sources' or parsed.path.startswith('/sources/'):
+            self.send_response(403)
+            self.send_header('Content-Type', 'text/plain; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(b"403 Forbidden: Sources folder is private.")
+            return
+
+        # 12. /kirish sahifasi (Part 2 Section 4)
+        if parsed.path in ('/kirish', '/kirish/', '/kirish.html'):
+            k_lang = params.get('lang', [''])[0].lower()
+            if k_lang not in ('uz', 'en', 'ru'):
+                m_lang = re.search(r'tilcor_lang=(uz|en|ru)', self.headers.get('Cookie', ''))
+                k_lang = m_lang.group(1) if m_lang else 'uz'
+            who = user if user in ('admin', 'reviewer') else None
+            self.send_page(ui_components.render_login_page(k_lang, who), k_lang)
+            return
+
+        # Admin sahifalariga ruxsat cheklovi (Part 2 Section 4: anonim foydalanuvchiga 401)
+        if parsed.path in ('/admin/collocations', '/admin/collocations/'):
+            if not self.require_auth('admin'):
+                return
+            colloc_admin_path = os.path.join(DIRECTORY, 'admin_collocations.html')
+            if os.path.exists(colloc_admin_path):
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/html; charset=utf-8')
+                self.send_header('X-Robots-Tag', 'noindex, nofollow')
+                self.end_headers()
+                with open(colloc_admin_path, 'rb') as f:
+                    self.wfile.write(f.read())
+                return
+
+        REDIRECT_TO_KIRISH_PAGES = set(ADMIN_HTML_PAGES)
+        if parsed.path in REDIRECT_TO_KIRISH_PAGES or parsed.path == '/admin' or parsed.path.startswith('/admin/'):
+            user = self.get_authenticated_user()
+            if not user or user != 'admin':
+                self.send_response(302)
+                self.send_header('Location', '/kirish')
+                self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate')
+                self.end_headers()
+                return
+
+        req_path = parsed.path
+        is_admin = (user == 'admin')
+
+        # Language resolution
+        req_lang = params.get('lang', [''])[0].lower()
+        cookie_str = self.headers.get('Cookie', '')
+        cookie_lang = 'uz'
+        for c in cookie_str.split(';'):
+            if 'tilcor_lang=' in c:
+                cookie_lang = c.split('tilcor_lang=')[1].strip().split(';')[0].lower()
+        lang = req_lang if req_lang in ('uz', 'en', 'ru') else (cookie_lang if cookie_lang in ('uz', 'en', 'ru') else 'uz')
+
+        if req_path in ('/', '/index.html'):
+            st = dict(get_site_stats())
+            st['tokens_total'] = sum(v.get('tokens', 0) for v in get_text_sizes().values())
+            st['collocations_index'] = len(collocation_index_items())
+            self.send_page(ui_components.render_home_page(lang, stats=st, is_admin=is_admin, featured=featured_pair()), lang)
+            return
+
+        info_pages = {
+            '/about_project.html': lambda: content_pages.render_about(lang, is_admin, get_site_stats()),
+            '/loyiha-haqida': lambda: content_pages.render_about(lang, is_admin, get_site_stats()),
+            '/sources_rights.html': lambda: content_pages.render_sources(lang, is_admin, get_site_stats(), get_text_sizes()),
+            '/manbalar': lambda: content_pages.render_sources(lang, is_admin, get_site_stats(), get_text_sizes()),
+            '/methodology.html': lambda: content_pages.render_methodology(lang, is_admin, get_site_stats()),
+            '/metodologiya': lambda: content_pages.render_methodology(lang, is_admin, get_site_stats()),
+            '/annotation_guidelines.html': lambda: content_pages.render_guidelines(lang, is_admin, get_annotation_counts()),
+            '/yoriqnoma': lambda: content_pages.render_guidelines(lang, is_admin, get_annotation_counts()),
+            '/methodology_statistics.html': lambda: content_pages.render_statistics(lang, is_admin, get_site_stats(), get_text_sizes(), get_annotation_counts(), collocation_index_items()),
+            '/statistika': lambda: content_pages.render_statistics(lang, is_admin, get_site_stats(), get_text_sizes(), get_annotation_counts(), collocation_index_items()),
+        }
+        if req_path.rstrip('/') in info_pages:
+            self.send_page(info_pages[req_path.rstrip('/')](), lang)
+            return
+
+        if req_path in ('/kwic', '/kwic/', '/kwic_concordance.html'):
+            query = params.get('q', [''])[0].strip()[:120]
+            book = params.get('kitob', [''])[0]
+            window = safe_int(params.get('oyna', ['6'])[0], default=6, minimum=1, maximum=15)
+            order = params.get('tartib', ['matn'])[0]
+            page = safe_int(params.get('page', ['1'])[0])
+            forced = params.get('til', [''])[0]
+            lines, q_lang, err = [], 'uz', ''
+            if query:
+                from search_engine import execute_unified_search
+                active_c = get_search_corpus()
+                book_code = {'kvk': 'cholpon', 'oms': 'hemingway'}.get(book)
+                if book_code:
+                    active_c = [c for c in active_c if c.get('book') == book_code]
+                res = execute_unified_search(query, active_c, get_active_collocations(), get_active_dictionary(),
+                                             forced_lang=forced if forced in ('uz', 'en') else None, limit=1000, page=1)
+                err = res.get('error', '')
+                if not err:
+                    import search_plus
+                    res = search_plus.enrich(res, corpus_by_id(), page=1, per_page=100000)
+                q_lang = res.get('selected_lang') or 'uz'
+                lines = ui_components.sort_kwic_lines(
+                    ui_components.build_kwic_lines(res.get('corpus_sentences') or [], window, multi=bool(res.get('is_collocation_query'))), order)
+            if params.get('format', [''])[0] == 'csv' and query:
+                body = ui_components.kwic_csv(lines, lang).encode('utf-8')
+                safe_name = re.sub(r'[^\w-]+', '_', query, flags=re.UNICODE)[:40] or 'kwic'
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/csv; charset=utf-8')
+                self.send_header('Content-Disposition', f"attachment; filename=kwic_{urllib.parse.quote(safe_name)}.csv")
+                self.end_headers()
+                self.wfile.write(body)
+                return
+            html_content = ui_components.render_kwic_page(lang, is_admin=is_admin, query=query, book=book, window=window,
+                                                          order=order, page=page, lines=lines, q_lang=q_lang, error=err)
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.send_header('Set-Cookie', f'tilcor_lang={lang}; Path=/; Max-Age=31536000')
+            self.end_headers()
+            self.wfile.write(html_content.encode('utf-8'))
+            return
+
+        # Task 3 & 4 routes:
+        if req_path in ('/korpus', '/korpus/'):
+            html_content = ui_components.render_korpus_page(lang, is_admin=is_admin, stats=get_site_stats())
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.send_header('Set-Cookie', f'tilcor_lang={lang}; Path=/; Max-Age=31536000')
+            self.end_headers()
+            self.wfile.write(html_content.encode('utf-8'))
+            return
+
+        if req_path in ('/kollokatsiyalar', '/kollokatsiyalar/'):
+            page = safe_int(params.get('page', ['1'])[0])
+            if params.get('manba', [''])[0] == 'malumotnoma':
+                html_content = ui_components.render_reference_page(lang, is_admin=is_admin, items=get_active_collocations(), page_no=page)
+            else:
+                html_content = ui_components.render_kollokatsiyalar_page(
+                    lang, is_admin=is_admin, pattern=params.get('qolip', [''])[0], page=page, items=collocation_index_items(),
+                    til=params.get('til', ['uz'])[0], q=params.get('q', [''])[0].strip()[:80], order=params.get('tartib', [''])[0])
+            self.send_page(html_content, lang)
+            return
+
+        if req_path in ('/lugat', '/lugat/'):
+            self.send_page(ui_components.render_lugat_page(lang, is_admin=is_admin), lang)
+            return
+
+        if req_path in ('/qidiruv', '/qidiruv/'):
+            query = params.get('q', [''])[0].strip()[:120]
+            book = params.get('kitob', params.get('book', ['']))[0]
+            page = safe_int(params.get('page', ['1'])[0])
+            res = run_search(query, book, params.get('til', [''])[0], page) if query else {}
+            self.send_page(ui_components.render_qidiruv_page(lang, query=query, book=book, search_res=res, is_admin=is_admin, page=page), lang)
+            return
+
+        # Permanent citation URLs
+        if req_path.startswith('/soz/'):
+            lemma = urllib.parse.unquote(req_path[len('/soz/'):].strip('/')).strip()[:120]
+            if lemma:
+                import citation_pages
+                res = run_search(lemma, per_page=10)
+                self.send_page(citation_pages.generate_word_citation_html(lemma, res, lang=lang), lang)
+                return
+
+        if req_path.startswith('/kollokatsiya/'):
+            colloc_id = urllib.parse.unquote(req_path[len('/kollokatsiya/'):].strip('/'))
+            item = next((it for it in collocation_index_items() if it['id'] == colloc_id), None)
+            if item:
+                import search_plus
+                pairs = search_plus.occurrence_pairs(item, corpus_by_id())
+                self.send_page(ui_components.render_collocation_detail(lang, is_admin, item, pairs), lang)
+                return
+            ref = next((c for c in get_active_collocations() if str(c.get('id')) == colloc_id), None)
+            if ref:
+                import citation_pages
+                term = (ref.get('english') or '').split('/')[0].strip()[:120]
+                res = run_search(term, per_page=10) if term else {}
+                self.send_page(citation_pages.generate_collocation_citation_html(colloc_id, ref, search_res=res, lang=lang), lang)
+                return
+            self.send_error(404, "Not Found")
+            return
+
+        if req_path.endswith('.html') and req_path not in PUBLIC_HTML_PAGES and not is_admin:
+            self.send_error(404, "Not Found")
+            return
+
+        if req_path == '/' or req_path.endswith('.html'):
+            target_file = 'index.html' if req_path == '/' else req_path.lstrip('/')
+            file_disk_path = os.path.join(DIRECTORY, target_file)
+            if os.path.exists(file_disk_path) and os.path.isfile(file_disk_path):
+                req_lang = params.get('lang', [''])[0].lower()
+                cookie_str = self.headers.get('Cookie', '')
+                cookie_lang = 'uz'
+                for c in cookie_str.split(';'):
+                    if 'tilcor_lang=' in c:
+                        cookie_lang = c.split('tilcor_lang=')[1].strip().split(';')[0].lower()
+                lang = req_lang if req_lang in ('uz', 'en', 'ru') else (cookie_lang if cookie_lang in ('uz', 'en', 'ru') else 'uz')
+
+                is_admin = (user == 'admin')
+
+                try:
+                    with open(file_disk_path, 'r', encoding='utf-8') as f:
+                        raw_html = f.read()
+
+                    if target_file == 'kwic_concordance.html' and params.get('q', [''])[0]:
+                        kw_res = get_phd_kwic(params)
+                        results = kw_res.get('results', [])
+                        rows_html = []
+                        for k in results:
+                            rows_html.append(
+                                f'<tr>'
+                                f'<td class="kwic-left" style="text-align:right;">{html.escape(k.get("left", ""))}</td>'
+                                f'<td class="kwic-node" style="text-align:center; font-weight:700; color:#1e40af;">{html.escape(k.get("node", ""))}</td>'
+                                f'<td class="kwic-right" style="text-align:left;">{html.escape(k.get("right", ""))}</td>'
+                                f'<td class="kwic-meta" style="text-align:center;"><div><b>{html.escape(k.get("book_title", ""))}</b></div><div>{html.escape(ui_components.get_i18n(lang, "page_fmt").replace("{p}", str(k.get("page", ""))))}</div></td>'
+                                f'</tr>'
+                            )
+                        if rows_html:
+                            table_body = "".join(rows_html)
+                            raw_html = re.sub(r'<tbody[^>]*id=["\']kwicTableBody["\'][^>]*>.*?</tbody>', f'<tbody id="kwicTableBody">{table_body}</tbody>', raw_html, flags=re.DOTALL)
+                            raw_html = re.sub(r'<tbody[^>]*id=["\']kwicResultsBody["\'][^>]*>.*?</tbody>', f'<tbody id="kwicResultsBody">{table_body}</tbody>', raw_html, flags=re.DOTALL)
+                            raw_html = re.sub(r'id=["\']countBadge["\'][^>]*>.*?</span>', f'id="countBadge">{html.escape(ui_components.count_phrase(len(results), "kwic_results_word", lang))}</span>', raw_html)
+
+                    rendered_html = render_localized_html(raw_html, lang, is_admin, params, req_path=req_path)
+
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'text/html; charset=utf-8')
+                    self.send_header('Set-Cookie', f'tilcor_lang={lang}; Path=/; Max-Age=31536000')
+                    self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+                    self.send_header('Pragma', 'no-cache')
+                    self.send_header('Expires', '0')
+                    self.end_headers()
+                    self.wfile.write(rendered_html.encode('utf-8'))
+                    return
+                except Exception as e:
+                    print(f"[!] Localized HTML render error: {e}")
+
+        # Static files: only the folders the pages need. Everything else
+        # (code, scripts, data, databases, .git, docs, book texts, secrets) is never served.
+        if is_public_static_path(req_path) or (is_admin and req_path.startswith('/static/')):
+            super().do_GET()
+            return
+        self.send_error(404, "Not Found")
+
+    def list_directory(self, path):
+        # No directory listings.
+        self.send_error(404, "Not Found")
+        return None
 
     def do_POST(self):
         parsed = urllib.parse.urlparse(self.path)
+
+        # 0. Public Auth endpoints (login / logout)
+        if parsed.path == '/api/auth/login':
+            client_ip = get_client_ip(self)
+            if not check_login_rate_limit(client_ip):
+                self.send_json({"success": False, "error": "Login urinishlari chegarasi oshdi. 15 daqiqadan so‘ng urinib ko‘ring."}, status=429)
+                return
+            length = int(self.headers.get('Content-Length', 0))
+            try:
+                body = json.loads(self.rfile.read(length).decode('utf-8'))
+            except Exception:
+                body = {}
+            u = body.get('username', '').strip()
+            p = body.get('password', '')
+            if verify_login(u, p):
+                token = secrets.token_hex(32)
+                SESSIONS[token] = {"user": u, "created": time.time(), "expires": time.time() + 86400 * 7}
+                secure_flag = '; Secure' if self.headers.get('X-Forwarded-Proto', '') == 'https' else ''
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Set-Cookie', f"tilcor_session={token}; Path=/; Max-Age=604800; HttpOnly; SameSite=Lax{secure_flag}")
+                self.send_header('X-Robots-Tag', 'noindex, nofollow')
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": True, "user": u, "isAdmin": u == 'admin'}, ensure_ascii=False).encode('utf-8'))
+                return
+            else:
+                record_failed_login(client_ip)
+                self.send_json({"success": False, "error": "Foydalanuvchi nomi yoki parol noto‘g‘ri"}, status=401)
+                return
+
+        if parsed.path == '/api/auth/logout':
+            cookie_str = self.headers.get('Cookie', '')
+            token = extract_cookie_token(cookie_str)
+            if token and token in SESSIONS:
+                del SESSIONS[token]
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Set-Cookie', "tilcor_session=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax")
+            self.send_header('X-Robots-Tag', 'noindex, nofollow')
+            self.end_headers()
+            self.wfile.write(json.dumps({"success": True}, ensure_ascii=False).encode('utf-8'))
+            return
+
+        # Kollokatsiyalarni ekspertizadan o'tkazish POST API (Part 3.4)
+        if parsed.path == '/api/admin/collocations/review':
+            if not self.require_auth('admin'):
+                return
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                data = json.loads(body)
+                cid = data.get('id')
+                action = data.get('action')
+                new_text = data.get('text')
+
+                for c in COLLOCATIONS:
+                    if c.get('id') == cid:
+                        if action == 'approve':
+                            if c.get('uzbek_variants') and c['uzbek_variants'][0]:
+                                c['uzbek_variants'][0]['status'] = 'tasdiqlangan muqobil (tadqiqotchi)'
+                                c['uzbek_variants'][0]['source_class'] = 'tasdiqlangan'
+                            c['review_status'] = 'tasdiqlangan muqobil (tadqiqotchi)'
+                            c['class'] = 'tasdiqlangan'
+                        elif action == 'edit' and new_text:
+                            c['uzbek_variants'] = [{
+                                'text': new_text,
+                                'source_class': 'tasdiqlangan',
+                                'form': 'kollokatsiya',
+                                'status': 'tasdiqlangan muqobil (tadqiqotchi)'
+                            }]
+                            c['uzbek'] = new_text
+                            c['review_status'] = 'tasdiqlangan muqobil (tadqiqotchi)'
+                            c['class'] = 'tasdiqlangan'
+                        elif action == 'reject':
+                            c['status'] = 'rejected'
+                            c['public_visible'] = False
+                        break
+
+                colloc_path = os.path.join(DATA_DIR, 'collocations_full.json')
+                with open(colloc_path, 'w', encoding='utf-8') as f:
+                    json.dump(COLLOCATIONS, f, ensure_ascii=False, indent=2)
+
+                self.send_json({"success": True, "id": cid, "action": action})
+                return
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}, status=500)
+                return
+
         user = self.require_auth()
         if not user:
             return
+
+        # Writing annotations changes research data: only signed-in researchers.
+        if self.path in ('/api/stage7/annotate', '/api/annotate'):
+            user = self.require_auth('reviewer')
+            if not user:
+                return
 
         if self.path == '/api/stage7/annotate':
             length = int(self.headers.get('Content-Length', 0))
@@ -2117,6 +2911,12 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         if self.path == '/api/translate':
+            if not self.require_auth('admin'):
+                return
+            if not check_ai_rate_limit():
+                self.send_response(429)
+                self.send_json({"error": "Tarjima so'rovlar limiti oshdi."})
+                return
             length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(length).decode('utf-8')
             try:
@@ -2167,6 +2967,8 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         if self.path == '/api/lab/extract':
+            if not self.require_auth('admin'):
+                return
             length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(length).decode('utf-8')
             try:
@@ -2202,14 +3004,65 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         super().do_POST()
 
-    def send_json(self, data):
-        self.send_response(200)
+    def send_json(self, data, status=200):
+        self.send_response(status)
         self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+        self.send_header('Pragma', 'no-cache')
+        self.send_header('Expires', '0')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('X-Robots-Tag', 'noindex, nofollow')
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.end_headers()
         self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
+
+
+# =====================================================================
+# Search pipeline used by the public pages: unified search + word alignment layer
+# =====================================================================
+_CORPUS_BY_ID = {}
+
+def corpus_by_id():
+    if len(_CORPUS_BY_ID) != len(FULL_CORPUS):
+        _CORPUS_BY_ID.clear()
+        _CORPUS_BY_ID.update((c['id'], c) for c in FULL_CORPUS)
+    return _CORPUS_BY_ID
+
+def run_search(query, book='', forced='', page=1, per_page=20):
+    from search_engine import execute_unified_search
+    import search_plus
+    active_c = get_search_corpus()
+    book_code = {'kvk': 'cholpon', 'oms': 'hemingway'}.get(book)
+    if book_code:
+        active_c = [c for c in active_c if c.get('book') == book_code]
+    res = execute_unified_search(query, active_c, get_active_collocations(), get_active_dictionary(),
+                                 forced_lang=forced if forced in ('uz', 'en') else None, limit=1000, page=1)
+    if res.get('error'):
+        return res
+    return search_plus.enrich(res, corpus_by_id(), page=page, per_page=per_page)
+
+_FEATURED = {}
+
+def featured_pair():
+    """The pair shown on the home page: og‘ir uyqu -> a heavy sleep (Cho‘lpon, 2000, p. 36; 2019, p. 74)."""
+    if _FEATURED.get('pair') is None:
+        try:
+            res = run_search('og‘ir uyqu', per_page=50)
+            s = next((x for x in res.get('corpus_sentences') or [] if x.get('equiv_confirmed')), None)
+            _FEATURED['pair'] = {'book': s['book'], 'q_lang': 'uz', 'q_html': s['query_highlighted'], 'q_page': s['query_page'],
+                                 'o_html': s['other_highlighted'], 'o_page': s['other_page']} if s else {}
+        except Exception as e:
+            print(f"[!] featured pair: {e}")
+            _FEATURED['pair'] = {}
+    return _FEATURED['pair'] or None
+
+def collocation_index_items():
+    import search_plus
+    return search_plus._load_index()['items']
+
+class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    daemon_threads = True
+    allow_reuse_address = True
 
 def is_port_free(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -2248,9 +3101,9 @@ def run():
     if not port:
         port = int(port_env) if port_env else find_available_port()
         
-    socketserver.TCPServer.allow_reuse_address = True
+    ThreadedTCPServer.allow_reuse_address = True
     
-    with socketserver.TCPServer(("", port), AppRequestHandler) as httpd:
+    with ThreadedTCPServer(("", port), AppRequestHandler) as httpd:
         url = f"http://localhost:{port}"
         active_c = get_active_corpus()
         active_col = get_active_collocations()

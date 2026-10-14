@@ -7,11 +7,11 @@
 ## 1. Tizimga Kirish va Rollar (Authentication & RBAC)
 TILCOR platformasi uch xil kirish darajasiga ega:
 1. **Tadqiqotchi (`admin`):** To‘liq boshqaruv, annotatsiya kiritish, litsenziya holatini yangilash, barcha ma'lumotlarni eksport qilish.
-   - Parol: `tilcor_phd_admin_2026` (yoki `TILCOR_ADMIN_PASSWORD` muhit o‘zgaruvchisi).
+   - Parol: `<parol kodda saqlanmaydi>` (yoki `TILCOR_ADMIN_PASSWORD` muhit o‘zgaruvchisi).
 2. **Ilmiy rahbar (`reviewer`):** Annotatsiyalarni tekshirish, tasdiqlash, III bob statistik jadvallarini ko‘rish va to‘liq eksport qilish.
-   - Parol: `tilcor_supervisor_2026`.
+   - Parol: `<parol kodda saqlanmaydi>`.
 3. **Mehmon / Kengash a'zosi (`guest`):** Qidiruv, KWIC konkordans va metodologiyani ko‘rish. Himoyalangan matnlarda natijalar 50 tagacha cheklangan, ommaviy yuklab olish bloklangan.
-   - Parol: `tilcor_guest_2026`.
+   - Parol: `<parol kodda saqlanmaydi>`.
 
 ---
 

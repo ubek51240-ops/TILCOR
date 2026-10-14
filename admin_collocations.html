@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="uz" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kollokatsiyalarni Ekspertizadan O‘tkazish (Admin) — TILCOR</title>
+    <meta name="robots" content="noindex, nofollow">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/tokens.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Top Header -->
+    <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-sm">TC</div>
+                <div>
+                    <span class="font-bold text-white text-base">TILCOR · Tadqiqotchi Kabineti</span>
+                    <span class="text-[10px] text-slate-400 block">Maʼlumotnoma kollokatsiyalarini lingvistik verifikatsiya qilish (Part 3.4)</span>
+                </div>
+            </a>
+        </div>
+        <div class="flex items-center gap-3">
+            <span class="text-xs px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-mono" id="statsCounter">Yuklanmoqda...</span>
+            <a href="/" class="text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 transition">Portalga qaytish</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
+        <!-- Controls & Filters -->
+        <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex flex-wrap items-center gap-3">
+                <input type="text" id="searchFilter" placeholder="Kollokatsiyani qidirish..." oninput="filterCollocations()"
+                    class="px-3.5 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64">
+                
+                <select id="sourceFilter" onchange="filterCollocations()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="all">Barcha manbalar</option>
+                    <option value="Cambridge">Cambridge Collocations</option>
+                    <option value="IELTS">IELTS Academic Collocations</option>
+                    <option value="1000">1000 English Collocations</option>
+                </select>
+
+                <select id="sampleFilter" onchange="filterCollocations()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="sample_100">Tanlangan 100 ta namuna (Pre-selected)</option>
+                    <option value="all">Barcha faol birliklar</option>
+                    <option value="has_corpus">Korpusda uchrashi borlar</option>
+                    <option value="check_failed">Tekshiruvdan oʻtmaganlar</option>
+                </select>
+            </div>
+
+            <div class="text-xs text-slate-400 flex items-center gap-2">
+                <span>Klaviatura: <kbd class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 font-mono text-[10px]">A</kbd> Tasdiqlash · <kbd class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 font-mono text-[10px]">E</kbd> Tahrirlash · <kbd class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 font-mono text-[10px]">R</kbd> Rad etish</span>
+            </div>
+        </div>
+
+        <!-- Collocations List -->
+        <div id="collocationsTable" class="space-y-3">
+            <div class="text-center py-12 text-slate-400 text-xs">Kollokatsiyalar yuklanmoqda...</div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+        let allCollocations = [];
+
+        async function loadCollocations() {
+            try {
+                const res = await fetch('/api/admin/collocations');
+                if (res.status === 401) {
+                    window.location.href = '/kirish';
+                    return;
+                }
+                const data = await res.json();
+                allCollocations = data.collocations || [];
+                document.getElementById('statsCounter').textContent = `Jami: ${allCollocations.length} ta faol birlik`;
+                filterCollocations();
+            } catch (err) {
+                document.getElementById('collocationsTable').innerHTML = `<div class="p-6 text-center text-rose-400 text-xs">Xatolik yuz berdi: ${err.message}</div>`;
+            }
+        }
+
+        function filterCollocations() {
+            const query = document.getElementById('searchFilter').value.toLowerCase().trim();
+            const source = document.getElementById('sourceFilter').value;
+            const sample = document.getElementById('sampleFilter').value;
+
+            const filtered = allCollocations.filter(c => {
+                if (query && !c.english.toLowerCase().includes(query)) return false;
+                if (source !== 'all' && !(c.sourceBook || '').includes(source)) return false;
+                if (sample === 'sample_100' && !c.is_sample_100) return false;
+                if (sample === 'has_corpus' && (!c.corpus_occurrences || c.corpus_occurrences === 0)) return false;
+                if (sample === 'check_failed') {
+                    const q = c.quality_checks || {};
+                    if (q.orthography_passed && q.form_passed && q.calque_free) return false;
+                }
+                return true;
+            });
+
+            renderTable(filtered.slice(0, 50));
+        }
+
+        function renderTable(items) {
+            const container = document.getElementById('collocationsTable');
+            if (items.length === 0) {
+                container.innerHTML = '<div class="p-8 text-center text-slate-400 text-xs bg-slate-800/40 rounded-2xl border border-slate-800">Ushbu filtr bo‘yicha kollokatsiyalar topilmadi.</div>';
+                return;
+            }
+
+            container.innerHTML = items.map((item, idx) => {
+                const variants = item.uzbek_variants || [];
+                const checks = item.quality_checks || {};
+                const checkBadges = `
+                    <span class="text-[10px] px-2 py-0.5 rounded ${checks.orthography_passed ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/60' : 'bg-rose-950/60 text-rose-300 border border-rose-800/60'}">Orfografiya: ${checks.orthography_passed ? '✓' : '✗'}</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded ${checks.form_passed ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/60' : 'bg-amber-950/60 text-amber-300 border border-amber-800/60'}">Shakl: ${checks.form_passed ? '✓' : 'ko‘rish kerak'}</span>
+                `;
+
+                return `
+                <div class="bg-slate-800/90 border border-slate-700/80 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-slate-600 transition">
+                    <div class="space-y-1.5 flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm sm:text-base font-bold text-white">${item.english}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-medium">${item.pattern || '—'}</span>
+                            ${item.is_sample_100 ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold uppercase">Namuna 100</span>' : ''}
+                        </div>
+                        <div class="text-xs text-slate-400 flex flex-wrap items-center gap-3">
+                            <span>Manba: <strong class="text-slate-300">${item.sourceBook || 'Reference'}</strong></span>
+                            ${item.corpus_occurrences ? `<span class="text-emerald-400 font-medium">Korpusda: ${item.corpus_occurrences} marta</span>` : '<span class="text-slate-500">Korpusda uchramaydi</span>'}
+                        </div>
+                        <div class="pt-1 flex flex-wrap items-center gap-2">
+                            <span class="text-xs text-slate-300">O‘zbekcha muqobillar:</span>
+                            ${variants.map(v => `
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 inline-flex items-center gap-1.5">
+                                    ${v.text}
+                                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-300 border border-indigo-800 uppercase font-mono">${v.source_class}</span>
+                                </span>
+                            `).join('')}
+                        </div>
+                        <div class="pt-1 flex items-center gap-2">
+                            ${checkBadges}
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="reviewAction('${item.id}', 'approve')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
+                            <i data-lucide="check" class="w-3.5 h-3.5"></i> Tasdiqlash
+                        </button>
+                        <button onclick="reviewAction('${item.id}', 'edit')" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-xs font-semibold transition flex items-center gap-1">
+                            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Tahrirlash
+                        </button>
+                        <button onclick="reviewAction('${item.id}', 'reject')" class="px-3 py-1.5 bg-rose-600/80 hover:bg-rose-600 text-white rounded-xl text-xs font-semibold transition flex items-center gap-1">
+                            <i data-lucide="x" class="w-3.5 h-3.5"></i> Rad etish
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        async function reviewAction(collocId, action) {
+            let newText = null;
+            if (action === 'edit') {
+                newText = prompt("Yangi o‘zbekcha muqobilni kiriting (rasmiy lotin imlosida):");
+                if (!newText) return;
+            }
+            try {
+                const res = await fetch('/api/admin/collocations/review', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: collocId, action, text: newText })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    // Update locally
+                    const it = allCollocations.find(c => c.id === collocId);
+                    if (it) {
+                        if (action === 'approve') {
+                            if (it.uzbek_variants && it.uzbek_variants[0]) {
+                                it.uzbek_variants[0].status = 'tasdiqlangan muqobil (tadqiqotchi)';
+                                it.uzbek_variants[0].source_class = 'tasdiqlangan';
+                            }
+                        } else if (action === 'edit' && newText) {
+                            it.uzbek_variants = [{
+                                text: newText,
+                                source_class: 'tasdiqlangan',
+                                form: 'kollokatsiya',
+                                status: 'tasdiqlangan muqobil (tadqiqotchi)'
+                            }];
+                            it.uzbek = newText;
+                        } else if (action === 'reject') {
+                            it.status = 'rejected';
+                            it.public_visible = false;
+                        }
+                    }
+                    filterCollocations();
+                } else {
+                    alert(data.error || "Xatolik yuz berdi");
+                }
+            } catch (err) {
+                alert("Server bilan bog'lanishda xatolik: " + err.message);
+            }
+        }
+
+        loadCollocations();
+    </script>
+</body>
+</html>

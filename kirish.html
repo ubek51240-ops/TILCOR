@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="uz" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirish | TILCOR — Parallel Korpus & Leksikografiya</title>
+    <meta name="robots" content="noindex, nofollow">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#eef2ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/tokens.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between antialiased selection:bg-indigo-500 selection:text-white">
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-black text-white text-base shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition">
+                    T
+                </div>
+                <div class="leading-tight">
+                    <span class="font-extrabold text-lg tracking-tight text-white block">TILCOR</span>
+                    <span class="text-[10px] text-slate-400 font-medium tracking-wider uppercase block">Xavfsiz Kirish</span>
+                </div>
+            </a>
+        </div>
+        <div>
+            <a href="/" class="text-xs text-slate-400 hover:text-indigo-400 transition flex items-center gap-1.5 font-medium py-1.5 px-3 rounded-lg hover:bg-slate-800">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>Asosiy sahifa</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 flex items-center justify-center p-4 sm:p-6">
+        <div class="w-full max-w-md bg-slate-800/90 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-violet-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 space-y-6">
+                <div class="text-center space-y-1.5">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mb-2">
+                        <i data-lucide="lock" class="w-6 h-6"></i>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white">Tizimga Kirish</h1>
+                    <p class="text-xs text-slate-400 max-w-xs mx-auto">Dissertatsiya platformasiga kirish</p>
+                </div>
+
+                <div id="loginAlert" class="hidden p-3 rounded-xl text-xs border font-medium"></div>
+
+                <form id="standaloneLoginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div class="space-y-1.5">
+                        <label for="username" class="block text-xs font-semibold text-slate-300">Foydalanuvchi nomi</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
+                                <i data-lucide="user" class="w-4 h-4"></i>
+                            </span>
+                            <input type="text" id="username" required autocomplete="username"
+                                class="w-full pl-9 pr-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                                data-i18n-placeholder="username_password" placeholder="Foydalanuvchi nomi">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="password" class="block text-xs font-semibold text-slate-300">Parol</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
+                                <i data-lucide="key" class="w-4 h-4"></i>
+                            </span>
+                            <input type="password" id="password" required autocomplete="current-password"
+                                class="w-full pl-9 pr-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                                placeholder="••••••••••••">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submitBtn"
+                        class="w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold rounded-xl text-sm shadow-lg shadow-indigo-600/25 transition flex items-center justify-center gap-2 mt-2">
+                        <span>Kirish</span>
+                        <i data-lucide="log-in" class="w-4 h-4"></i>
+                    </button>
+                </form>
+
+                
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 py-4 px-6 text-center text-xs text-slate-500">
+        TILCOR · 2026 — Parallel korpus va leksikografik tahlil platformasi. Barcha huquqlar himoyalangan.
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const alertBox = document.getElementById('loginAlert');
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            alertBox.className = 'hidden';
+            btn.disabled = true;
+            btn.innerHTML = '<span>Tekshirilmoqda...</span>';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    alertBox.className = 'p-3 rounded-xl text-xs border font-medium bg-emerald-950/60 border-emerald-700/60 text-emerald-300 block';
+                    alertBox.textContent = "Muvaffaqiyatli kirdingiz! Yo'naltirilmoqda...";
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 800);
+                } else {
+                    alertBox.className = 'p-3 rounded-xl text-xs border font-medium bg-rose-950/60 border-rose-700/60 text-rose-300 block';
+                    alertBox.textContent = data.error || "Login yoki parol noto'g'ri!";
+                    btn.disabled = false;
+                    btn.innerHTML = '<span>Kirish</span><i data-lucide="log-in" class="w-4 h-4"></i>';
+                    lucide.createIcons();
+                }
+            } catch (err) {
+                alertBox.className = 'p-3 rounded-xl text-xs border font-medium bg-rose-950/60 border-rose-700/60 text-rose-300 block';
+                alertBox.textContent = "Server bilan bog'lanishda xatolik yuz berdi.";
+                btn.disabled = false;
+                btn.innerHTML = '<span>Kirish</span><i data-lucide="log-in" class="w-4 h-4"></i>';
+                lucide.createIcons();
+            }
+        }
+    </script>
+</body>
+</html>

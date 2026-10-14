@@ -4,7 +4,7 @@ import paramiko
 
 HOST = "189.74.100.111"
 USER = "root"
-PASS = "AcL0hzLOh16zDoM$"
+PASS = os.environ['TILCOR_VPS_PASSWORD']
 
 TARJIMON_LOCAL = r"C:\Users\user\Desktop\tarjimon"
 TILORA_LOCAL = r"C:\Users\user\Desktop\TILORA"
@@ -14,7 +14,7 @@ TILORA_REMOTE = "/var/www/tilora"
 
 def sync_dir(sftp, local_dir, remote_dir, ignore_dirs=None):
     if ignore_dirs is None:
-        ignore_dirs = {'.git', '__pycache__', 'venv', '.idea', '.vscode'}
+        ignore_dirs = {'.git', '__pycache__', 'venv', '.idea', '.vscode', 'backups', 'scratch', '.system_generated'}
     
     try:
         sftp.stat(remote_dir)

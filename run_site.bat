@@ -8,9 +8,7 @@ echo ===================================================================
 echo.
 echo Server ishga tushirilmoqda...
 echo Xavfsizlik: Tizim yopiq va autentifikatsiya orqali himoyalangan.
-echo Kirish ma'lumotlari:
-echo   - Tadqiqotchi (Admin):   admin    / tilcor_phd_admin_2026
-echo   - Ilmiy rahbar (Reviewer): reviewer / tilcor_supervisor_2026
+echo Admin paroli: secrets\admin.password faylida yoki TILCOR_ADMIN_PASSWORD muhit o'zgaruvchisida.
 echo.
 python server.py --port 5050 --env production
 pause
