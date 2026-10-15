@@ -2719,7 +2719,9 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             if item:
                 import search_plus
                 pairs = search_plus.occurrence_pairs(item, corpus_by_id())
-                self.send_page(ui_components.render_collocation_detail(lang, is_admin, item, pairs), lang)
+                inet_map = get_internet_equivalents() if item.get('lang') == 'en' else {}
+                inet_eq = inet_map.get((item.get('lemma') or '').lower()) or inet_map.get((item.get('display') or '').lower())
+                self.send_page(ui_components.render_collocation_detail(lang, is_admin, item, pairs, inet_eq=inet_eq), lang)
                 return
             ref = next((c for c in get_active_collocations() if str(c.get('id')) == colloc_id), None)
             if ref:
@@ -3151,6 +3153,27 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
 # =====================================================================
 # Search pipeline used by the public pages: unified search + word alignment layer
 # =====================================================================
+# INTERNET sinfidagi (D-bo'lim) ingliz kollokatsiyalarining manbali o'zbekcha muqobillari.
+# Har bir yozuv manba nomi, URL va murojaat sanasi bilan; tadqiqotchi tasdig'igacha
+# alohida yorliq bilan ko'rsatiladi, statistikaga kirmaydi.
+_INET_EQ = {}
+
+def get_internet_equivalents():
+    global _INET_EQ
+    if not _INET_EQ:
+        p = os.path.join(DIRECTORY, 'data', 'internet_equivalents.json')
+        if os.path.exists(p):
+            try:
+                with open(p, 'r', encoding='utf-8') as f:
+                    raw = json.load(f)
+                _INET_EQ = {(r.get('en') or '').lower(): r for r in raw
+                            if r.get('status') == 'topildi' and r.get('equivalents')}
+                print(f"[*] Internet muqobillari yuklandi: {len(_INET_EQ)} ta")
+            except Exception as e:
+                print(f"[!] internet_equivalents.json o'qishda xatolik: {e}")
+                _INET_EQ = {}
+    return _INET_EQ
+
 _CORPUS_BY_ID = {}
 
 def corpus_by_id():

@@ -396,5 +396,8 @@
   "home_link_corpus": "The books, translators, editions and number of pairs",
   "did_you_mean": "Did you mean (similar words found in the corpus):",
   "rate_limited": "The number of requests is temporarily limited. Please try again in a minute.",
-  "freq_pm": "≈ {n} per million words."
+  "freq_pm": "≈ {n} per million words.",
+  "inet_eq_title": "Equivalents from internet sources",
+  "inet_eq_note": "The equivalents below come from open online dictionaries and academic sources; each is shown with its source, link and access date. They are not corpus data and are excluded from the statistics until the researcher confirms them.",
+  "inet_eq_badge": "Internet source — awaiting researcher confirmation"
 }

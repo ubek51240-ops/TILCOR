@@ -27,6 +27,15 @@ Har bir bosqichda o‘tkazilgan avtomatlashtirilgan va qo‘lda bajarilgan sinov
 
 v3.7 holati: **tilcor.uz da jonli**. VPS zaxirasi: /root/tilcor_backups/tilcor_before_v37_20261015_115123.tar.gz
 
+## v3.7.2 Sinovlari — 2026-10-15 (internet muqobillari)
+
+| № | Sinov | Natija |
+|---|-------|--------|
+| 1 | 120 ta nomzod bo‘yicha 4 ta mustaqil qidiruv jarayoni; 29 topildi / 91 topilmadi; URLsiz yoki mashina-tarjima manbali muqobillar avtomatik rad (3 ta) | ISHLAYDI |
+| 2 | Namunaviy manbalarni qo‘lda tekshirish: uz.wiktionary (katta xotin), en.wiktionary (kampir, juvon), Glosbe (o‘tgan yil) — hammasi ochildi, matn tasdiqlandi | ISHLAYDI |
+| 3 | Lokal: /kollokatsiya/en-a6bb116b06 (old woman), en-a6eca9a7bc (closed the door), en-789a864a39 (run away) sahifalarida «Internet manbalardagi muqobillar» bo‘limi chiqadi; muqobilsiz sahifada (old man) chiqmaydi | ISHLAYDI |
+| 4 | data/internet_equivalents.json ommaviy berilmaydi (404) | ISHLAYDI |
+
 Holat: lokal. tilcor.uz ga hali joylanmagan.
 
 ## 5-Bosqich (Step 05) Sinovlari — 2026-10-13

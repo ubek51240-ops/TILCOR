@@ -343,6 +343,7 @@ body:not(.tc) .tc-header *, body:not(.tc) .tc-topbar *, body:not(.tc) .tc-drawer
 .tc-badge { display: inline-block; font-size: 12px; line-height: 1; padding: 6px 9px; border-radius: 999px; border: 1px solid var(--rule-strong); color: var(--muted); white-space: nowrap; }
 .tc-badge--tile { border-color: var(--tile); color: var(--tile); }
 .tc-badge--lapis { border-color: var(--lapis); color: var(--lapis); }
+.tc-badge--amber { border-color: var(--gold); color: var(--gold); }
 .tc-legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 8px; }
 
 /* ---------- tables ---------- */

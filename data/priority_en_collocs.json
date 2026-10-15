@@ -1,0 +1,722 @@
+[
+ {
+  "id": "en-a6bb116b06",
+  "en": "old woman",
+  "pattern": "adjective + noun",
+  "freq": 79
+ },
+ {
+  "id": "en-24d391fb4a",
+  "en": "come back",
+  "pattern": "verb + adverb",
+  "freq": 30
+ },
+ {
+  "id": "en-a0128c2506",
+  "en": "left hand",
+  "pattern": "adjective + noun",
+  "freq": 30
+ },
+ {
+  "id": "en-c04f8c8d6a",
+  "en": "know best",
+  "pattern": "verb + adverb",
+  "freq": 29
+ },
+ {
+  "id": "en-e3231729a7",
+  "en": "young girl",
+  "pattern": "adjective + noun",
+  "freq": 27
+ },
+ {
+  "id": "en-64f994c3aa",
+  "en": "opened her eyes",
+  "pattern": "verb + noun",
+  "freq": 23
+ },
+ {
+  "id": "en-04f545f95c",
+  "en": "take care",
+  "pattern": "verb + noun",
+  "freq": 21
+ },
+ {
+  "id": "en-2742ace2e9",
+  "en": "right hand",
+  "pattern": "adjective + noun",
+  "freq": 20
+ },
+ {
+  "id": "en-19467cf886",
+  "en": "man saw",
+  "pattern": "noun + verb",
+  "freq": 18
+ },
+ {
+  "id": "en-9ce4d80380",
+  "en": "shaking his head",
+  "pattern": "verb + noun",
+  "freq": 18
+ },
+ {
+  "id": "en-943236e561",
+  "en": "young wife",
+  "pattern": "adjective + noun",
+  "freq": 17
+ },
+ {
+  "id": "en-e996d72801",
+  "en": "cart driver",
+  "pattern": "noun + noun",
+  "freq": 16
+ },
+ {
+  "id": "en-4bcc4bd5b5",
+  "en": "last night",
+  "pattern": "adjective + noun",
+  "freq": 16
+ },
+ {
+  "id": "en-f2b4281e96",
+  "en": "man thought",
+  "pattern": "noun + verb",
+  "freq": 15
+ },
+ {
+  "id": "en-641a7f6ad8",
+  "en": "put both hands",
+  "pattern": "verb + noun",
+  "freq": 15
+ },
+ {
+  "id": "en-06e87be8ca",
+  "en": "raised her voice",
+  "pattern": "verb + noun",
+  "freq": 15
+ },
+ {
+  "id": "en-f8eda71cc2",
+  "en": "opened the door",
+  "pattern": "verb + noun",
+  "freq": 13
+ },
+ {
+  "id": "en-e75a4c6da3",
+  "en": "great fish",
+  "pattern": "adjective + noun",
+  "freq": 12
+ },
+ {
+  "id": "en-c33897d1f0",
+  "en": "lowered his voice",
+  "pattern": "verb + noun",
+  "freq": 12
+ },
+ {
+  "id": "en-515c8bea56",
+  "en": "read newspapers",
+  "pattern": "verb + noun",
+  "freq": 12
+ },
+ {
+  "id": "en-a6ed582bda",
+  "en": "hear her voice",
+  "pattern": "verb + noun",
+  "freq": 11
+ },
+ {
+  "id": "en-8fc3ff3e60",
+  "en": "lifted his head",
+  "pattern": "verb + noun",
+  "freq": 11
+ },
+ {
+  "id": "en-859586e1bd",
+  "en": "look in eye",
+  "pattern": "verb + preposition + noun",
+  "freq": 11
+ },
+ {
+  "id": "en-5df2a2cc18",
+  "en": "fish came",
+  "pattern": "noun + verb",
+  "freq": 10
+ },
+ {
+  "id": "en-424471fa99",
+  "en": "give their money",
+  "pattern": "verb + noun",
+  "freq": 10
+ },
+ {
+  "id": "en-f13a0fce0d",
+  "en": "have our fun",
+  "pattern": "verb + noun",
+  "freq": 10
+ },
+ {
+  "id": "en-719fb3a65d",
+  "en": "spent the night",
+  "pattern": "verb + noun",
+  "freq": 10
+ },
+ {
+  "id": "en-da120c15a6",
+  "en": "took two steps",
+  "pattern": "verb + noun",
+  "freq": 10
+ },
+ {
+  "id": "en-9c42f44701",
+  "en": "come home",
+  "pattern": "verb + adverb",
+  "freq": 9
+ },
+ {
+  "id": "en-64b94e46b2",
+  "en": "had no choice",
+  "pattern": "verb + noun",
+  "freq": 9
+ },
+ {
+  "id": "en-f83b29ef97",
+  "en": "heard her daughter’s words",
+  "pattern": "verb + noun",
+  "freq": 9
+ },
+ {
+  "id": "en-343caca077",
+  "en": "slept soundly",
+  "pattern": "verb + adverb",
+  "freq": 9
+ },
+ {
+  "id": "en-22eb0d476e",
+  "en": "young woman",
+  "pattern": "adjective + noun",
+  "freq": 9
+ },
+ {
+  "id": "en-350a8b1e16",
+  "en": "big fish",
+  "pattern": "adjective + noun",
+  "freq": 8
+ },
+ {
+  "id": "en-a6eca9a7bc",
+  "en": "closed the door",
+  "pattern": "verb + noun",
+  "freq": 8
+ },
+ {
+  "id": "en-9b87b3cd96",
+  "en": "dear friend",
+  "pattern": "adjective + noun",
+  "freq": 8
+ },
+ {
+  "id": "en-c3db93e117",
+  "en": "eldest wife",
+  "pattern": "adjective + noun",
+  "freq": 8
+ },
+ {
+  "id": "en-2357482cbc",
+  "en": "gave a brave answer",
+  "pattern": "verb + noun",
+  "freq": 8
+ },
+ {
+  "id": "en-8159fca1c3",
+  "en": "man knew",
+  "pattern": "noun + verb",
+  "freq": 8
+ },
+ {
+  "id": "en-eca25e57d8",
+  "en": "new-method",
+  "pattern": "adjective + noun",
+  "freq": 8
+ },
+ {
+  "id": "en-8ae16b894b",
+  "en": "next morning",
+  "pattern": "adjective + noun",
+  "freq": 8
+ },
+ {
+  "id": "en-789a864a39",
+  "en": "run away",
+  "pattern": "verb + adverb",
+  "freq": 8
+ },
+ {
+  "id": "en-6f3c0bf5bb",
+  "en": "wash your hands",
+  "pattern": "verb + noun",
+  "freq": 8
+ },
+ {
+  "id": "en-c71b58cb44",
+  "en": "dark water",
+  "pattern": "adjective + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-9cf9f0876d",
+  "en": "entering the house",
+  "pattern": "verb + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-7c2a9493fa",
+  "en": "give my daughter",
+  "pattern": "verb + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-e98ca33e1e",
+  "en": "give to man",
+  "pattern": "verb + preposition + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-5628970e9c",
+  "en": "give a little water",
+  "pattern": "verb + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-7375ffaff0",
+  "en": "have a chance",
+  "pattern": "verb + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-23ac436cd4",
+  "en": "have children",
+  "pattern": "verb + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-80c8a6d4d0",
+  "en": "had a different effect",
+  "pattern": "verb + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-dad0cfd996",
+  "en": "have money",
+  "pattern": "verb + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-eb920192c4",
+  "en": "have wife",
+  "pattern": "verb + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-790fe91a9a",
+  "en": "keep her eyes",
+  "pattern": "verb + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-8b7039a5be",
+  "en": "lock the door",
+  "pattern": "verb + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-ec7416b8ff",
+  "en": "looked around",
+  "pattern": "verb + adverb",
+  "freq": 7
+ },
+ {
+  "id": "en-01c993787d",
+  "en": "moved slowly",
+  "pattern": "verb + adverb",
+  "freq": 7
+ },
+ {
+  "id": "en-1c6c90ab51",
+  "en": "previous night",
+  "pattern": "adjective + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-23e9c6e68b",
+  "en": "reserve coils",
+  "pattern": "noun + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-ca19090a9c",
+  "en": "sharks come",
+  "pattern": "noun + verb",
+  "freq": 7
+ },
+ {
+  "id": "en-97930b7d37",
+  "en": "stood in front",
+  "pattern": "verb + preposition + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-002cff75e5",
+  "en": "suddenly stopped",
+  "pattern": "verb + adverb",
+  "freq": 7
+ },
+ {
+  "id": "en-be9906aa97",
+  "en": "tomorrow morning",
+  "pattern": "noun + noun",
+  "freq": 7
+ },
+ {
+  "id": "en-c0be6608ae",
+  "en": "turned around",
+  "pattern": "verb + adverb",
+  "freq": 7
+ },
+ {
+  "id": "en-aae517c5ba",
+  "en": "turned back",
+  "pattern": "verb + adverb",
+  "freq": 7
+ },
+ {
+  "id": "en-2c59580da2",
+  "en": "worked his way back",
+  "pattern": "verb + adverb",
+  "freq": 7
+ },
+ {
+  "id": "en-5a531fce2d",
+  "en": "answer question",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-af10a12694",
+  "en": "boat moved",
+  "pattern": "noun + verb",
+  "freq": 6
+ },
+ {
+  "id": "en-218126e0b7",
+  "en": "bone spur",
+  "pattern": "noun + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-177d7bb16f",
+  "en": "city girls",
+  "pattern": "noun + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-02c420c27c",
+  "en": "come closer",
+  "pattern": "verb + adverb",
+  "freq": 6
+ },
+ {
+  "id": "en-0e25595553",
+  "en": "maybe he will come",
+  "pattern": "verb + adverb",
+  "freq": 6
+ },
+ {
+  "id": "en-e93b5cde89",
+  "en": "drank tea",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-5a4db69c14",
+  "en": "elder co",
+  "pattern": "adjective + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-fefa97bcf5",
+  "en": "elder master",
+  "pattern": "adjective + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-e9c615ef88",
+  "en": "find a man",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-d8a09774b3",
+  "en": "best friend",
+  "pattern": "adjective + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-478bcf47ba",
+  "en": "have friends",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-9856bf29df",
+  "en": "have the right",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-e54e9a2386",
+  "en": "held the line",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-8585e203d4",
+  "en": "knows our language",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-7d93ca73c8",
+  "en": "last words",
+  "pattern": "adjective + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-e10fde8c04",
+  "en": "last year",
+  "pattern": "adjective + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-7031acca03",
+  "en": "leaned back",
+  "pattern": "verb + adverb",
+  "freq": 6
+ },
+ {
+  "id": "en-5ff9fb8d1c",
+  "en": "looked back",
+  "pattern": "verb + adverb",
+  "freq": 6
+ },
+ {
+  "id": "en-f88845dd7f",
+  "en": "make money",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-fb22086578",
+  "en": "make another turn",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-27be7e7218",
+  "en": "man looked",
+  "pattern": "noun + verb",
+  "freq": 6
+ },
+ {
+  "id": "en-8a1af115ac",
+  "en": "barely managed",
+  "pattern": "verb + adverb",
+  "freq": 6
+ },
+ {
+  "id": "en-2c5491620d",
+  "en": "moved closer",
+  "pattern": "verb + adverb",
+  "freq": 6
+ },
+ {
+  "id": "en-a3e1f92792",
+  "en": "moving quickly",
+  "pattern": "verb + adverb",
+  "freq": 6
+ },
+ {
+  "id": "en-6f9a4603f3",
+  "en": "open door",
+  "pattern": "adjective + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-497246f4c4",
+  "en": "poor girl",
+  "pattern": "adjective + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-4ab969e3aa",
+  "en": "poor woman",
+  "pattern": "adjective + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-69242f9982",
+  "en": "see the fish",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-dfb2d38898",
+  "en": "sweet words",
+  "pattern": "adjective + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-b7031735f1",
+  "en": "take back",
+  "pattern": "verb + adverb",
+  "freq": 6
+ },
+ {
+  "id": "en-b8def368ac",
+  "en": "took both her hands",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-f9864815b2",
+  "en": "take in hand",
+  "pattern": "verb + preposition + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-62c3c612fd",
+  "en": "take land",
+  "pattern": "verb + noun",
+  "freq": 6
+ },
+ {
+  "id": "en-428d52ce8c",
+  "en": "asked her mother",
+  "pattern": "verb + noun",
+  "freq": 5
+ },
+ {
+  "id": "en-f192ed78a0",
+  "en": "suddenly he asked",
+  "pattern": "verb + adverb",
+  "freq": 5
+ },
+ {
+  "id": "en-b1825ee33f",
+  "en": "blue water",
+  "pattern": "adjective + noun",
+  "freq": 5
+ },
+ {
+  "id": "en-a0c8fd7420",
+  "en": "boy asked",
+  "pattern": "noun + verb",
+  "freq": 5
+ },
+ {
+  "id": "en-cabed0595f",
+  "en": "boy came",
+  "pattern": "noun + verb",
+  "freq": 5
+ },
+ {
+  "id": "en-d2586e6116",
+  "en": "cleared his throat",
+  "pattern": "verb + noun",
+  "freq": 5
+ },
+ {
+  "id": "en-e75e6799b3",
+  "en": "came a little later",
+  "pattern": "verb + adverb",
+  "freq": 5
+ },
+ {
+  "id": "en-60893b8f0f",
+  "en": "come soon",
+  "pattern": "verb + adverb",
+  "freq": 5
+ },
+ {
+  "id": "en-20b9de0b4d",
+  "en": "dear child",
+  "pattern": "adjective + noun",
+  "freq": 5
+ },
+ {
+  "id": "en-fb392f01e6",
+  "en": "die already",
+  "pattern": "verb + adverb",
+  "freq": 5
+ },
+ {
+  "id": "en-e736c9aba4",
+  "en": "do mingboshi’s work",
+  "pattern": "verb + noun",
+  "freq": 5
+ },
+ {
+  "id": "en-04ddce94c6",
+  "en": "dutar playing",
+  "pattern": "noun + noun",
+  "freq": 5
+ },
+ {
+  "id": "en-37c34ad6bb",
+  "en": "far side",
+  "pattern": "adjective + noun",
+  "freq": 5
+ },
+ {
+  "id": "en-20a6ed2ae5",
+  "en": "father not come",
+  "pattern": "noun + verb",
+  "freq": 5
+ },
+ {
+  "id": "en-31e1caf0b0",
+  "en": "fish had turned",
+  "pattern": "noun + verb",
+  "freq": 5
+ },
+ {
+  "id": "en-1ee01ad73b",
+  "en": "gave her a check",
+  "pattern": "verb + noun",
+  "freq": 5
+ },
+ {
+  "id": "en-674598cad7",
+  "en": "gives life",
+  "pattern": "verb + noun",
+  "freq": 5
+ },
+ {
+  "id": "en-cd958d06d9",
+  "en": "gave more line",
+  "pattern": "verb + noun",
+  "freq": 5
+ },
+ {
+  "id": "en-7ee67cc43f",
+  "en": "have some business",
+  "pattern": "verb + noun",
+  "freq": 5
+ },
+ {
+  "id": "en-50395989a4",
+  "en": "had no desire",
+  "pattern": "verb + noun",
+  "freq": 5
+ }
+]

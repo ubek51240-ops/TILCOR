@@ -396,5 +396,8 @@
   "home_link_corpus": "Asarlar, tarjimonlar, nashrlar va juftliklar soni",
   "did_you_mean": "Buni nazarda tutdingizmi (korpusda uchraydigan yaqin so‘zlar):",
   "rate_limited": "So‘rovlar soni vaqtincha cheklandi. Iltimos, bir daqiqadan so‘ng qayta urinib ko‘ring.",
-  "freq_pm": "Million so‘zga ≈ {n} marta."
+  "freq_pm": "Million so‘zga ≈ {n} marta.",
+  "inet_eq_title": "Internet manbalardagi muqobillar",
+  "inet_eq_note": "Quyidagi muqobillar internetdagi ochiq lug‘at va akademik manbalardan olingan; har biri manbasi, havolasi va murojaat sanasi bilan ko‘rsatiladi. Ular korpus ma’lumoti emas va tadqiqotchi tasdig‘igacha statistikaga kirmaydi.",
+  "inet_eq_badge": "Internet manba — tadqiqotchi tasdig‘i kutilmoqda"
 }

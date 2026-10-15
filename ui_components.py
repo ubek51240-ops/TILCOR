@@ -877,7 +877,7 @@ def _uniq_forms(forms, exclude=''):
     return out
 
 
-def render_collocation_detail(lang, is_admin, item, pairs):
+def render_collocation_detail(lang, is_admin, item, pairs, inet_eq=None):
     """All stored occurrences of one corpus collocation, each as a facing pair."""
     q_lang = item['lang']
     o_lang = other_lang(q_lang)
@@ -944,14 +944,33 @@ def render_collocation_detail(lang, is_admin, item, pairs):
             judged = ''
         assoc_sec = ('<section class="tc-section"><h2>%s</h2><p class="tc-section__note">%s</p><div class="tc-panel" style="margin-top:12px">%s%s</div></section>'
                      % (T(lang, 'coll_ref_title'), T(lang, 'coll_assoc_note'), groups, judged))
+    # INTERNET sinfidagi muqobillar (D-bo'lim): faqat manba + URL + murojaat sanasi bilan,
+    # tadqiqotchi tasdig'igacha alohida yorliqda, statistikaga kirmaydi.
+    inet_sec = ''
+    eqs = (inet_eq or {}).get('equivalents') or []
+    if eqs:
+        rows = ''
+        for e in eqs[:3]:
+            src_line = '%s — <a href="%s" rel="nofollow">%s</a>, %s: %s' % (
+                html.escape(e.get('source_name') or ''), html.escape(e.get('url') or '#'),
+                html.escape((e.get('url') or '').split('/')[2] if '://' in (e.get('url') or '') else e.get('url') or ''),
+                T(lang, 'access_date'), html.escape(e.get('access_date') or ''))
+            note = e.get('note') or ''
+            rows += ('<div style="margin-top:10px"><span class="tc-serif" lang="uz" style="font-size:1.05rem">%s</span>'
+                     '<div class="tc-small tc-muted" style="margin-top:3px">%s%s</div></div>'
+                     % (html.escape(e.get('uz') or ''), src_line,
+                        (' · ' + html.escape(note)) if note else ''))
+        inet_sec = ('<section class="tc-section"><h2>%s</h2><p class="tc-section__note">%s</p>'
+                    '<div class="tc-panel" style="margin-top:12px"><span class="tc-badge tc-badge--amber">%s</span>%s</div></section>'
+                    % (T(lang, 'inet_eq_title'), T(lang, 'inet_eq_note'), T(lang, 'inet_eq_badge'), rows))
     shown_note = ''
     if item.get('freq', 0) > len(pairs):
         shown_note = '<p class="tc-section__note tc-num">%s</p>' % T(lang, 'coll_examples_first').replace('{n}', format_number(len(pairs), lang))
     body = ('<p class="tc-small"><a href="%s">%s</a></p><h1 lang="%s" style="margin-top:8px">%s</h1><p class="tc-lead">%s</p>%s'
-            '%s<section class="tc-section"><h2>%s <span class="tc-count tc-num">%s</span></h2>%s%s<div style="margin-top:12px">%s</div></section>'
+            '%s%s<section class="tc-section"><h2>%s <span class="tc-count tc-num">%s</span></h2>%s%s<div style="margin-top:12px">%s</div></section>'
             '<section class="tc-section"><h2>%s</h2><p class="tc-panel tc-small" style="margin-top:12px;font-family:var(--serif)">%s</p></section>'
             % (with_lang('/kollokatsiyalar?til=' + q_lang, lang), T(lang, 'coll_page_title'), q_lang, html.escape(item.get('display') or ''),
-               lead, tr_sec, assoc_sec, T(lang, 'sec_sentences'), format_number(len(pairs), lang), shown_note, legend(lang), cards,
+               lead, tr_sec, assoc_sec, inet_sec, T(lang, 'sec_sentences'), format_number(len(pairs), lang), shown_note, legend(lang), cards,
                T(lang, 'perm_citation_page'), html.escape(cite)))
     return page(lang, item.get('display') or '', body, '/kollokatsiyalar', is_admin)
 

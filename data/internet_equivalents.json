@@ -1,0 +1,961 @@
+[
+ {
+  "en": "old woman",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "kampir",
+    "source_name": "English Wiktionary, 'old woman' translations",
+    "source_type": "vikilugat",
+    "url": "https://en.wiktionary.org/wiki/old_woman",
+    "access_date": "2026-10-15",
+    "evidence": "Uzbek: kampir (uz), ajuz (uz), ajuza (uz)",
+    "note": "",
+    "reviewed": false
+   },
+   {
+    "uz": "ajuz",
+    "source_name": "English Wiktionary, 'old woman' translations",
+    "source_type": "vikilugat",
+    "url": "https://en.wiktionary.org/wiki/old_woman",
+    "access_date": "2026-10-15",
+    "evidence": "Uzbek: kampir (uz), ajuz (uz), ajuza (uz)",
+    "note": "",
+    "reviewed": false
+   },
+   {
+    "uz": "ajuza",
+    "source_name": "English Wiktionary, 'old woman' translations",
+    "source_type": "vikilugat",
+    "url": "https://en.wiktionary.org/wiki/old_woman",
+    "access_date": "2026-10-15",
+    "evidence": "Uzbek: kampir (uz), ajuz (uz), ajuza (uz)",
+    "note": "",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "know best",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "take care",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "shaking his head",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "bosh chayqamoq",
+    "source_name": "Lingvospektr: The role of 'Head' as a semantic center in lexical fields: English and Uzbek compared",
+    "source_type": "akademik_maqola",
+    "url": "https://lingvospektr.uz/index.php/lngsp/article/view/1150",
+    "access_date": "2026-10-15",
+    "evidence": "bosh chayqamoq (shake the head - to express negation or lament)",
+    "note": "Collocational core (lemma 'shake one's head'); inflected form 'shaking his head' not separately attested.",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "last night",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "o'tgan tun",
+    "source_name": "An Uzbek Glossary (compiled by Hervé Guérin), Univ. of Chicago CEERES",
+    "source_type": "boshqa",
+    "url": "https://humanities-web.s3.us-east-2.amazonaws.com/ceeres/prod/2021-06/An%20Uzbek%20Glossary%20(Compiled%20by%20Herve%20Guerin).pdf",
+    "access_date": "2026-10-15",
+    "evidence": "TUN ... yarim tun ... o'tgan tun | night | midnight ... | last night (entry under TUN; two-column PDF layout, 'o'tgan tun' glossed 'last night')",
+    "note": "Two-column glossary PDF; Uzbek headword column pairs 'o'tgan tun' with gloss 'last night'.",
+    "reviewed": false
+   },
+   {
+    "uz": "o'tgan kecha",
+    "source_name": "Glosbe English-Uzbek Dictionary (translation memory misoli, 'night' sahifasi)",
+    "source_type": "lugat_sayt",
+    "url": "https://glosbe.com/en/uz/night",
+    "access_date": "2026-10-15",
+    "evidence": "English: \"Did you call me last night?\" — Uzbek: \"O'tgan kecha menga telefon qildingmi?\"",
+    "note": "Glosbe'da 'last night' uchun alohida lug'at maqolasi yo'q; ekvivalent 'night' sahifasidagi parallel misol gapdan hujjatlashtirildi (to'liq ibora gap ichida uchraydi).",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "raised her voice",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "baland ovoz bilan gapir-",
+    "source_name": "An Uzbek Glossary (compiled by Hervé Guérin), Univ. of Chicago CEERES",
+    "source_type": "boshqa",
+    "url": "https://humanities-web.s3.us-east-2.amazonaws.com/ceeres/prod/2021-06/An%20Uzbek%20Glossary%20(Compiled%20by%20Herve%20Guerin).pdf",
+    "access_date": "2026-10-15",
+    "evidence": "baland ovoz bilan gapir- | past ovoz bilan gapir- ... speak in a loud voice | speak in a low voice",
+    "note": "Approximate functional equivalent only: source glosses it 'speak in a loud voice', not the exact collocation 'raise one's voice' (ovozini ko'tarmoq not found in verifiable sources).",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "lowered his voice",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "past ovoz bilan gapir-",
+    "source_name": "An Uzbek Glossary (compiled by Hervé Guérin), Univ. of Chicago CEERES",
+    "source_type": "boshqa",
+    "url": "https://humanities-web.s3.us-east-2.amazonaws.com/ceeres/prod/2021-06/An%20Uzbek%20Glossary%20(Compiled%20by%20Herve%20Guerin).pdf",
+    "access_date": "2026-10-15",
+    "evidence": "baland ovoz bilan gapir- | past ovoz bilan gapir- ... speak in a loud voice | speak in a low voice",
+    "note": "Approximate functional equivalent only: source glosses it 'speak in a low voice', not the exact collocation 'lower one's voice'.",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "lifted his head",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "bosh ko'tarmoq",
+    "source_name": "Lingvospektr: The role of 'Head' as a semantic center in lexical fields: English and Uzbek compared",
+    "source_type": "akademik_maqola",
+    "url": "https://lingvospektr.uz/index.php/lngsp/article/view/1150",
+    "access_date": "2026-10-15",
+    "evidence": "bosh ko'tarmoq (lift up the head - used for regaining courage or, in negative form, for being unable to face others)",
+    "note": "Collocational core (lemma 'lift one's head'); source also gives 'boshini baland ko'tarib yurmoq' – 'to walk with head held high'.",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "give their money",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "took two steps",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "qadam bos-",
+    "source_name": "An Uzbek Glossary (compiled by Hervé Guérin), Univ. of Chicago CEERES",
+    "source_type": "boshqa",
+    "url": "https://humanities-web.s3.us-east-2.amazonaws.com/ceeres/prod/2021-06/An%20Uzbek%20Glossary%20(Compiled%20by%20Herve%20Guerin).pdf",
+    "access_date": "2026-10-15",
+    "evidence": "QADAM ... qadam bos- | qadam qo'y- | step, pace | step forward | step forward",
+    "note": "Collocational core only ('to step'); the whole phrase 'took two steps' is a free combination, numeral not attested.",
+    "reviewed": false
+   },
+   {
+    "uz": "qadam qo'y-",
+    "source_name": "An Uzbek Glossary (compiled by Hervé Guérin), Univ. of Chicago CEERES",
+    "source_type": "boshqa",
+    "url": "https://humanities-web.s3.us-east-2.amazonaws.com/ceeres/prod/2021-06/An%20Uzbek%20Glossary%20(Compiled%20by%20Herve%20Guerin).pdf",
+    "access_date": "2026-10-15",
+    "evidence": "QADAM ... qadam bos- | qadam qo'y- | step, pace | step forward | step forward",
+    "note": "Collocational core only ('to step forward').",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "heard her daughter's words",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "big fish",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "eldest wife",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "katta xotin",
+    "source_name": "Vikilug'at (uz.wiktionary.org), 'katta' entry",
+    "source_type": "vikilugat",
+    "url": "https://uz.wiktionary.org/wiki/katta",
+    "access_date": "2026-10-15",
+    "evidence": "Katta xotin - etn. birinchi, bosh xotin. ... ~ xotin 1) ист. старшая жена; 2) женщина в летах, немолодая женщина",
+    "note": "Uzbek Wiktionary defines 'katta xotin' as 'first, chief wife'; Russian gloss in same entry: 'старшая жена' (senior/eldest wife). Ethnographic/historical term for the senior co-wife.",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "new-method",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "usul-i jadid (usuli jadid)",
+    "source_name": "Wikipedia, 'Jadid'",
+    "source_type": "boshqa",
+    "url": "https://en.wikipedia.org/wiki/Jadid",
+    "access_date": "2026-10-15",
+    "evidence": "Jadids were marked by their widespread use of print media in promoting their messages and advocacy of the Usul-i Jadid or 'new method' of teaching in the maktab of the empire, from which the term 'Jadidism' is derived.",
+    "note": "Historical Jadid term for 'new-method' (schools/teaching); Wikipedia explicitly equates Usul-i Jadid with 'new method'. Encyclopedia, not a bilingual dictionary — verify against an Uzbek academic source.",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "wash your hands",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "give my daughter",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "have a chance",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "have money",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "lock the door",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "previous night",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "stood in front",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "turned around",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "answer question",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "javob bermoq",
+    "source_name": "Glosbe English–Uzbek dictionary (entry: answer)",
+    "source_type": "lugat_sayt",
+    "url": "https://glosbe.com/en/uz/answer",
+    "access_date": "2026-10-15",
+    "evidence": "javob bermoq — \"to make a reply or response to\"; example: \"Sulaymonda ushbu savolga javob topish uchun yaxshi imkoniyati bo'lgan\"",
+    "note": "Lug'atda 'answer' fe'li uchun 'javob'/'javob bermoq' berilgan; sahifadagi misol gapida 'savolga javob' birikmasi uchraydi. 'answer a question' alohida modda sifatida yo'q (yadro bo'yicha ekvivalent).",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "city girls",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "drank tea",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "find a man",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "have the right",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "huquqiga ega (bo'lmoq) / huquqiga egadir",
+    "source_name": "Inson huquqlari umumjahon deklaratsiyasi (UDHR), o'zbekcha matn — Lexilogos",
+    "source_type": "boshqa",
+    "url": "https://www.lexilogos.com/declaration/ouzbek.htm",
+    "access_date": "2026-10-15",
+    "evidence": "Har bir inson fikr, bijdon va din erkinligi huquqiga egadir.",
+    "note": "Rasmiy parallel hujjat: inglizcha UDHR matnidagi 'Everyone has the right to...' ushbu o'zbekcha matnda 'Har bir inson ... huquqiga egadir' bilan beriladi. Glosbe'da 'right' → 'huquq' ham tasdiqlangan (https://glosbe.com/en/uz/right), lekin 'have the ",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "last words",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "looked back",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "man looked",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "moving quickly",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "poor woman",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "bechora",
+    "source_name": "Glosbe English–Uzbek dictionary (entry: poor)",
+    "source_type": "lugat_sayt",
+    "url": "https://glosbe.com/en/uz/poor",
+    "access_date": "2026-10-15",
+    "evidence": "bechora, faqir, gʻarib are the top translations of \"poor\" into Uzbek. ... Ular to'xtab, bechora odamga nigoh tashlashdi.",
+    "note": "Faqat kollokatsiya o'zagi (poor = bechora) hujjatlashtirildi; Glosbe misolida parallel holat 'poor man' → 'bechora odam' ko'rinadi. 'Poor woman' butun ibora sifatida lug'atlarda topilmadi.",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "take back",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "take land",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "blue water",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "cleared his throat",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "dear child",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "dutar playing",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "fish had turned",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "gave more line",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "come back",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "qaytmoq (uyga qaytmoq)",
+    "source_name": "Tatoeba parallel jumlalar bazasi",
+    "source_type": "boshqa",
+    "url": "https://tatoeba.org/en/api_v0/search?from=eng&to=uzb&query=%22come%20back%22",
+    "access_date": "2026-10-15",
+    "evidence": "\"When will you come back home?\" — \"Qachon uyga qaytasan?\"",
+    "note": "Inson tarjimasi bo'lgan parallel jumla; 'come back' o'zagi 'qaytmoq' fe'li bilan berilgan",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "young girl",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "right hand",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "o'ng qo'l",
+    "source_name": "Injil (Matto Xushxabari) o'zbekcha tarjimasi, kitobook.com",
+    "source_type": "boshqa",
+    "url": "https://www.kitobook.com/web/INJIL/01-matt.html",
+    "access_date": "2026-10-15",
+    "evidence": "Sen sadaqa berayotganingda, chap qo'ling o'ng qo'ling nima qilayotganini bilmasin.",
+    "note": "Matto 6:3; inglizcha asl matndagi 'thy right hand' ga mos parallel diniy matn tarjimasi",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "young wife",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "man thought",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "opened the door",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "eshikni ochmoq",
+    "source_name": "Tatoeba parallel jumlalar bazasi",
+    "source_type": "boshqa",
+    "url": "https://tatoeba.org/en/api_v0/search?from=eng&to=uzb&query=%22open%20the%20door%22",
+    "access_date": "2026-10-15",
+    "evidence": "\"Don't open the door!\" — \"Eshikni ochmang!\"",
+    "note": "Kollokatsion o'zak 'open the door = eshikni ochmoq' manbada buyruq maylida ko'rsatilgan",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "read newspapers",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "look in eye",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "have our fun",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "come home",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "uyga qaytmoq",
+    "source_name": "Tatoeba parallel jumlalar bazasi",
+    "source_type": "boshqa",
+    "url": "https://tatoeba.org/en/api_v0/search?from=eng&to=uzb&query=%22come%20back%22",
+    "access_date": "2026-10-15",
+    "evidence": "\"When will you come back home?\" — \"Qachon uyga qaytasan?\"",
+    "note": "Manbadagi jumla 'come back home' shaklida; 'uyga qayt-' o'zagi hujjatlashtirilgan",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "slept soundly",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "closed the door",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "eshikni yopmoq",
+    "source_name": "Tatoeba parallel jumlalar bazasi",
+    "source_type": "boshqa",
+    "url": "https://tatoeba.org/en/api_v0/search?from=eng&to=uzb&query=%22close%20the%20door%22",
+    "access_date": "2026-10-15",
+    "evidence": "\"He closed the door.\" — \"U eshikni yopdi.\" (kirillcha: \"У эшикни ёпди.\")",
+    "note": "To'liq frazaning bevosita parallel tarjimasi",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "gave a brave answer",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "next morning",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "dark water",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "give to man",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "have children",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "bolasi bor (bolangiz bor)",
+    "source_name": "Tatoeba parallel jumlalar bazasi",
+    "source_type": "boshqa",
+    "url": "https://tatoeba.org/en/api_v0/search?from=eng&to=uzb&query=%22children%22",
+    "access_date": "2026-10-15",
+    "evidence": "\"He has twenty children.\" — \"Uning yigirma bolasi bor.\"; \"How many children do you have?\" — \"Qancha bolangiz bor?\"",
+    "note": "O'zbekchada 'have children' egalik qo'shimchasi + 'bor' konstruksiyasi bilan beriladi; manbada aynan shu ko'rsatilgan",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "have wife",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "looked around",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "reserve coils",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "suddenly stopped",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "turned back",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "boat moved",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "come closer",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "elder co",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "best friend",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "eng yaqin do'st",
+    "source_name": "IndifferentLanguages (Best friend in Different Languages)",
+    "source_type": "lugat_sayt",
+    "url": "https://www.indifferentlanguages.com/words/best_friend",
+    "access_date": "2026-10-15",
+    "evidence": "Uzbek — eng yaqin do'st",
+    "note": "Agregator/jamoaviy lug'at sayti; tadqiqotchi tomonidan qo'shimcha tekshiruv tavsiya etiladi",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "held the line",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "last year",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "o'tgan yil",
+    "source_name": "Glosbe English–Uzbek Dictionary",
+    "source_type": "lugat_sayt",
+    "url": "https://glosbe.com/en/uz/last%20year",
+    "access_date": "2026-10-15",
+    "evidence": "o'tgan yil is the translation of \"last year\" into Uzbek.",
+    "note": "Jamoaviy lug'at (Glosbe)",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "make money",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "pul topmoq",
+    "source_name": "IndifferentLanguages (Make money in Different Languages)",
+    "source_type": "lugat_sayt",
+    "url": "https://www.indifferentlanguages.com/words/make_money",
+    "access_date": "2026-10-15",
+    "evidence": "Uzbek — pul topmoq",
+    "note": "Agregator/jamoaviy lug'at sayti; tadqiqotchi tomonidan qo'shimcha tekshiruv tavsiya etiladi",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "barely managed",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "open door",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "eshikni ochmoq",
+    "source_name": "Tatoeba parallel jumlalar bazasi",
+    "source_type": "boshqa",
+    "url": "https://tatoeba.org/en/api_v0/search?from=eng&to=uzb&query=%22open%20the%20door%22",
+    "access_date": "2026-10-15",
+    "evidence": "\"Don't open the door!\" — \"Eshikni ochmang!\"",
+    "note": "Fe'lli o'zak (open the door) hujjatlashtirilgan; 'ochiq eshik' (sifatlovchili birikma) uchun alohida manba topilmadi",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "see the fish",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "took both her hands",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "asked her mother",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "boy asked",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "came a little later",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "die already",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "far side",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "gave her a check",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "have some business",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "left hand",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "chap qo'l",
+    "source_name": "Injil (Muqaddas Kitob), Matto bayon etgan Xushxabar 6:3 — gospelgo.com",
+    "source_type": "boshqa",
+    "url": "http://gospelgo.com/a/uzbek/mat.htm",
+    "access_date": "2026-10-15",
+    "evidence": "Sen sadaqa berayotganingda, chap qo'ling o'ng qo'ling nima qilayotganini bilmasin.",
+    "note": "Published parallel Bible translation; English Matthew 6:3 reads 'do not let your left hand know what your right hand is doing'. Evidence shows inflected form 'chap qo'ling' (= your left hand).",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "opened her eyes",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "man saw",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "cart driver",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "aravakash",
+    "source_name": "Vikilug'at (uz.wiktionary.org)",
+    "source_type": "vikilugat",
+    "url": "https://uz.wiktionary.org/wiki/aravakash",
+    "access_date": "2026-10-15",
+    "evidence": "Ot-arava bilan yuk tashuvchi, arava minuvchi, haydovchi odam",
+    "note": "Uzbek Wiktionary defines aravakash as a person who drives/transports with a cart; Russian gloss 'возчик, кучер'. English gloss 'carter, cart-driver' in a Scribd-indexed Uzbek-English dictionary excerpt needs manual verification.",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "put both hands",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "great fish",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "hear her voice",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "fish came",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "spent the night",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "tunamoq",
+    "source_name": "Verbformen.com (nemischa 'nachten' fe'li ko'p tilli tarjima jadvali)",
+    "source_type": "boshqa",
+    "url": "https://www.verbformen.com/conjugation/nachten.htm",
+    "access_date": "2026-10-15",
+    "evidence": "English: \"darken, become night, grow dark, it gets dark, night falls, overnight, spend the night\"; Uzbek: \"qorong'i tushmoq, qorong'ilash, tun bo'lish, tun bo'lmoq, tun tushmoq, tunamoq, tunda qolmoq\"",
+    "note": "Equivalence of the collocational core (spend the night = tunamoq / tunda qolmoq) established indirectly via the multilingual translation table of German 'nachten'; verify in a primary English-Uzbek dictionary.",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "had no choice",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "young woman",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "juvon",
+    "source_name": "English Wiktionary (Uzbek entry 'juvon')",
+    "source_type": "vikilugat",
+    "url": "https://en.wiktionary.org/wiki/juvon",
+    "access_date": "2026-10-15",
+    "evidence": "juvon — 1. young woman",
+    "note": "Single-lexeme Uzbek equivalent of the whole phrase; 'yosh ayol' as a literal variant was not found in a verifiable source.",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "dear friend",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "aziz do'stim",
+    "source_name": "Muqaddas Kitob — Yuhannoning uchinchi maktubi 1:2 (kitobook.com, IBT tarjimasi)",
+    "source_type": "boshqa",
+    "url": "https://www.kitobook.com/category/book/muqaddas-kitob-injil/50/1/",
+    "access_date": "2026-10-15",
+    "evidence": "Aziz do'stim, hamma ishlaringga Xudodan rivoj tilayman. Tanang ruhing singari sog'–salomat bo'lsin.",
+    "note": "Published parallel Bible translation; English versions (e.g. NIV 3 John 1:2) render the same verse opening as 'Dear friend'. Base form: aziz do'st.",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "man knew",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "run away",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "qochmoq",
+    "source_name": "English Wiktionary ('flee' tarjimalar bo'limi)",
+    "source_type": "vikilugat",
+    "url": "https://en.wiktionary.org/wiki/flee",
+    "access_date": "2026-10-15",
+    "evidence": "(intransitive) to run away; to escape — Uzbek: qochmoq",
+    "note": "Sourced via the translation table of 'flee', whose gloss is explicitly 'to run away; to escape'. Extended form 'qochib ketmoq' not separately sourced.",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "entering the house",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "give a little water",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "had a different effect",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "keep her eyes",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "moved slowly",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "sharks come",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "tomorrow morning",
+  "status": "topildi",
+  "equivalents": [
+   {
+    "uz": "ertaga ertalab",
+    "source_name": "grammars.training (ingliz tili grammatikasi, o'zbek tilidagi dars)",
+    "source_type": "boshqa",
+    "url": "https://grammars.training/uz/grammar/be-going-to",
+    "access_date": "2026-10-15",
+    "evidence": "Ertaga ertalab mijoz bilan uchrashamiz. — We are going to meet the client tomorrow morning.",
+    "note": "Bilingual grammar-lesson sentence pair; components also confirmed on Glosbe (ertaga = tomorrow, ertalab = morning, https://glosbe.com/uz/en/ertaga).",
+    "reviewed": false
+   }
+  ]
+ },
+ {
+  "en": "worked his way back",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "bone spur",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "maybe he will come",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "elder master",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "have friends",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "knows our language",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "leaned back",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "make another turn",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "moved closer",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "poor girl",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "sweet words",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "take in hand",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "suddenly he asked",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "boy came",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "come soon",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "do mingboshi's work",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "father not come",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "gives life",
+  "status": "topilmadi",
+  "equivalents": []
+ },
+ {
+  "en": "had no desire",
+  "status": "topilmadi",
+  "equivalents": []
+ }
+]

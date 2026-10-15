@@ -4,6 +4,27 @@ Ushbu hujjat doktorlik dissertatsiyasi talablari doirasida har bir bosqichda kir
 
 ---
 
+## [v3.7.2] — Internet manbalardagi muqobillar (birinchi to‘plam) — 2026-10-15
+
+Tadqiqotchi topshirig‘i: inglizcha kollokatsiyalarga internetdagi tekshirilsa bo‘ladigan manbalardan
+o‘zbekcha muqobillar izlash. D-bo‘lim INTERNET sinfi qoidasi to‘liq qo‘llandi.
+
+- **Yangi ma’lumot:** `data/internet_equivalents.json` — korpusda eng ko‘p uchraydigan 120 ta inglizcha
+  kollokatsiya nomzodi bo‘yicha qidiruv; **29 tasiga manbali muqobil topildi**, 91 tasi «topilmadi»
+  (ko‘pi korpusga xos erkin birikmalar — bu ham ilmiy natija). Har bir muqobil: manba nomi, aniq URL,
+  murojaat sanasi (2026-10-15) va sahifadan so‘zma-so‘z dalil-parcha bilan.
+- **Manba turlari:** Vikilug‘at (uz/en.wiktionary), Glosbe, akademik maqola (lingvospektr.uz),
+  parallel nashr matnlari (Injil o‘zbekcha tarjimasi, UDHR rasmiy matni, Chikago universiteti o‘zbek
+  glossariysi), Tatoeba parallel jumlalari. Mashina tarjimasi va AI manba sifatida taqiqlangan va filtrda
+  avtomatik rad etiladi.
+- **Sifat nazorati:** faqat alohida so‘z komponentlari topilgan (birikmaning o‘zi emas) 13 ta yozuv
+  muqobil sifatida qabul qilinmadi; namunaviy URL lar qo‘lda qayta tekshirildi.
+- **Sayt:** /kollokatsiya/<id> sahifasida yangi «Internet manbalardagi muqobillar» bo‘limi — oltin
+  «Internet manba — tadqiqotchi tasdig‘i kutilmoqda» belgisi, manba havolasi va sanasi bilan.
+  Bu ma’lumot statistikaga kirmaydi (reviewed=false, tadqiqotchi tasdig‘igacha).
+- Namuna: eldest wife → katta xotin (Vikilug‘at); shaking his head → bosh chayqamoq (lingvospektr.uz);
+  right hand → o‘ng qo‘l (Injil parallel matni); last year → o‘tgan yil (Glosbe); young woman → juvon.
+
 ## [v3.7] — Qidiruv takliflari va xavfsizlik kuchaytirildi — 2026-10-15
 
 v3.6 ustiga qo‘shimcha (v3.6 bilan birga joylanadi).
