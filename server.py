@@ -96,6 +96,7 @@ AUTH_USERS = {
     "admin": _load_secret('admin', 'TILCOR_ADMIN_PASSWORD', generate=True),   # Tadqiqotchi
     "reviewer": _load_secret('reviewer', 'TILCOR_REVIEWER_PASSWORD'),          # Ilmiy rahbar (ixtiyoriy)
     "guest": _load_secret('guest', 'TILCOR_GUEST_PASSWORD'),                   # Kengash a'zosi (ixtiyoriy)
+    "annotator": _load_secret('annotator', 'TILCOR_ANNOTATOR_PASSWORD'),       # Ikkinchi annotator (inson tekshiruvi)
 }
 AUTH_USERS = {u: p for u, p in AUTH_USERS.items() if p}
 
@@ -164,6 +165,19 @@ def check_login_rate_limit(ip: str) -> bool:
     attempts = [t for t in FAILED_LOGINS.get(ip, []) if now - t < 900]
     FAILED_LOGINS[ip] = attempts
     return len(attempts) < 5
+
+# F-bo'lim talabi: ommaviy korpus so'rovlariga tezlik chekovi (IP bo'yicha).
+SEARCH_HITS = {}
+
+def check_search_rate_limit(ip: str, limit: int = 30, window: int = 60) -> bool:
+    now = time.time()
+    if len(SEARCH_HITS) > 5000:   # xotira himoyasi: eski yozuvlarni tozalash
+        for k in [k for k, v in SEARCH_HITS.items() if not v or now - v[-1] > window]:
+            SEARCH_HITS.pop(k, None)
+    hits = [t for t in SEARCH_HITS.get(ip, []) if now - t < window]
+    hits.append(now)
+    SEARCH_HITS[ip] = hits
+    return len(hits) <= limit
 
 def record_failed_login(ip: str):
     now = time.time()
@@ -274,11 +288,22 @@ def get_site_stats():
     st['pairs_auto_pin'] = st['auto_pin_kvk'] + st['auto_pin_oms']
     st['unpaired'] = len(get_unpaired_sentences())
     st['tokens_total'] = sum(v.get('tokens', 0) for v in sizes.values())
+    try:
+        st['ref_tokens'] = (get_reference_info() or {}).get('n', 0)
+    except Exception:
+        st['ref_tokens'] = 0
+    try:
+        import corpus_dictionary
+        ds = corpus_dictionary.stats()
+        st['dict_uz'], st['dict_en'], st['dict_pairs'] = ds['uz'], ds['en'], ds['pairs']
+    except Exception as e:
+        print(f"[!] dictionary stats: {e}")
     _SITE_STATS_CACHE.update(key=key, stats=st)
     return st
 
 _TEXT_SIZES_CACHE = {}
-_SIZE_TOKEN_RE = re.compile(r"\b[\w\u02bb\u02bc'-]+\b", re.UNICODE)
+# a word: letters joined by an apostrophe of any kind (ko‘ngil, ma’no, didn’t) or by a hyphen (qah-qah)
+_SIZE_TOKEN_RE = re.compile(r"\w+(?:[-'\u2018\u2019\u02bb\u02bc`]\w+)*", re.UNICODE)
 
 def get_text_sizes():
     """Tokens, word forms and hapaxes of each segmented text, recomputed from phd_corpus.db."""
@@ -799,7 +824,7 @@ def parse_uzbek_token(raw_word, prev_token=None):
             "token": raw_word, "clean": clean, "lemma": stem,
             "pos": "Ot", "posEn": "Noun", "isNoun": True, "isVerb": False,
             "badge": "Ot (Noun)", "color": "blue",
-            "details": f"Ot ({case_names.get(suffix, 'qo\'shimchali')})"
+            "details": "Ot (%s)" % case_names.get(suffix, "qo'shimchali")
         }
 
     if normalized in UZ_VERB_ROOTS:
@@ -1127,7 +1152,8 @@ def search_dictionary(query, limit=50):
 # ==============================================================
 def load_ai_config():
     cfg = {
-        "api_key": "sk-5phbyal92pr3ztphvp1nc22qp4rlrebz",
+        # the key is never kept in the code: environment variable TILCOR_AI_API_KEY (or the local file below)
+        "api_key": os.environ.get("TILCOR_AI_API_KEY", ""),
         "base_url": "https://api.b.ai/v1",
         "model": "deepseek-v4-flash-vision-exp"
     }
@@ -1352,10 +1378,11 @@ def analyze_word_collocations_ai(word):
             break
 
     # 5. Build PhD Prompt for DeepSeek
+    pattern_hint = pos_res['pattern'] if pos_res else "Sifat+Ot, Fe'l+Ot"
     phd_prompt = (
         f"Kollokatsiya va Morfo-Sintaktik Tahlil: «{raw_word}» (Ekvivalenti: «{target_word}»).\n"
         f"1. So'z turkumlari (POS) tahlili: Qaysi so'z OT (Noun), qaysi so'z FE'L (Verb), Sifat, Ravish va h.k. ekanligini aniq ajrating.\n"
-        f"2. Birikma modeli ({pos_res['pattern'] if pos_res else 'Sifat+Ot, Fe\'l+Ot'}).\n"
+        f"2. Birikma modeli ({pattern_hint}).\n"
         f"3. O'zbek va ingliz tillaridagi barqaror kollokatsiyalar (turg'un birikmalar) va tabiiy tarjimasi.\n"
         f"4. Kalka xatolari va uslubiy qopqonlar (*noto'g'ri so'zma-so'z kalka vs To'g'ri turg'un birikma).\n"
         f"5. Birikmaning lingvomadaniy tavsifi va lug‘aviy izohi."
@@ -2281,8 +2308,27 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_json({"error": "Gold tests not found"}, status=404)
             return
 
+        # 1.5. Qidiruv qatori takliflari (faqat korpusda real uchragan so'zlar)
+        if parsed.path == '/api/suggest':
+            if user != 'admin' and not check_search_rate_limit(get_client_ip(self), limit=120):
+                self.send_json({"suggestions": [], "error": "rate_limited"}, status=429)
+                return
+            q = params.get('q', [''])[0].strip()[:60]
+            try:
+                import suggest
+                items = suggest.autocomplete(q, get_search_corpus()) if q else []
+            except Exception as e:
+                print(f"[!] suggest xatosi: {e}")
+                items = []
+            self.send_json({"suggestions": items})
+            return
+
         # 2. Qayta qurilgan Korpus & Leksikografik Qidiruv API (≤ 50 results)
         if parsed.path == '/api/search':
+            if user != 'admin' and not check_search_rate_limit(get_client_ip(self)):
+                self.send_json({"error": "So'rovlar soni vaqtincha cheklandi. Bir daqiqadan so'ng qayta urinib ko'ring.",
+                                "rate_limited": True}, status=429)
+                return
             query = params.get('q', [''])[0]
             lang = params.get('lang', ['auto'])[0]
             raw_limit = safe_int(params.get('limit', ['50'])[0], default=50, maximum=1000)
@@ -2465,8 +2511,10 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             if k_lang not in ('uz', 'en', 'ru'):
                 m_lang = re.search(r'tilcor_lang=(uz|en|ru)', self.headers.get('Cookie', ''))
                 k_lang = m_lang.group(1) if m_lang else 'uz'
-            who = user if user in ('admin', 'reviewer') else None
-            self.send_page(ui_components.render_login_page(k_lang, who), k_lang)
+            who = user if user in ('admin', 'reviewer', 'annotator') else None
+            nxt = params.get('next', [''])[0]
+            nxt = nxt if nxt.startswith('/') and not nxt.startswith('//') and '\\' not in nxt else ''
+            self.send_page(ui_components.render_login_page(k_lang, who, nxt), k_lang)
             return
 
         # Admin sahifalariga ruxsat cheklovi (Part 2 Section 4: anonim foydalanuvchiga 401)
@@ -2521,8 +2569,8 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             '/metodologiya': lambda: content_pages.render_methodology(lang, is_admin, get_site_stats()),
             '/annotation_guidelines.html': lambda: content_pages.render_guidelines(lang, is_admin, get_annotation_counts()),
             '/yoriqnoma': lambda: content_pages.render_guidelines(lang, is_admin, get_annotation_counts()),
-            '/methodology_statistics.html': lambda: content_pages.render_statistics(lang, is_admin, get_site_stats(), get_text_sizes(), get_annotation_counts(), collocation_index_items()),
-            '/statistika': lambda: content_pages.render_statistics(lang, is_admin, get_site_stats(), get_text_sizes(), get_annotation_counts(), collocation_index_items()),
+            '/methodology_statistics.html': lambda: content_pages.render_statistics(lang, is_admin, get_site_stats(), get_text_sizes(), get_annotation_counts(), collocation_index_items(), get_reference_info(), get_comparable_stats()),
+            '/statistika': lambda: content_pages.render_statistics(lang, is_admin, get_site_stats(), get_text_sizes(), get_annotation_counts(), collocation_index_items(), get_reference_info(), get_comparable_stats()),
         }
         if req_path.rstrip('/') in info_pages:
             self.send_page(info_pages[req_path.rstrip('/')](), lang)
@@ -2530,6 +2578,11 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         if req_path in ('/kwic', '/kwic/', '/kwic_concordance.html'):
             query = params.get('q', [''])[0].strip()[:120]
+            if query and user != 'admin' and not check_search_rate_limit(get_client_ip(self)):
+                body = '<h1>%s</h1><div class="tc-panel" style="margin-top:20px"><p>%s</p></div>' % (
+                    ui_components.T(lang, 'nav_kwic'), ui_components.T(lang, 'rate_limited'))
+                self.send_page(ui_components.page(lang, ui_components.get_i18n(lang, 'nav_kwic'), body, '/kwic', is_admin), lang, status=429)
+                return
             book = params.get('kitob', [''])[0]
             window = safe_int(params.get('oyna', ['6'])[0], default=6, minimum=1, maximum=15)
             order = params.get('tartib', ['matn'])[0]
@@ -2590,12 +2643,61 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_page(html_content, lang)
             return
 
+        if req_path == '/baholash' or req_path.startswith('/baholash/'):
+            import validation_pages as VP
+            who = self.get_authenticated_user()
+            if who not in ('admin', 'annotator', 'reviewer'):
+                self.send_response(302)
+                self.send_header('Location', '/kirish?next=' + urllib.parse.quote(self.path))
+                self.send_header('Cache-Control', 'no-store')
+                self.end_headers()
+                return
+            task = req_path[len('/baholash/'):].strip('/') if req_path.startswith('/baholash/') else ''
+            if task:
+                import validation as V
+                if task not in V.TASKS or who == 'reviewer':
+                    self.send_error(404, "Not Found")
+                    return
+                which = params.get('set', ['train'])[0]
+                which = which if which in ('train', 'main') else 'train'
+                html_content = VP.render_item(lang, who, who == 'admin', task, which, params.get('item', [''])[0][:200],
+                                              corpus_by_id(), collocation_index_items())
+            else:
+                html_content = VP.render_overview(lang, who, who == 'admin', collocation_index_items())
+            self.send_page(html_content, lang)
+            return
+
+        if req_path == '/api/baholash/export.csv':
+            if self.get_authenticated_user() != 'admin':
+                self.send_error(403, "Forbidden")
+                return
+            import csv, io, validation as V
+            buf = io.StringIO()
+            csv.writer(buf).writerows(V.export_rows())
+            data = ('\ufeff' + buf.getvalue()).encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/csv; charset=utf-8')
+            self.send_header('Content-Disposition', 'attachment; filename="tilcor_inson_tekshiruvi.csv"')
+            self.send_header('Content-Length', str(len(data)))
+            self.send_header('Cache-Control', 'no-store')
+            self.end_headers()
+            self.wfile.write(data)
+            return
+
         if req_path in ('/lugat', '/lugat/'):
-            self.send_page(ui_components.render_lugat_page(lang, is_admin=is_admin), lang)
+            import corpus_dictionary
+            model = corpus_dictionary.page_model(params.get('yo', ['uz'])[0], params.get('q', [''])[0], params.get('harf', [''])[0],
+                                                 corpus_by_id(), page_no=safe_int(params.get('sahifa', ['1'])[0]), explicit='yo' in params)
+            self.send_page(ui_components.render_lugat_page(lang, is_admin=is_admin, model=model), lang)
             return
 
         if req_path in ('/qidiruv', '/qidiruv/'):
             query = params.get('q', [''])[0].strip()[:120]
+            if query and user != 'admin' and not check_search_rate_limit(get_client_ip(self)):
+                body = '<h1>%s</h1><div class="tc-panel" style="margin-top:20px"><p>%s</p></div>' % (
+                    ui_components.T(lang, 'nav_word_search'), ui_components.T(lang, 'rate_limited'))
+                self.send_page(ui_components.page(lang, ui_components.get_i18n(lang, 'nav_word_search'), body, '/qidiruv', is_admin), lang, status=429)
+                return
             book = params.get('kitob', params.get('book', ['']))[0]
             page = safe_int(params.get('page', ['1'])[0])
             res = run_search(query, book, params.get('til', [''])[0], page) if query else {}
@@ -2635,7 +2737,10 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         if req_path == '/' or req_path.endswith('.html'):
             target_file = 'index.html' if req_path == '/' else req_path.lstrip('/')
-            file_disk_path = os.path.join(DIRECTORY, target_file)
+            file_disk_path = os.path.abspath(os.path.normpath(os.path.join(DIRECTORY, target_file)))
+            if not file_disk_path.startswith(os.path.abspath(DIRECTORY) + os.sep):
+                self.send_error(404, "Not Found")
+                return
             if os.path.exists(file_disk_path) and os.path.isfile(file_disk_path):
                 req_lang = params.get('lang', [''])[0].lower()
                 cookie_str = self.headers.get('Cookie', '')
@@ -2727,6 +2832,29 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
                 record_failed_login(client_ip)
                 self.send_json({"success": False, "error": "Foydalanuvchi nomi yoki parol noto‘g‘ri"}, status=401)
                 return
+
+        if parsed.path == '/api/baholash':
+            who = self.get_authenticated_user()
+            if who not in ('admin', 'annotator'):
+                self.send_json({"ok": False, "error": "auth"}, status=401)
+                return
+            origin = self.headers.get('Origin', '')
+            host = self.headers.get('Host', '')
+            if origin and urllib.parse.urlparse(origin).netloc != host:
+                self.send_json({"ok": False, "error": "origin"}, status=403)
+                return
+            if 'application/json' not in self.headers.get('Content-Type', ''):
+                self.send_json({"ok": False, "error": "content type"}, status=415)
+                return
+            length = min(int(self.headers.get('Content-Length', 0) or 0), 20000)
+            try:
+                body = json.loads(self.rfile.read(length).decode('utf-8'))
+            except Exception:
+                body = {}
+            import validation as V
+            ok, res = V.save(str(body.get('task', '')), str(body.get('item', '')), who, body.get('labels') or {}, str(body.get('note', '')))
+            self.send_json({"ok": ok, "error": None if ok else res, "labels": res if ok else None}, status=200 if ok else 400)
+            return
 
         if parsed.path == '/api/auth/logout':
             cookie_str = self.headers.get('Cookie', '')
@@ -2869,6 +2997,9 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             if not self.require_auth('admin'):
                 return
             length = int(self.headers.get('Content-Length', 0))
+            if length > 15 * 1024 * 1024:   # 15 MB dan katta xat qabul qilinmaydi
+                self.send_json({"success": False, "error": "Fayl juda katta (15 MB chegara)"}, status=413)
+                return
             body = self.rfile.read(length).decode('utf-8')
             try:
                 data = json.loads(body)
@@ -3039,7 +3170,24 @@ def run_search(query, book='', forced='', page=1, per_page=20):
                                  forced_lang=forced if forced in ('uz', 'en') else None, limit=1000, page=1)
     if res.get('error'):
         return res
-    return search_plus.enrich(res, corpus_by_id(), page=page, per_page=per_page)
+    res = search_plus.enrich(res, corpus_by_id(), page=page, per_page=per_page)
+    # Millionga nisbatan normallashtirilgan chastota (B3-qoida: har bir ko'rsatkich o'z n i bilan)
+    try:
+        occ = int((res.get('summary') or {}).get('corpus_occurrences') or 0)
+        toks = sum(v.get('tokens', 0) for v in get_text_sizes().values())
+        if occ and toks:
+            pm = occ * 1_000_000 / toks
+            res['per_million'] = round(pm, 1) if pm < 100 else round(pm)
+    except Exception as e:
+        print(f"[!] per_million xatosi: {e}")
+    # Natija topilmasa — yaqin yozilgan real korpus so'zlarini taklif qilamiz
+    try:
+        if not int((res.get('pagination') or {}).get('total_sentences') or 0):
+            import suggest
+            res['did_you_mean'] = suggest.similar(query, get_search_corpus())
+    except Exception as e:
+        print(f"[!] did_you_mean xatosi: {e}")
+    return res
 
 _FEATURED = {}
 
@@ -3055,6 +3203,26 @@ def featured_pair():
             print(f"[!] featured pair: {e}")
             _FEATURED['pair'] = {}
     return _FEATURED['pair'] or None
+
+_DATA_FILES = {}
+
+def _data_file(name):
+    """A JSON file of data/ read once (None if it is missing)."""
+    if name not in _DATA_FILES:
+        try:
+            with open(os.path.join(DATA_DIR, name), encoding='utf-8') as f:
+                _DATA_FILES[name] = json.load(f)
+        except Exception as e:
+            print(f"[!] {name} not loaded: {e}")
+            _DATA_FILES[name] = None
+    return _DATA_FILES[name]
+
+def get_reference_info():
+    d = _data_file('reference_en.json')
+    return {k: d[k] for k in ('name', 'parts', 'n', 'built', 'spacy_model')} if d else None
+
+def get_comparable_stats():
+    return _data_file('comparable_stats.json')
 
 def collocation_index_items():
     import search_plus

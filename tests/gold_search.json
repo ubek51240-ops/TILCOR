@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-10-13T23:25:59.850168",
+  "timestamp": "2026-10-15T11:48:56.544230",
   "date": "13.10.2026",
   "corpus_version": "3.3",
   "total_tests": 21,
-  "passed_tests": 21,
-  "failed_tests": 0,
-  "all_passed": true,
+  "passed_tests": 18,
+  "failed_tests": 3,
+  "all_passed": false,
   "test_results": [
     {
       "category": "Uzbek",
@@ -21,11 +21,11 @@
       "category": "Uzbek",
       "query": "qishloq (family)",
       "expected_count": "115 in KVK",
-      "actual_count": "112 in KVK",
+      "actual_count": "111 in KVK",
       "must_include": "—",
       "actual_includes": "—",
-      "status": "PASS",
-      "notes": "Farq: 2.6% (2% chegarasi ichida)"
+      "status": "FAIL",
+      "notes": "Farq: 3.5% (2% chegarasi ichida)"
     },
     {
       "category": "Uzbek",
@@ -33,7 +33,7 @@
       "expected_count": 3,
       "actual_count": 4,
       "must_include": "36, 65, 93",
-      "actual_includes": "[36, 65, 93]",
+      "actual_includes": "[36, 65, 93, 122]",
       "status": "PASS",
       "notes": "36, 65, 93 sahifalari to'liq qamrab olindi"
     },
@@ -101,7 +101,7 @@
       "category": "English",
       "query": "heart (family)",
       "expected_count": "113 in KVK + 8 in OMS",
-      "actual_count": "97 in KVK + 7 in OMS",
+      "actual_count": "96 in KVK + 7 in OMS",
       "must_include": "132, 152",
       "actual_includes": "132=True, 152=True",
       "status": "PASS",
@@ -111,7 +111,7 @@
       "category": "English",
       "query": "decide / decision (family)",
       "expected_count": "37 in KVK + 6 in OMS",
-      "actual_count": "33 in KVK",
+      "actual_count": "35 in KVK",
       "must_include": "111 ('decided')",
       "actual_includes": "111=True",
       "status": "PASS",
@@ -121,10 +121,10 @@
       "category": "English",
       "query": "shark (family)",
       "expected_count": "66 in OMS-EN",
-      "actual_count": "62 in OMS-EN",
+      "actual_count": "61 in OMS-EN",
       "must_include": "—",
       "actual_includes": "—",
-      "status": "PASS",
+      "status": "FAIL",
       "notes": ""
     },
     {
@@ -141,10 +141,10 @@
       "category": "English",
       "query": "deep sleep",
       "expected_count": 2,
-      "actual_count": 2,
+      "actual_count": 1,
       "must_include": "123, 147",
-      "actual_includes": "[93, 121]",
-      "status": "PASS",
+      "actual_includes": "[93]",
+      "status": "FAIL",
       "notes": ""
     },
     {
@@ -153,7 +153,7 @@
       "expected_count": 4,
       "actual_count": 5,
       "must_include": "48, 250 (x2), 266",
-      "actual_includes": "[6, 44, 242, 243, 260]",
+      "actual_includes": "[6, 44, 243, 260, 242]",
       "status": "PASS",
       "notes": ""
     },
@@ -161,7 +161,7 @@
       "category": "English",
       "query": "fell asleep",
       "expected_count": "11",
-      "actual_count": 12,
+      "actual_count": 11,
       "must_include": "98, 123",
       "actual_includes": "98=True, 123=True",
       "status": "PASS",

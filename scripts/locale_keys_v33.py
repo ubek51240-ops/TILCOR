@@ -30,6 +30,10 @@ K = {
  'hs_pairs': ('Juftliklar', 'Pairs', 'Пары'),
  'hs_tokens': ('Tokenlar', 'Tokens', 'Токены'),
  'hs_works': ('Asarlar', 'Works', 'Произведения'),
+ 'eq_note_all': ('Muqobil — tarjimonning kitobdagi so‘zlari. Ular {total} ta gapning hammasida so‘z darajasidagi tekislash orqali topildi.',
+                 'A counterpart is the translator’s own words in the book. It was found by word alignment in all {total} sentences.',
+                 'Соответствие — собственные слова переводчика в книге. Оно найдено пословным выравниванием во всех {total} предложениях.'),
+ 'eq_pending_count': ('uchrash', 'occurrences', 'употреблений'),
 }
 
 if __name__ == '__main__':

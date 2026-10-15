@@ -4,6 +4,105 @@ Ushbu hujjat doktorlik dissertatsiyasi talablari doirasida har bir bosqichda kir
 
 ---
 
+## [v3.7] — Qidiruv takliflari va xavfsizlik kuchaytirildi — 2026-10-15
+
+v3.6 ustiga qo‘shimcha (v3.6 bilan birga joylanadi).
+
+**Qidiruv mantig‘i (Linguee / Reverso Context namunasida):**
+- Yangi `suggest.py` moduli: qidiruv qatorida yozish paytida avtomatik takliflar (`/api/suggest`).
+  Takliflar FAQAT korpus gaplarida real uchragan so‘z shakllaridan tuziladi, har biri uchrashlar soni bilan
+  (G1-qoida: hech narsa o‘ylab topilmaydi). Ko‘p so‘zli so‘rovda oxirgi so‘z to‘ldiriladi.
+- Natija topilmaganda «Buni nazarda tutdingizmi?» — yaqin yozilgan real korpus so‘zlari (Levenshteyn masofasi ≤ 2,
+  qisqa so‘zlarda ≤ 1), bosilganda oddiy /qidiruv so‘roviga olib boradi. O‘zbekcha so‘rovlar `uz_norm` bilan
+  normallanadi (apostrof variantlari, kirill); inglizcha so‘rovlar ham qamrab olinadi.
+- Takliflar ro‘yxati klaviatura bilan boshqariladi (↑/↓/Enter/Esc), uslub «tungi ko‘k» mavzusiga mos (`.tc-ac`).
+- **Misollar tartibi (SkELL/GDEX namunasida):** bir xil tasdiqlanish darajasidagi gaplar ichida o‘qish uchun
+  qulay misollar (6–22 so‘z, to‘liq gap, sahifa-belgilarisiz) birinchi ko‘rsatiladi. 7.1-band tartibi
+  (tasdiqlangan muqobilli → tasdiqlangan → avtomatik) o‘zgarmaydi.
+- **Normallashtirilgan chastota:** qidiruv natijasi sarlavhasida «Million so‘zga ≈ N marta» (butun korpus
+  tokenlariga nisbatan, B3-qoida bo‘yicha).
+
+**Xavfsizlik:**
+- Ommaviy qidiruvga tezlik chekovi (F-bo‘lim talabi): IP bo‘yicha 1 daqiqada 30 ta sahifa-qidiruv
+  (/qidiruv, /kwic, /api/search), takliflar uchun 120 ta; oshganda 429 va uch tilda tushunarli xabar (`rate_limited`).
+  Tadqiqotchi (admin) cheklanmaydi.
+- `.html` fayl berishda yo‘l normallashtirish (normpath) va loyiha papkasidan tashqariga chiqishni taqiqlash.
+- Ruxsatnoma xati yuklashiga 15 MB chegara.
+
+**Lokalizatsiya:** yangi kalitlar `did_you_mean`, `rate_limited` — uz/en/ru uchalasida.
+
+**O‘zgargan fayllar:** `server.py`, `ui_components.py` (CSS v3.7), `suggest.py` (yangi), `css/tilcor.css`, `locales/uz|en|ru.json`.
+
+## [v3.6] — Inson tekshiruvi, tayanch korpus, teng matnlar va tuzatishlar — 2026-10-14
+
+Bu versiya v3.5 ni (korpus lug‘ati) to‘liq o‘z ichiga oladi va v3.4 ustiga ham, v3.5 ustiga ham joylanadi.
+
+- **Bosh sahifa** maketdagidek: «So‘zlar kontekstda.» sarlavhasi, yumaloq qidiruv qatori, namuna so‘rovlar; «Boshqa bo‘limlar»
+  oltita (Korpus tarkibi qo‘shildi), kompyuterda uch ustunda; misol izohidagi «Misol:» takrori olib tashlandi.
+- **Terminologiya** 1.1.4-bandga moslandi: avtomatik ajratilgan birikmalar saytda «kollokatsiya nomzodlari» deb ataladi; nomzodning
+  maqomini lingvistik baho (inson tekshiruvi) va tayanch korpus belgilaydi.
+- **Inson tekshiruvi** (`/baholash`, faqat tizimga kirgan baholovchi uchun): besh vazifa — gap juftliklari, so‘z muqobillari,
+  o‘zbekcha va inglizcha kollokatsiya nomzodlari, lug‘at tarjimalari; har birida 50 birlik o‘quv to‘plami va 200 birlik asosiy
+  tanlanma (qatlamlarga bo‘lingan, qat’iy urug‘ 20261015, `scripts/build_validation_samples.py`). Nomzodlar 1.1.4-banddagi qaror
+  tartibi savollari (1–4 va 6) bilan baholanadi, toifa avtomatik chiqadi. Ikkinchi annotator — «annotator» foydalanuvchisi
+  (`secrets/annotator.password`). Natijalar: ulush va Wilson 95 % oralig‘i, Koen kappasi, tayanch korpusdagi logDice chegarasini
+  tadqiqotchi baholari bo‘yicha kalibrlash; CSV eksport. Baholar `data/validation/annotations.json` ga yoziladi va yangilash
+  arxiviga kirmaydi; tanlanmani qayta quruvchi skript baholar bor bo‘lsa to‘xtaydi (`--force` bilan o‘tadi).
+- **Inglizcha tayanch korpus** (BNC ulanguncha): Brown, MASC va Gutenberg badiiy nasri — 2 598 511 token, tadqiqot korpusidagi bilan
+  bir xil spaCy bog‘lanish qoliplari (`scripts/build_reference_en.py`, BNC uchun `--bnc`). Har bir inglizcha nomzodga tayanch
+  korpusdagi f, MI, t-score, logDice va G² yozildi; statistika 5-bo‘limi va nomzod sahifasidagi «Statistik ko‘rsatkichlar».
+- **Teng (qiyosiy) matnlar** (statistika 6-bo‘limi, Bernardini, 2007): har bir tilda asliyat va tarjima tili — STTR, mustaqil so‘zlar
+  ulushi, nomzod zichligi, tayanch korpusda odatiy birikmalar ulushi; χ², G², Kramer V; talqin cheklovi
+  (`scripts/build_comparable_stats.py`).
+- **III bob uchun testlar** (statistika 3-bo‘limi): yo‘nalishlar orasidagi farq uchun χ², G², Kramer V va imkoniyatlar nisbati 95 %
+  oralig‘i bilan, uchrash va nomzod turi darajasida (`analysis.py`, uchinchi tomon kutubxonasisiz; natijalar SciPy bilan solishtirildi).
+- **Kollokatsiya indeksi**: 2 536 nomzod (o‘zbekcha 974, inglizcha 1 562); -moqchi shakli va -ib ravishdoshi bilan boshlanadigan fe’l
+  birikmalari chiqarildi, evidensial qo‘shimchalar fe’l oxirlari ro‘yxatiga qo‘shildi.
+- **Statistika 1-bo‘limidagi xato tuzatildi**: matn hajmini sanashda o‘zbekcha so‘zlar o‘/g‘ belgisida (‘) va inglizcha qisqartmalar
+  (didn’t) ikkiga bo‘linib sanalardi (ko‘ngil → ko + ngil). Endi jami 214 244 token (avval 233 717): «Kecha va kunduz» 68 559,
+  «Night and Day» 96 371, «The Old Man and the Sea» 26 907, «Chol va dengiz» 22 407. Izohda bu sanoq bilan 3–6-bo‘limlardagi
+  so‘z tekislash tokenlari orasidagi farq tushuntirildi; 6-bo‘lim izohida ko‘rsatkichlar faqat bir til ichida solishtirilishi aytildi.
+- **Korpus lug‘ati qayta tuzildi**: grammatik ravish (never, here; hech, juda) va yordamchi fe’l (have, make; qilmoq, bo‘lmoq) boshqa
+  turkumdagi so‘zga tarjima sifatida berilmaydi — 75 ta tarjima shu qoida bilan chiqdi (ko‘ngil ↔ never, yer ↔ here, qo‘l ↔ have);
+  oyi «mother» oy «moon, month» dan ajratildi; -si, -lari egalik qo‘shimchali tez-tez uchraydigan shakllar ham lug‘at shakliga
+  keltiriladi (onasi → ona, yelkalari → yelka), yarmi → yarim; inglizcha n’t, ’s bosh so‘z bo‘lmaydi; misol gap juftligi ishonchliroq
+  juftlikdan olinadi. Natija: 1 117 o‘zbekcha va 966 inglizcha bosh so‘z, 3 168 tarjima. AI yordamidagi tanlab tekshiruv yangi lug‘atda
+  qayta o‘tkazildi: 50 tadan 39 to‘g‘ri, 6 qisman, 5 noto‘g‘ri (`notes/tanlab_tekshiruv_lugat_2026-10-14.md`,
+  `scripts/sample_dictionary_check.py`); metodologiya 7-bandi va cheklovlar shunga ko‘ra yangilandi.
+- **Dizayn**: telefonda «Korpus manbalari» kartochkalarida yorliq ustida, qiymat ostida turadi; statistika jadvallari kichik ekranda
+  o‘z ichida suriladi, sahifa yonga surilmaydi.
+- **Moslik**: Python 3.12 dan oldingi versiyalarda sintaksis xatosi beradigan ikki f-satr qayta yozildi; barcha fayllar Python 3.8 da
+  ochiladi, server Python 3.12 da v3.4 ning nusxasiga joylab sinaldi.
+- **Kalit**: asl koddan qolgan AI xizmati kaliti `server.py` dan olib tashlandi; kerak bo‘lsa, `TILCOR_AI_API_KEY` muhit
+  o‘zgaruvchisidan o‘qiladi. Eski kalit oldingi arxivlarda bor edi, uni xizmat egasining kabinetida bekor qilish kerak.
+
+## [v3.5] — Korpus lug‘ati — 2026-10-14
+
+- Yangi «Lug‘at» bo‘limi (`/lugat`): o‘zbekcha–inglizcha va inglizcha–o‘zbekcha korpus lug‘ati, 1 125 o‘zbekcha va 968 inglizcha
+  bosh so‘z, 3 240 tarjima. Har bir tarjima — tarjimonning kitobdagi so‘zi: soni, ulushi,
+  tarjimadagi shakllari va kitobdan misol gap juftligi (bosh so‘z — oltin, tarjima — firuza bilan belgilangan).
+- Lug‘at so‘z tekislashidan avtomatik tuziladi (`scripts/build_corpus_dictionary.py` → `data/corpus_dictionary.json`):
+  o‘zbekcha so‘z shakllari lug‘at shakliga keltiriladi (dedi, degan → demoq; xotini → xotin; yuragi → yurak; ko‘ngli → ko‘ngil),
+  ham fe’l, ham ot qo‘shimchasi bo‘la oladigan qo‘shimcha inglizcha so‘z turkumiga qarab o‘qiladi (oldi «took» → olmoq,
+  oldida «in front of» → oldi), chiziqchali so‘zlar butunligicha olinadi (qah-qah, co-wife). Tarjima uchun shartlar:
+  kamida 3 bog‘lanish, bosh so‘z bog‘lanishlarining kamida 3 foizi, Dice ≥ 0,05.
+- Sahifa: yo‘nalish almashtirgich, qidiruv (so‘z shakli bo‘yicha ham topadi, boshqa qismda bo‘lsa o‘zi o‘tadi), alifbo
+  (o‘zbekcha O‘, G‘, Sh, Ch bilan), ko‘p uchraydigan so‘zlar; maqolada kollokatsiyalari, o‘zakdosh so‘zlar, qidiruv va KWIC havolalari,
+  teskari lug‘atga havola. Qidiruv oynasida «Lug‘at» turi, bosh sahifada havola.
+- Metodologiya: yangi 7-band «Korpus lug‘ati»; keyingi bandlar 8–11 bo‘ldi, havolalar yangilandi; cheklovlarga lug‘at haqida band.
+  Tanlab tekshiruv (AI yordamida, 50 ta tasodifiy tarjima): 40 to‘g‘ri, 8 qisman, 2 noto‘g‘ri —
+  `notes/tanlab_tekshiruv_lugat_2026-10-14.md`.
+- Dizayn tuzatishlari: bosh sahifadagi raqamli kartochkalar 1000–1600 px kenglikdagi ekranlarda kesilib qolmaydi (endi 2 ustun);
+  1180 px dan tor ekranda bo‘limlar menyusi tugma orqali ochiladi (menyu ikki qatorga tushmaydi); rus tilida yuqori qator
+  planshetda sig‘adi.
+
+## [v3.4] — Kichik tuzatishlar — 2026-10-14
+
+- Bosh sarlavha, brend va manba yorliqlarida so‘zlar orasidagi bo‘shliq (matn ko‘rinishida «bergankitobning» bo‘lib qolardi).
+- Qidiruv va menyu tugmalarida ekran o‘quvchilar uchun yashirin matn.
+- Muqobil hamma gaplarda topilganda «qolgan gaplarda…» degan jumla chiqmaydi.
+- 1.1-paragrafdagi juftliklarda kollokatsiya muqobili tadqiqotchi belgilagan so‘zdan olinadi (og‘ir uyqu: a heavy sleep 2, fell asleep 1, a deep sleep 1).
+
 ## [v3.3] — Yangi dizayn («tungi ko‘k») — 2026-10-14
 
 - To‘q ko‘k fon (yorug‘lik dog‘lari va nuqtali to‘r), shaffof «shisha» panellar, oq sarlavhalar; kitob matni serif shriftda qoldi.

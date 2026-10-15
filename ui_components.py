@@ -13,7 +13,7 @@ import urllib.parse
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOCALES_DIR = os.path.join(BASE_DIR, 'locales')
-CSS_VERSION = '3.3'
+CSS_VERSION = '3.7.1'
 
 _LOCALES = {}
 for _l in ('uz', 'en', 'ru'):
@@ -127,6 +127,7 @@ BOOK_FILTERS = {'kvk': ('cholpon', 'Cho‘lpon, «Kecha va kunduz» — «Night 
 _BOOK_FILTERS = BOOK_FILTERS
 SEARCH_SAMPLES = (('yurak', 'uz'), ('og‘ir uyqu', 'uz'), ('javob bermoq', 'uz'), ('rangi o‘chmoq', 'uz'),
                   ('heart', 'en'), ('set the table', 'en'), ('shark', 'en'))
+HOME_SAMPLES = (('og‘ir uyqu', 'uz'), ('javob bermoq', 'uz'), ('heavy sleep', 'en'), ('yurak', 'uz'))
 TITLE_BY_SIDE = {('cholpon', 'uz'): '«Kecha va kunduz»', ('cholpon', 'en'): '«Night and Day»',
                  ('hemingway', 'en'): '«The Old Man and the Sea»', ('hemingway', 'uz'): '«Chol va dengiz»'}
 
@@ -166,11 +167,11 @@ def side_label(lang, book, side_lang, page):
 
 def side_label_html(lang, book, side_lang, page):
     role, author, title, note, pg = _side_parts(lang, book, side_lang, page)
-    out = '<span>%s</span><b>%s, %s</b>' % (T(lang, role), html.escape(author), html.escape(title))
+    out = '<span>%s</span> <b>%s, %s</b>' % (T(lang, role), html.escape(author), html.escape(title))
     if pg:
-        out += '<span class="tc-num">%s</span>' % html.escape(pg)
+        out += ' <span class="tc-num">%s</span>' % html.escape(pg)
     if note:
-        out += '<span>%s</span>' % html.escape(note)
+        out += ' <span>%s</span>' % html.escape(note)
     return out
 
 
@@ -310,6 +311,7 @@ def _nav_items(lang, is_admin):
         ('/qidiruv', 'nav_search', ('/qidiruv', '/kwic', '/soz'),
          (('/qidiruv', 'nav_word_search', 'nav_word_search_desc'), ('/kwic', 'nav_kwic', 'nav_kwic_desc'))),
         ('/kollokatsiyalar', 'nav_collocations', ('/kollokatsiyalar', '/kollokatsiya'), ()),
+        ('/lugat', 'nav_dictionary', ('/lugat',), ()),
         ('/korpus', 'nav_corpus', ('/korpus', '/sources_rights.html', '/manbalar'),
          (('/korpus', 'nav_corpus_overview', ''), ('/sources_rights.html', 'nav_sources', ''))),
         ('/methodology.html', 'nav_analysis', ('/methodology', '/annotation_guidelines', '/statistika', '/metodologiya', '/yoriqnoma'),
@@ -318,9 +320,9 @@ def _nav_items(lang, is_admin):
         ('/about_project.html', 'about_project', ('/about_project.html', '/loyiha-haqida'), ()),
     ]
     if is_admin:
-        items.append(('/admin_collocations.html', 'nav_lab', ('/admin_', '/preview_', '/annotation_workspace'),
-                      (('/admin_collocations.html', 'nav_lab_collocations', ''), ('/preview_alignment_queue.html', 'nav_lab_alignment', ''),
-                       ('/annotation_workspace.html', 'nav_lab_annotation', ''))))
+        items.append(('/admin_collocations.html', 'nav_lab', ('/admin_', '/preview_', '/annotation_workspace', '/baholash'),
+                      (('/baholash', 'nav_lab_validation', ''), ('/admin_collocations.html', 'nav_lab_collocations', ''),
+                       ('/preview_alignment_queue.html', 'nav_lab_alignment', ''), ('/annotation_workspace.html', 'nav_lab_annotation', ''))))
     return items
 
 
@@ -339,7 +341,28 @@ _FRAME_JS = ('<script>(function(){var d=document;function q(s){return d.querySel
              'tp.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})})}'
              'd.querySelectorAll(".tc-range input[type=range]").forEach(function(r){var o=r.parentNode.querySelector("output"),tpl=o.getAttribute("data-tpl");'
              'function u(){var p=(r.value-r.min)/(r.max-r.min)*100;r.style.setProperty("--fill",p+"%");o.textContent=tpl.replace("{n}",r.value)}'
-             'r.addEventListener("input",u);r.addEventListener("change",function(){if(r.form&&r.form.q&&r.form.q.value.trim())r.form.submit()});u()})'
+             'r.addEventListener("input",u);r.addEventListener("change",function(){if(r.form&&r.form.q&&r.form.q.value.trim())r.form.submit()});u()});'
+             # qidiruv qatori takliflari (/api/suggest — faqat korpusdagi real so'z shakllari)
+             'd.querySelectorAll("form[role=search] input[type=search][name=q]").forEach(function(inp){'
+             'var wrap=inp.parentNode,box=d.createElement("div"),items=[],sel=-1,acT;'
+             'box.className="tc-ac";box.setAttribute("role","listbox");wrap.appendChild(box);'
+             'function hide(){box.classList.remove("is-open");box.innerHTML="";items=[];sel=-1}'
+             'function pick(t){inp.value=t;hide();if(inp.form)inp.form.submit()}'
+             'function render(list){if(!list.length){hide();return}items=list;sel=-1;box.innerHTML="";'
+             'list.forEach(function(s){var b=d.createElement("button");b.type="button";b.className="tc-ac__item";b.setAttribute("role","option");'
+             'var w=d.createElement("span");w.textContent=s.text;w.lang=s.lang||"";var n=d.createElement("small");n.className="tc-num";n.textContent=s.count;'
+             'b.appendChild(w);b.appendChild(n);b.addEventListener("mousedown",function(e){e.preventDefault();pick(s.text)});box.appendChild(b)});'
+             'box.classList.add("is-open")}'
+             'inp.setAttribute("autocomplete","off");'
+             'inp.addEventListener("input",function(){var v=inp.value.trim();clearTimeout(acT);if(v.length<2){hide();return}'
+             'acT=setTimeout(function(){fetch("/api/suggest?q="+encodeURIComponent(v)).then(function(r){return r.ok?r.json():null})'
+             '.then(function(j){if(inp.value.trim()===v)render((j&&j.suggestions)||[])}).catch(function(){hide()})},180)});'
+             'inp.addEventListener("keydown",function(e){if(!items.length)return;'
+             'if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();sel=(sel+(e.key==="ArrowDown"?1:items.length-1))%items.length;'
+             'box.querySelectorAll(".tc-ac__item").forEach(function(b,i){b.classList.toggle("is-sel",i===sel)})}'
+             'else if(e.key==="Enter"&&sel>=0){e.preventDefault();pick(items[sel].text)}'
+             'else if(e.key==="Escape"){hide()}});'
+             'inp.addEventListener("blur",function(){setTimeout(hide,150)})})'
              '})})();</script>')
 
 
@@ -361,9 +384,11 @@ def render_nav(lang='uz', current_path='/', is_admin=False):
     pills = ''.join('<a href="%s" hreflang="%s"%s>%s</a>' % (lang_href(c), c, cur_attr(c == lang), short) for c, _f, short in names)
     sign = '<a class="tc-signin" href="%s">%s</a>' % (with_lang('/kirish', lang), T(lang, 'nav_logout') if is_admin else T(lang, 'nav_login'))
     topbar = ('<div class="tc-topbar"><div class="tc-topbar__in">'
+              '<div class="tc-topbar__info"><span>%s%s</span><span>%s%s</span><span>%s%s</span></div>'
               '<nav class="tc-topbar__links" aria-label="%s"><a href="%s">%s</a><a href="%s">%s</a><a href="%s">%s</a></nav>'
               '<div class="tc-flags" role="group" aria-label="%s">%s</div>%s</div></div>'
-              % (T(lang, 'nav_analysis'), with_lang('/metodologiya', lang), T(lang, 'nav_methodology'),
+              % (icon('pin'), T(lang, 'topbar_place'), icon('file'), T(lang, 'topbar_research'), icon('book'), T(lang, 'topbar_books'),
+                 T(lang, 'nav_analysis'), with_lang('/metodologiya', lang), T(lang, 'nav_methodology'),
                  with_lang('/statistika', lang), T(lang, 'nav_statistics'), with_lang('/sources_rights.html', lang), T(lang, 'nav_sources'),
                  T(lang, 'interface_language'), flags, sign))
 
@@ -380,13 +405,13 @@ def render_nav(lang='uz', current_path='/', is_admin=False):
         drawer.append('<div class="tc-drawer__group"><a href="%s">%s</a>%s</div>'
                       % (with_lang(href, lang), T(lang, key),
                          ('<div>%s</div>' % ''.join('<a href="%s">%s</a>' % (with_lang(h, lang), T(lang, k)) for h, k, _d in menu)) if menu else ''))
-    brand = ('<a class="tc-brand" href="%s">%s<span class="tc-brand__text"><span class="tc-brand__name">TILCOR</span>'
+    brand = ('<a class="tc-brand" href="%s">%s<span class="tc-brand__text"><span class="tc-brand__name">TILCOR</span> '
              '<span class="tc-brand__sub">%s</span></span></a>' % (with_lang('/', lang), _LOGO, T(lang, 'brand_sub')))
     header = ('<header class="tc-header"><div class="tc-header__in">%s<nav class="tc-nav" aria-label="%s">%s</nav>'
-              '<div class="tc-tools"><a class="tc-round" href="%s" data-open="tc-so" aria-label="%s" title="%s">%s</a>'
-              '<a class="tc-round" href="#tc-drawer" data-open="tc-drawer" aria-label="%s" title="%s">%s</a></div></div></header>'
-              % (brand, T(lang, 'nav_menu'), ''.join(nav), with_lang('/qidiruv', lang), T(lang, 'so_open'), T(lang, 'so_open'), icon('search'),
-                 T(lang, 'menu_open'), T(lang, 'menu_open'), icon('menu')))
+              '<div class="tc-tools"><a class="tc-round" href="%s" data-open="tc-so" title="%s">%s<span class="tc-sr">%s</span></a>'
+              '<a class="tc-round" href="#tc-drawer" data-open="tc-drawer" title="%s">%s<span class="tc-sr">%s</span></a></div></div></header>'
+              % (brand, T(lang, 'nav_menu'), ''.join(nav), with_lang('/qidiruv', lang), T(lang, 'so_open'), icon('search'), T(lang, 'so_open'),
+                 T(lang, 'menu_open'), icon('menu'), T(lang, 'menu_open')))
     drawer_html = ('<div class="tc-drawer" id="tc-drawer" role="dialog" aria-modal="true" aria-label="%s">'
                    '<div class="tc-drawer__shade" data-close="tc-drawer"></div><div class="tc-drawer__panel">'
                    '<div class="tc-drawer__top"><div class="tc-lang" role="group" aria-label="%s">%s</div>'
@@ -396,7 +421,7 @@ def render_nav(lang='uz', current_path='/', is_admin=False):
     # the search overlay
     hidden = '' if lang == 'uz' else '<input type="hidden" name="lang" value="%s">' % lang
     targets = ''.join('<label><input type="radio" name="tc-target" value="%s"%s> %s</label>' % (a, ' checked' if a == '/qidiruv' else '', T(lang, k))
-                      for a, k in (('/qidiruv', 'so_t_search'), ('/kwic', 'so_t_kwic'), ('/kollokatsiyalar', 'so_t_colls')))
+                      for a, k in (('/qidiruv', 'so_t_search'), ('/kwic', 'so_t_kwic'), ('/kollokatsiyalar', 'so_t_colls'), ('/lugat', 'so_t_dict')))
     samples = ''.join('<a href="%s" lang="%s">%s</a>' % (with_lang('/qidiruv?q=' + urllib.parse.quote(s), lang), l_, html.escape(s))
                       for s, l_ in SEARCH_SAMPLES + (('old man', 'en'), ('qishloq', 'uz')))
     overlay = ('<div class="tc-so" id="tc-so" role="dialog" aria-modal="true" aria-label="%s">'
@@ -431,6 +456,7 @@ _BAND_SECTIONS = (
     (('/about_project', '/loyiha-haqida'), 'info', 'about_project'),
     (('/lugat',), 'book', 'nav_dictionary'),
     (('/kirish',), 'lock', 'nav_login'),
+    (('/baholash',), 'layers', 'nav_lab_validation'),
 )
 
 
@@ -471,17 +497,20 @@ def _pager(lang, cur, total_pages, make_url):
 
 
 def search_form(lang, query='', book='', action='/qidiruv', extra_html='', autofocus=False):
+    """The search box of the inner pages: the same white pill with a round button as on the home page."""
     hidden = '' if lang == 'uz' else '<input type="hidden" name="lang" value="%s">' % lang
     if book in BOOK_FILTERS:
         hidden += '<input type="hidden" name="kitob" value="%s">' % html.escape(book)
-    samples = ''.join('<a href="%s" lang="%s">%s</a>' % (with_lang(action + '?q=' + urllib.parse.quote(q), lang), l_, html.escape(q))
-                      for q, l_ in SEARCH_SAMPLES)
-    return ('<form action="%s" method="get" role="search"><div class="tc-search">'
-            '<input type="search" name="q" value="%s" placeholder="%s" aria-label="%s"%s>%s'
-            '<button class="tc-btn" type="submit">%s</button></div>'
-            '<div class="tc-samples"><span>%s</span>%s</div>%s</form>'
-            % (action, html.escape(query), T(lang, 'search_placeholder'), T(lang, 'search_label'),
-               ' autofocus' if autofocus else '', hidden, T(lang, 'search_button'), T(lang, 'search_chips_label'), samples, extra_html))
+    chips = ''
+    if not query:
+        chips = '<nav class="tc-hchips" aria-label="%s">%s</nav>' % (T(lang, 'so_samples'), ''.join(
+            '<a href="%s" lang="%s">%s%s</a>' % (with_lang(action + '?q=' + urllib.parse.quote(q), lang), l_, html.escape(q), icon('arrow'))
+            for q, l_ in SEARCH_SAMPLES))
+    return ('<form class="tc-sform" action="%s" method="get" role="search"><div class="tc-hsearch">'
+            '<input type="search" name="q" value="%s" placeholder="%s" aria-label="%s" autocomplete="off"%s>%s'
+            '<button type="submit" aria-label="%s">%s</button></div>%s%s</form>'
+            % (action, html.escape(query), T(lang, 'home_search_placeholder'), T(lang, 'search_label'),
+               ' autofocus' if autofocus else '', hidden, T(lang, 'search_button'), icon('search'), chips, extra_html))
 
 
 # ---------------------------------------------------------------------
@@ -494,25 +523,24 @@ def render_home_page(lang='uz', stats=None, is_admin=False, featured=None):
     def n(k):
         return format_number(st.get(k, 0), lang)
 
-    h1 = T(lang, 'home_h1')
-    if ' — ' in h1:
-        first, second = h1.split(' — ', 1)
-    elif ', ' in h1:
-        first, second = h1.rsplit(', ', 1)
-    else:
-        first, second = h1, ''
-    hero = ('<section class="tc-hero">%s<div class="tc-hero__in"><div>'
-            '<div class="tc-eyebrow">TILCOR</div><h1>%s<span>%s</span></h1><p class="tc-lead">%s</p>%s'
-            '<div class="tc-hero__btns"><a class="tc-btn" href="%s">%s%s</a><a class="tc-btn tc-btn--ghost" href="%s">%s%s</a></div></div>'
-            '<div class="tc-stats">'
+    hidden = '' if lang == 'uz' else '<input type="hidden" name="lang" value="%s">' % lang
+    chips = ''.join('<a href="%s" lang="%s">%s%s</a>' % (with_lang('/qidiruv?q=' + urllib.parse.quote(q), lang), l_, html.escape(q), icon('arrow'))
+                    for q, l_ in HOME_SAMPLES)
+    search = ('<form class="tc-hsearch" action="/qidiruv" method="get" role="search">'
+              '<input type="search" name="q" placeholder="%s" aria-label="%s" autocomplete="off">%s'
+              '<button type="submit" aria-label="%s">%s</button></form>'
+              '<nav class="tc-hchips" aria-label="%s">%s</nav>'
+              % (T(lang, 'home_search_placeholder'), T(lang, 'search_label'), hidden, T(lang, 'search_button'), icon('arrow'),
+                 T(lang, 'so_samples'), chips))
+    hero = ('<section class="tc-hero">%s<div class="tc-hero__in"><div class="tc-hero__text">'
+            '<p class="tc-eyebrow">%s</p><h1>%s <span>%s</span></h1><p class="tc-lead">%s</p>%s</div>'
+            '<div class="tc-stats"><h2 class="tc-stats__title">%s</h2>'
             '<div class="tc-stat tc-stat--big"><small>%s</small><b class="tc-num">%s</b><p>%s</p></div>'
             '<div class="tc-stat tc-stat--wide"><small>%s</small><b class="tc-num">%s</b></div>'
             '<div class="tc-stat"><small>%s</small><b class="tc-num">%s</b></div>'
             '<div class="tc-stat"><small>%s</small><b class="tc-num">%s</b></div></div></div></section>'
-            % (_HERO_ART, html.escape(first), html.escape(second), T(lang, 'home_lead'), search_form(lang),
-               with_lang('/kollokatsiyalar', lang), T(lang, 'nav_collocations'), icon('arrow'),
-               with_lang('/metodologiya', lang), T(lang, 'nav_methodology'), icon('arrow'),
-               T(lang, 'home_stat_pairs'), n('pairs_total'), T(lang, 'home_stat_note'),
+            % (_HERO_ART, T(lang, 'home_eyebrow'), T(lang, 'home_h1_a'), T(lang, 'home_h1_b'), T(lang, 'home_lead2'), search,
+               T(lang, 'home_stats_title'), T(lang, 'home_stat_pairs'), n('pairs_total'), T(lang, 'home_stat_note'),
                T(lang, 'home_stat_tokens'), n('tokens_total'), T(lang, 'home_stat_collocations'), n('collocations_index'),
                T(lang, 'home_stat_works'), format_number(2, lang)))
 
@@ -541,9 +569,11 @@ def render_home_page(lang='uz', stats=None, is_admin=False, featured=None):
         ('label_tokens', '<span class="tc-num">%s / %s</span>' % (n('tokens_oms_en'), n('tokens_oms_uz')))], '/qidiruv?kitob=oms')
     links = ''.join('<a href="%s"><i>%s</i><span><b>%s</b><span>%s</span></span></a>' % (with_lang(h, lang), icon(ic), T(lang, k), T(lang, d))
                     for h, ic, k, d in (('/kollokatsiyalar', 'nodes', 'nav_collocations', 'home_link_colloc'),
+                                        ('/lugat', 'book', 'dict_title', 'home_link_dict'),
                                         ('/kwic', 'columns', 'nav_kwic', 'home_link_kwic'),
                                         ('/metodologiya', 'file', 'nav_methodology', 'home_link_method'),
-                                        ('/statistika', 'chart', 'nav_statistics', 'home_link_stats')))
+                                        ('/statistika', 'chart', 'nav_statistics', 'home_link_stats'),
+                                        ('/korpus', 'layers', 'nav_corpus_overview', 'home_link_corpus')))
     body = ('%s<section class="tc-section"><h2>%s</h2><div class="tc-books" style="margin-top:16px">%s%s</div></section>'
             '<section class="tc-section"><h2>%s</h2><div class="tc-links" style="margin-top:16px">%s</div></section>'
             % (feat, T(lang, 'home_sources_title'), kvk, oms, T(lang, 'home_more_title'), links))
@@ -582,7 +612,8 @@ def render_equivalents(res, lang, query):
         rows.append('<div class="tc-eq"><div class="tc-eq__head"><span class="tc-eq__word" lang="%s">%s</span>'
                     '<span class="tc-eq__meta tc-num">%s, %d%%</span>%s%s</div>%s</div>'
                     % (o_lang, html.escape(e['text']), html.escape(count_phrase(e['count'], 'label_sentences', lang)), e['share'], badges, forms_html, ex_html))
-    note = get_i18n(lang, 'eq_note').replace('{with}', format_number(cov.get('with', 0), lang)).replace('{total}', format_number(cov.get('total', 0), lang))
+    key = 'eq_note_all' if cov.get('total') and cov.get('with', 0) >= cov.get('total', 0) else 'eq_note'
+    note = get_i18n(lang, key).replace('{with}', format_number(cov.get('with', 0), lang)).replace('{total}', format_number(cov.get('total', 0), lang))
     return '<section class="tc-section">%s<p class="tc-section__note">%s</p>%s%s</section>' % (head, html.escape(note), bar, ''.join(rows))
 
 
@@ -719,11 +750,26 @@ def render_qidiruv_page(lang='uz', query='', book='', search_res=None, is_admin=
         lang_note = T(lang, 'q_lang_uz') if q_lang == 'uz' else T(lang, 'q_lang_en')
         if res.get('is_ambiguous') and q_lang == 'uz':
             lang_note += ' <a href="%s">%s</a>' % (url(til='en'), T(lang, 'q_lang_force_en'))
-        body += ('<header style="margin-top:32px"><h1 lang="%s">%s</h1><p class="tc-lead tc-num" style="margin-top:6px">%s, %s. %s</p></header>'
-                 % (q_lang, html.escape(query), html.escape(count_phrase(occ, 'occurrences_in_corpus', lang)),
-                    html.escape(count_phrase(total, 'label_sentences', lang)), lang_note))
+        if lang == 'uz':
+            summary = 'Korpusda %s marta uchraydi, %s ta gapda.' % (format_number(occ, lang), format_number(total, lang))
+        else:
+            summary = '%s, %s.' % (count_phrase(occ, 'occurrences_in_corpus', lang), count_phrase(total, 'label_sentences', lang))
+        pm = res.get('per_million')
+        if pm:
+            pm_s = ('%.1f' % pm if lang == 'en' else ('%.1f' % pm).replace('.', ',')) if isinstance(pm, float) else format_number(pm, lang)
+            summary += ' ' + get_i18n(lang, 'freq_pm').replace('{n}', pm_s)
+        body += ('<header style="margin-top:32px"><h1 lang="%s">%s</h1><p class="tc-lead tc-num" style="margin-top:6px">%s %s</p></header>'
+                 % (q_lang, html.escape(query), html.escape(summary), lang_note))
         if not total:
-            body += '<div class="tc-panel" style="margin-top:24px"><p>%s</p></div>' % T(lang, 'not_in_corpus')
+            dym = res.get('did_you_mean') or []
+            dym_html = ''
+            if dym:
+                chips = ''.join('<a class="tc-chip" href="%s" lang="%s">%s <span class="tc-num tc-muted">%s</span></a>'
+                                % (url(q=s['text']), 'uz' if s.get('lang') != 'en' else 'en', html.escape(s['text']),
+                                   format_number(s.get('count', 0), lang)) for s in dym)
+                dym_html = ('<p style="margin-top:14px">%s</p><div class="tc-chips" style="margin-top:8px">%s</div>'
+                            % (T(lang, 'did_you_mean'), chips))
+            body += '<div class="tc-panel" style="margin-top:24px"><p>%s</p>%s</div>' % (T(lang, 'not_in_corpus'), dym_html)
             body += render_collocations(res, lang)
         else:
             body += (render_equivalents(res, lang, query) + render_word_forms(res, lang) + render_collocations(res, lang)
@@ -820,6 +866,17 @@ def render_reference_page(lang='uz', is_admin=False, items=None, page_no=1):
     return page(lang, get_i18n(lang, 'ref_lists_title'), body, '/kollokatsiyalar', is_admin)
 
 
+def _uniq_forms(forms, exclude=''):
+    """Word forms without case variants (Chol, chol) and without the form shown as the head."""
+    out, seen = [], {exclude.lower()}
+    for f in forms:
+        low = f.lower()
+        if low not in seen:
+            seen.add(low)
+            out.append(f[:1].lower() + f[1:] if f[:1].isupper() and not f.isupper() else f)
+    return out
+
+
 def render_collocation_detail(lang, is_admin, item, pairs):
     """All stored occurrences of one corpus collocation, each as a facing pair."""
     q_lang = item['lang']
@@ -827,9 +884,13 @@ def render_collocation_detail(lang, is_admin, item, pairs):
     trs = item.get('translations') or []
     tr_rows = ''.join('<tr><td class="tc-serif" lang="%s">%s</td><td class="tc-num">%s</td><td class="tc-small tc-muted">%s</td></tr>'
                       % (o_lang, html.escape(t['text']), format_number(t['count'], lang),
-                         html.escape(', '.join(k for k in (t.get('forms') or {}) if k != t['text']))) for t in trs)
+                         html.escape(', '.join(_uniq_forms(t.get('forms') or {}, t['text'])))) for t in trs)
     cards = ''.join(pair_html(lang, p['book'], q_lang, p['query_html'], p['query_page'], p['other_html'], p['other_page'], compact=True) for p in pairs)
-    forms = ', '.join(html.escape(f) for f in (item.get('forms') or {}))
+    seen_forms = []
+    for f_ in (item.get('forms') or {}):
+        if f_.lower() not in [x.lower() for x in seen_forms]:
+            seen_forms.append(f_[:1].lower() + f_[1:] if f_[:1].isupper() and not f_.isupper() else f_)
+    forms = ', '.join(html.escape(f) for f in seen_forms)
     cite = 'TILCOR. (2026). %s [%s]. https://tilcor.uz/kollokatsiya/%s' % (item.get('display'), get_i18n(lang, 'profile_collocation'), item['id'])
     lead = html.escape(pattern_label(item.get('pattern', ''), lang)) + '; ' + html.escape(count_phrase(item.get('freq', 0), 'occurrences_word', lang)) + '.'
     if forms:
@@ -848,21 +909,49 @@ def render_collocation_detail(lang, is_admin, item, pairs):
     a = item.get('assoc') or {}
     assoc_sec = ''
     if a:
-        cells = [('O₁₁', format_number(item.get('freq', 0), lang)), ('R₁', format_number(a.get('f1', 0), lang)),
-                 ('C₁', format_number(a.get('f2', 0), lang)), ('N', format_number(a.get('n', 0), lang))]
-        cells += [(lbl, format_decimal(a.get(k), lang, 1 if k == 'g2' else 2)) for k, lbl in MEASURE_LABELS]
-        assoc_sec = ('<section class="tc-section"><h2>%s</h2><p class="tc-section__note">%s</p>'
-                     '<div class="tc-panel" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px 18px;margin-top:12px">%s</div></section>'
-                     % (T(lang, 'coll_assoc_title'), T(lang, 'coll_assoc_note'),
-                        ''.join('<div><div class="tc-small tc-muted">%s</div><div class="tc-num" style="font-size:1.15rem">%s</div></div>' % (k, v) for k, v in cells)))
+        def cell(k, v):
+            return '<div><div class="tc-small tc-muted">%s</div><div class="tc-num" style="font-size:1.15rem">%s</div></div>' % (k, v)
+        corp = [('O₁₁', format_number(item.get('freq', 0), lang)), ('R₁', format_number(a.get('f1', 0), lang)),
+                ('C₁', format_number(a.get('f2', 0), lang)), ('N', format_number(a.get('n', 0), lang))]
+        corp += [(lbl, format_decimal(a.get(k), lang, 1 if k == 'g2' else 2)) for k, lbl in MEASURE_LABELS]
+        groups = '<h3 style="margin:4px 0 10px">%s</h3><div class="tc-statgrid">%s</div>' % (T(lang, 'coll_ref_corpus'), ''.join(cell(k, v) for k, v in corp))
+        ref = item.get('ref')
+        if ref is not None:
+            if ref.get('f'):
+                rc = [('f', format_number(ref['f'], lang)), ('R₁', format_number(ref.get('f1', 0), lang)), ('C₁', format_number(ref.get('f2', 0), lang)),
+                      ('N', format_number(ref.get('n', 0), lang))]
+                rc += [(lbl, format_decimal(ref.get(k), lang, 1 if k == 'g2' else 2)) for k, lbl in MEASURE_LABELS]
+                note = T(lang, 'coll_ref_min') if ref['f'] >= 5 else T(lang, 'coll_ref_low')
+                groups += ('<h3 style="margin:18px 0 10px">%s</h3><div class="tc-statgrid">%s</div><p class="tc-small tc-muted" style="margin-top:8px">%s. '
+                           '<a href="%s">%s</a></p>' % (T(lang, 'coll_ref_ref'), ''.join(cell(k, v) for k, v in rc), note,
+                                                        with_lang('/statistika#tayanch', lang), T(lang, 'coll_ref_more')))
+            else:
+                groups += ('<h3 style="margin:18px 0 6px">%s</h3><p class="tc-small tc-muted">%s. <a href="%s">%s</a></p>'
+                           % (T(lang, 'coll_ref_ref'), T(lang, 'coll_ref_none'), with_lang('/statistika#tayanch', lang), T(lang, 'coll_ref_more')))
+        elif q_lang == 'uz':
+            groups += '<p class="tc-small tc-muted" style="margin-top:12px">%s</p>' % T(lang, 'coll_ref_uz')
+        judged = ''
+        try:
+            import validation as V
+            import validation_pages as VP
+            rec = V.annotations()['records'].get('colloc_' + q_lang, {})
+            cats = [r_.get('A', {}).get('labels', {}).get('category') for iid, r_ in rec.items() if iid.startswith('c:%s:' % item['id'])]
+            cats = [c_ for c_ in cats if c_]
+            if cats:
+                judged = '<p style="margin-top:14px"><span class="tc-badge tc-badge--tile">%s: %s</span></p>' % (
+                    T(lang, 'coll_judged'), html.escape(VP.L[lang]['cat_' + cats[0]]))
+        except Exception:
+            judged = ''
+        assoc_sec = ('<section class="tc-section"><h2>%s</h2><p class="tc-section__note">%s</p><div class="tc-panel" style="margin-top:12px">%s%s</div></section>'
+                     % (T(lang, 'coll_ref_title'), T(lang, 'coll_assoc_note'), groups, judged))
     shown_note = ''
     if item.get('freq', 0) > len(pairs):
         shown_note = '<p class="tc-section__note tc-num">%s</p>' % T(lang, 'coll_examples_first').replace('{n}', format_number(len(pairs), lang))
     body = ('<p class="tc-small"><a href="%s">%s</a></p><h1 lang="%s" style="margin-top:8px">%s</h1><p class="tc-lead">%s</p>%s'
-            '<section class="tc-section"><h2>%s <span class="tc-count tc-num">%s</span></h2>%s%s<div style="margin-top:12px">%s</div></section>%s'
+            '%s<section class="tc-section"><h2>%s <span class="tc-count tc-num">%s</span></h2>%s%s<div style="margin-top:12px">%s</div></section>'
             '<section class="tc-section"><h2>%s</h2><p class="tc-panel tc-small" style="margin-top:12px;font-family:var(--serif)">%s</p></section>'
             % (with_lang('/kollokatsiyalar?til=' + q_lang, lang), T(lang, 'coll_page_title'), q_lang, html.escape(item.get('display') or ''),
-               lead, tr_sec, T(lang, 'sec_sentences'), format_number(len(pairs), lang), shown_note, legend(lang), cards, assoc_sec,
+               lead, tr_sec, assoc_sec, T(lang, 'sec_sentences'), format_number(len(pairs), lang), shown_note, legend(lang), cards,
                T(lang, 'perm_citation_page'), html.escape(cite)))
     return page(lang, item.get('display') or '', body, '/kollokatsiyalar', is_admin)
 
@@ -907,21 +996,163 @@ def render_korpus_page(lang='uz', is_admin=False, stats=None):
     return page(lang, get_i18n(lang, 'korpus_title'), body, '/korpus', is_admin)
 
 
-def render_lugat_page(lang='uz', is_admin=False, query='', page_no=1, **_):
-    body = ('<h1>%s</h1><div class="tc-panel" style="margin-top:20px"><h2>%s</h2><p class="tc-prose" style="margin-top:10px">%s</p>'
-            '<p style="margin-top:14px"><a class="tc-btn" href="%s">%s</a></p></div>'
-            % (T(lang, 'nav_dictionary'), T(lang, 'dict_hidden_title'), T(lang, 'dict_hidden_text'), with_lang('/qidiruv', lang), T(lang, 'btn_go_search')))
-    return page(lang, get_i18n(lang, 'nav_dictionary'), body, '/lugat', is_admin, narrow=True)
+POS_KEYS = {'noun': 'pos_noun', 'verb': 'pos_verb', 'adj': 'pos_adj', 'adv': 'pos_adv'}
 
 
-def render_login_page(lang='uz', user=None):
+def _dict_url(lang, d, **kw):
+    params = [('yo', d)] + [(k, v) for k, v in kw.items() if v]
+    return with_lang('/lugat?' + urllib.parse.urlencode(params), lang)
+
+
+def _dict_word_tile(lang, d, e, n_tr=2):
+    o = other_lang(d)
+    pos = ('<i>%s</i>' % T(lang, POS_KEYS[e['pos']])) if e.get('pos') in POS_KEYS else ''
+    top_n = e['tr'][0]['count'] if e['tr'] else 0
+    trs = ', '.join(html.escape(t['text']) for t in e['tr'][:n_tr] if t['count'] >= 0.3 * top_n)
+    return ('<a class="tc-dword" href="%s"><b lang="%s">%s</b>%s<span lang="%s">%s</span><small class="tc-num">%s</small></a>'
+            % (_dict_url(lang, d, q=e['head']), d, html.escape(e['head']), pos, o, trs, format_number(e['freq'], lang)))
+
+
+def render_lugat_page(lang='uz', is_admin=False, model=None, **_):
+    """The corpus dictionary: Uzbek–English and English–Uzbek, built from the translators' own words."""
+    lang = lang if lang in ('uz', 'en', 'ru') else 'uz'
+    m = model or {}
+    d = m.get('dir') or 'uz'
+    o = other_lang(d)
+    st = m.get('stats') or {}
+    q = m.get('q') or ''
+    stats = hero_stats([('book', T(lang, 'hs_dict_uz'), format_number(st.get('uz', 0), lang)),
+                        ('book', T(lang, 'hs_dict_en'), format_number(st.get('en', 0), lang)),
+                        ('layers', T(lang, 'hs_dict_tr'), format_number(st.get('pairs', 0), lang))])
+    seg = ''.join('<label><input type="radio" name="yo" value="%s"%s><span>%s%s</span></label>'
+                  % (code, ' checked' if code == d else '', '<b class="tc-seg__flag">%s</b>' % _FLAGS[code], T(lang, 'dict_dir_' + code))
+                  for code in ('uz', 'en'))
+    hidden = '' if lang == 'uz' else '<input type="hidden" name="lang" value="%s">' % lang
+    form = ('<form class="tc-dform" action="/lugat" method="get" role="search">'
+            '<fieldset class="tc-seg"><legend class="tc-sr">%s</legend>%s</fieldset>'
+            '<div class="tc-hsearch"><input type="search" name="q" value="%s" placeholder="%s" aria-label="%s" autocomplete="off"%s>%s'
+            '<button type="submit" aria-label="%s">%s</button></div></form>'
+            % (T(lang, 'dict_dir_label'), seg, html.escape(q), T(lang, 'dict_placeholder_' + d), T(lang, 'dict_placeholder_' + d),
+               '' if q else ' autofocus', hidden, T(lang, 'dict_find'), icon('search')))
+    present = m.get('present') or set()
+    abc = ''.join(('<a href="%s"%s>%s</a>' % (_dict_url(lang, d, harf=l_), cur_attr(l_ == m.get('letter')), html.escape(l_)))
+                  if l_ in present else '<span aria-hidden="true">%s</span>' % html.escape(l_) for l_ in (m.get('letters') or ()))
+    abc = '<nav class="tc-abc" aria-label="%s" lang="%s">%s</nav>' % (T(lang, 'dict_letters'), d, abc)
+    mode = m.get('mode')
+    out = ''
+    if mode == 'entry':
+        if m.get('switched') and m.get('explicit'):
+            out += '<p class="tc-dnote">%s</p>' % T(lang, 'dict_switched_' + d)
+        for item in m.get('entries') or []:
+            out += _dict_entry(lang, d, item)
+        if m.get('other_hit') and not m.get('switched'):
+            out += ('<p class="tc-dnote"><a href="%s">%s: <span lang="%s">%s</span></a></p>'
+                    % (_dict_url(lang, o, q=q), T(lang, 'dict_also_other_' + o), o, html.escape(q)))
+    elif mode == 'notfound':
+        sug = m.get('suggest') or []
+        out += ('<div class="tc-panel tc-dmiss"><h2>%s</h2><p class="tc-prose tc-muted" style="margin-top:8px">%s</p>'
+                % (html.escape(get_i18n(lang, 'dict_not_found').replace('{q}', q)), T(lang, 'dict_not_found_hint')))
+        links = '<a class="tc-btn tc-btn--ghost" href="%s">%s%s</a>' % (with_lang('/qidiruv?q=' + urllib.parse.quote(q), lang), icon('search'), T(lang, 'dict_search_corpus'))
+        if m.get('other_hit'):
+            links = '<a class="tc-btn" href="%s">%s</a>' % (_dict_url(lang, o, q=q), T(lang, 'dict_also_other_' + o)) + links
+        out += '<div class="tc-hero__btns" style="margin-top:18px">%s</div></div>' % links
+        if sug:
+            out += ('<section class="tc-section"><h2>%s</h2><div class="tc-dwords" style="margin-top:14px">%s</div></section>'
+                    % (T(lang, 'dict_suggest'), ''.join(_dict_word_tile(lang, d, e) for e in sug)))
+    elif mode == 'letter':
+        n_items = m.get('n_items', 0)
+        out += ('<section class="tc-section"><div class="tc-section__head"><h2>%s <span class="tc-count tc-num">%s</span></h2></div>'
+                '<div class="tc-dwords">%s</div>%s</section>'
+                % (html.escape(get_i18n(lang, 'dict_letter_head').replace('{letter}', m['letter'])),
+                   html.escape(count_phrase(n_items, 'dict_words', lang)),
+                   ''.join(_dict_word_tile(lang, d, e) for e in m.get('items') or []),
+                   _pager(lang, m.get('page', 1), m.get('total_pages', 1), lambda p: _dict_url(lang, d, harf=m['letter'], sahifa=p))))
+    else:
+        out += ('<section class="tc-section"><div class="tc-section__head"><h2>%s</h2></div><p class="tc-section__note">%s</p>'
+                '<div class="tc-dwords">%s</div></section>'
+                % (T(lang, 'dict_top'), T(lang, 'dict_top_note'), ''.join(_dict_word_tile(lang, d, e) for e in m.get('top') or [])))
+        out += ('<section class="tc-section"><div class="tc-panel"><h2>%s</h2><p class="tc-prose" style="margin-top:10px">%s</p>'
+                '<p style="margin-top:12px"><a href="%s">%s</a></p></div></section>'
+                % (T(lang, 'dict_method_title'), T(lang, 'dict_method_text'), with_lang('/methodology.html#lugat', lang), T(lang, 'dict_method_link')))
+    js = ('<script>(function(){var f=document.querySelector(".tc-dform");if(!f)return;'
+          'f.querySelectorAll("input[name=yo]").forEach(function(r){r.addEventListener("change",function(){'
+          'var i=f.querySelector("input[name=q]");i.placeholder=r.value=="uz"?%s:%s;'
+          'if(!i.value.trim()){f.submit()}else{i.focus()}})})})();</script>'
+          % (json.dumps(get_i18n(lang, 'dict_placeholder_uz')), json.dumps(get_i18n(lang, 'dict_placeholder_en'))))
+    head = ('<h1>%s</h1><p class="tc-lead">%s</p>%s' % (T(lang, 'dict_title'), T(lang, 'dict_lead'), stats) if mode == 'home'
+            else '<h1>%s</h1>' % T(lang, 'dict_title'))
+    body = head + '<div class="tc-dbar">%s%s</div>%s%s' % (form, abc, out, js)
+    title = q if q else get_i18n(lang, 'dict_title')
+    path = '/lugat' + ('?q=' + urllib.parse.quote(q) if q else '')
+    return page(lang, title, body, path, is_admin)
+
+
+def _dict_entry(lang, d, item):
+    e = item['e']
+    o = other_lang(d)
+    pos = ('<span class="tc-entry__pos">%s</span>' % T(lang, POS_KEYS[e['pos']])) if e.get('pos') in POS_KEYS else ''
+    forms = ', '.join('<span lang="%s">%s</span> <span class="tc-num">%s</span>' % (d, html.escape(f), format_number(c, lang))
+                      for f, c in list((e.get('forms') or {}).items())[:8])
+    total = sum(t['count'] for t in item['tr']) or 1
+    senses = []
+    for k, t in enumerate(item['tr']):
+        pct = 100.0 * t['count'] / total
+        tforms = ', '.join('%s <span class="tc-num">%s</span>' % (html.escape(f), format_number(c, lang)) for f, c in (t.get('forms') or {}).items())
+        rev = ('<a class="tc-sense__rev" href="%s">%s%s</a>' % (_dict_url(lang, o, q=t['text']), icon('arrow'), T(lang, 'dict_reverse_' + o))
+               if t.get('reverse') else '')
+        pair = ''
+        p = t.get('pair')
+        if p:
+            foot = ('<span class="tc-badge tc-badge--tile">%s</span>' % T(lang, 'eq_in_dissertation')) if p.get('researcher') else ''
+            pair = pair_html(lang, p['book'], d, p['q_html'], p['q_page'], p['o_html'], p['o_page'], foot=foot, compact=True)
+            pair = ('<div class="tc-sense__ex"><p class="tc-small tc-muted">%s</p>%s</div>' % (T(lang, 'dict_example'), pair) if k == 0
+                    else '<details class="tc-sense__ex"><summary>%s</summary>%s</details>' % (T(lang, 'dict_more_example'), pair))
+        senses.append('<li class="tc-sense"><div class="tc-sense__head"><span class="tc-sense__word" lang="%s">%s</span>'
+                      '<span class="tc-sense__n tc-num">%s</span><span class="tc-sense__bar" title="%s"><span style="width:%.0f%%"></span></span>%s</div>'
+                      '<p class="tc-sense__forms">%s: <span lang="%s">%s</span></p>%s</li>'
+                      % (o, html.escape(t['text']), html.escape(count_phrase(t['count'], 'occurrences_word', lang)),
+                         html.escape(get_i18n(lang, 'dict_tr_share').replace('{p}', '%.0f' % pct)), max(pct, 3), rev,
+                         T(lang, 'dict_tr_forms'), o, tforms, pair))
+    colls = item.get('colls') or []
+    if colls:
+        lis = ''.join('<li><a href="%s" lang="%s">%s</a> <span class="tc-muted tc-small tc-num">%s</span>%s</li>'
+                      % (with_lang('/kollokatsiya/' + urllib.parse.quote(c['id']), lang), d, html.escape(c.get('display') or c.get('lemma') or ''),
+                         format_number(c.get('freq', 0), lang),
+                         ('<br><span class="tc-small" lang="%s">%s</span>' % (o, html.escape(c['translations'][0]['text']))) if c.get('translations') else '')
+                      for c in colls)
+        coll_html = '<ul class="tc-dlist">%s</ul>' % lis
+    else:
+        coll_html = '<p class="tc-small tc-muted">%s</p>' % T(lang, 'dict_colls_none')
+    rel = item.get('related') or []
+    rel_html = ('<div class="tc-panel"><h3>%s</h3><div class="tc-chips">%s</div></div>'
+                % (T(lang, 'dict_related'), ''.join('<a class="tc-chip" href="%s" lang="%s">%s</a>' % (_dict_url(lang, d, q=r['head']), d, html.escape(r['head']))
+                                                     for r in rel))) if rel else ''
+    head_q = urllib.parse.quote(e['head'][:-3] if d == 'uz' and e.get('pos') == 'verb' and e['head'].endswith('moq') else e['head'])
+    more = ('<div class="tc-panel"><h3>%s</h3><ul class="tc-dlist"><li><a href="%s">%s%s</a></li><li><a href="%s">%s%s</a></li></ul></div>'
+            % (T(lang, 'dict_more'), with_lang('/qidiruv?q=' + urllib.parse.quote(e['head']), lang), icon('search'), T(lang, 'dict_all_sentences'),
+               with_lang('/kwic?q=' + head_q, lang), icon('columns'), T(lang, 'dict_kwic')))
+    return ('<article class="tc-entry"><div class="tc-entry__main"><header class="tc-entry__head"><h2 lang="%s">%s</h2>%s'
+            '<p class="tc-entry__meta"><span class="tc-num">%s</span></p><p class="tc-entry__forms">%s: %s</p></header>'
+            '<h3 class="tc-entry__sub">%s</h3><ol class="tc-senses">%s</ol></div>'
+            '<aside class="tc-aside"><div class="tc-panel"><h3>%s</h3>%s</div>%s%s</aside></article>'
+            % (d, html.escape(e['head']), pos, html.escape(get_i18n(lang, 'dict_in_corpus').replace('{n}', count_phrase(e['freq'], 'occurrences_word', lang))),
+               T(lang, 'dict_forms'), forms, T(lang, 'dict_tr_title'), ''.join(senses), T(lang, 'dict_colls'), coll_html, rel_html, more))
+
+
+def render_login_page(lang='uz', user=None, next_url=''):
     if user:
         logout = "fetch('/api/auth/logout',{method:'POST'}).then(function(){location.href='/'})"
-        body = ('<h1>%s</h1><p class="tc-lead">%s</p><p style="margin-top:18px"><button class="tc-btn tc-btn--ghost" type="button" onclick="%s">%s</button></p>'
-                % (T(lang, 'login_title'), html.escape(get_i18n(lang, 'login_signed_in').replace('{user}', user)), logout, T(lang, 'nav_logout')))
+        links = ''
+        if user in ('admin', 'annotator', 'reviewer'):
+            links += '<a class="tc-btn" href="%s">%s</a>' % (with_lang('/baholash', lang), T(lang, 'nav_lab_validation'))
+        if user == 'admin':
+            links += '<a class="tc-btn tc-btn--ghost" href="/admin_collocations.html">%s</a>' % T(lang, 'nav_lab')
+        body = ('<h1>%s</h1><p class="tc-lead">%s</p><div class="tc-hero__btns" style="margin-top:18px">%s'
+                '<button class="tc-btn tc-btn--ghost" type="button" onclick="%s">%s</button></div>'
+                % (T(lang, 'login_title'), html.escape(get_i18n(lang, 'login_signed_in').replace('{user}', user)), links, logout, T(lang, 'nav_logout')))
     else:
         msgs = json.dumps({'fail': get_i18n(lang, 'error_login_failed'), 'rate': get_i18n(lang, 'login_rate_limited'),
-                           'net': get_i18n(lang, 'login_network_error'), 'home': with_lang('/', lang)}, ensure_ascii=False)
+                           'net': get_i18n(lang, 'login_network_error'), 'home': next_url or with_lang('/', lang)}, ensure_ascii=False)
         script = ("<script>var TC_MSG=%s;function tcLogin(e){e.preventDefault();var f=e.target,err=document.getElementById('tc-login-error');"
                   "err.textContent='';fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},"
                   "body:JSON.stringify({username:f.username.value,password:f.password.value})}).then(function(r){return r.json()"
@@ -1019,7 +1250,7 @@ def render_kwic_page(lang='uz', is_admin=False, query='', book='', window=6, ord
     tpl = get_i18n(lang, 'kwic_words_n')
     slider = ('<div class="tc-range"><span>%s</span><div class="tc-range__row">'
               '<input type="range" name="oyna" min="1" max="15" step="1" value="%d" aria-label="%s">'
-              '<output data-tpl="%s">%s</output></div><div class="tc-range__ticks" aria-hidden="true"><span>1</span><span>15</span></div></div>'
+              '<output data-tpl="%s">%s</output></div><div class="tc-range__ticks" aria-hidden="true"><span>±1</span><span>±15</span></div></div>'
               % (T(lang, 'kwic_window'), window, T(lang, 'kwic_window'), html.escape(tpl), html.escape(tpl.replace('{n}', str(window)))))
     orders = opt('matn', T(lang, 'kwic_sort_text'), order) + opt('chap', T(lang, 'kwic_sort_left'), order) + opt('ong', T(lang, 'kwic_sort_right'), order)
     filters = ('<div class="tc-filters"><label>%s<select name="kitob">%s</select></label>%s'
@@ -1040,7 +1271,7 @@ def render_kwic_page(lang='uz', is_admin=False, query='', book='', window=6, ord
         for l in chunk:
             ql, ol = l['query_lang'], other_lang(l['query_lang'])
             rows.append('<tr><td class="l" lang="%s">%s</td><td class="n" lang="%s"><mark class="q">%s</mark></td><td class="r" lang="%s">%s</td>'
-                        '<td class="s">%s<br>%s</td><td class="s" lang="%s" style="white-space:normal;font-family:var(--serif);font-size:14px;color:var(--ink)">%s</td></tr>'
+                        '<td class="s">%s<br>%s</td><td class="s e" lang="%s" style="white-space:normal;font-family:var(--serif);font-size:14px;color:var(--ink)">%s</td></tr>'
                         % (ql, html.escape(l['left']), ql, html.escape(l['node']), ql, html.escape(l['right']),
                            html.escape(TITLE_BY_SIDE.get((l['book'], ql), '')), html.escape(page_text(lang, l['query_page'])),
                            ol, html.escape(l.get('equivalent') or '—')))

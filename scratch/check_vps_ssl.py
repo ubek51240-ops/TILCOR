@@ -1,8 +1,9 @@
+import os
 import paramiko
 
 HOST = "189.74.100.111"
 USER = "root"
-PASS = "AcL0hzLOh16zDoM$"
+PASS = os.environ.get("TILCOR_VPS_PASSWORD", "")
 
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())

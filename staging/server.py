@@ -876,7 +876,7 @@ def search_dictionary(query, limit=50):
 # ==============================================================
 def load_ai_config():
     cfg = {
-        "api_key": "sk-5phbyal92pr3ztphvp1nc22qp4rlrebz",
+        "api_key": os.environ.get("AI_API_KEY", ""),
         "base_url": "https://api.b.ai/v1",
         "model": "deepseek-v4-flash-vision-exp"
     }

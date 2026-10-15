@@ -1,9 +1,10 @@
+import os
 import sys, paramiko
 sys.stdout.reconfigure(encoding='utf-8')
 
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-client.connect('189.74.100.111', 22, 'root', 'AcL0hzLOh16zDoM$')
+client.connect('189.74.100.111', 22, 'root', os.environ.get("TILCOR_VPS_PASSWORD", ""))
 
 cmds = """
 cd /var/www/tilora

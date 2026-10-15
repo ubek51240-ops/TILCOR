@@ -1,3 +1,5 @@
+> **Tarixiy hujjat (v2 holati).** Joriy holat: `README.md` va `CHANGELOG.md` (v3.5).
+
 # TILCOR platformasi: joriy holat
 
 *14.10.2026. Konsepsiya: claude/tilcor-platforma-konsepsiyasi.md. Kod: tilcor_v2_2026-10-14.zip (VPS ga joylash yordamchi orqali).*

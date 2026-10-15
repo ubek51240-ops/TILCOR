@@ -39,7 +39,8 @@ UZ_VERB_ENDINGS = sorted({
     'moqda', 'yapti', 'yapman', 'yapsan', 'yapmiz', 'yotgan', 'yotib', 'yotardi', 'maydi', 'mayman', 'madi',
     'madim', 'madilar', 'dilar', 'dingiz', 'dim', 'ding', 'dik', 'di', 'ti', 'adilar', 'adi', 'ydi', 'aman',
     'asan', 'amiz', 'ardi', 'arkan', 'ar', 'gancha', 'guncha', 'gach', 'gani', 'gan', 'kan', 'qan', 'moqchi',
-    'moq', 'mas', 'masdan', 'ib', 'sa', 'sin', 'singlar', 'ing', 'inglar', 'ishdi', 'ishib', 'ishdi'}, key=len, reverse=True)
+    'moq', 'mas', 'masdan', 'ib', 'sa', 'sin', 'singlar', 'ing', 'inglar', 'ishdi', 'ishib', 'ishdi',
+    'ibdi', 'ibdilar', 'ibman', 'ibsan', 'ibmiz', 'ibsiz', 'ibdir'}, key=len, reverse=True)   # -ibdi: evidential past (bo‘libdi)
 
 
 def main():
@@ -318,6 +319,11 @@ def main():
                     pat, lemma, base = 'ot + ot', f'{noun_lemma(w1)} {uz_norm(w2.lower())}', noun_lemma(w1)
                 if pat and pat != 'sifat + ot' and pat != 'ot + ot' and not valid_verb(lemma.split()[-1]):
                     pat = None
+                low_w1 = uz_norm(w1.lower())
+                if pat == 'ot + fe’l' and (low_w1.endswith('moqchi') or (low_w1.endswith('ib') and len(low_w1) > 4
+                                                                          and verb_endings_seen.get(low_w1[:-2]))):
+                    excluded['ko‘makchi fe’lli qurilma'] += 1   # qilmoqchi bo‘lmoq (intention), sapchib ko‘tarilmoq (converb)
+                    pat = None
                 if pat in ('ot + fe’l', 'ravish + fe’l', 'ega + kesim') and is_converb(w1, lemma.split()[-1]):
                     excluded['ko‘makchi fe’lli qurilma'] += 1   # tutib turmoq, qila olmoq (1.1.4)
                     pat = None
@@ -352,8 +358,45 @@ def main():
             return form[:1].lower() + form[1:]
         return form
 
+    def researcher_equivalent(pid, lang_, spans):
+        """In the pairs analysed in paragraph 1.1 the researcher marked the equivalent by hand; it is used instead of
+        the word alignment when the collocation lies inside the marked span (the same rule as on the search page)."""
+        ce = (corpus.get(pid) or {}).get('confirmed_equivalent') or {}
+        if not ce or not ce.get('en_span_offsets') or not ce.get('uz_span_offsets'):
+            return [], None
+        u0, u1 = ce['uz_span_offsets']
+        en_spans = [tuple(x) for x in ce['en_span_offsets']]
+        if lang_ == 'uz':
+            mine, other, other_lang = [(u0, u1)], en_spans, 'en'
+        else:
+            mine, other, other_lang = en_spans, [(u0, u1)], 'uz'
+        if not any(a < m1 and m0 < b for a, b in spans for m0, m1 in mine):
+            return [], None
+        rec = aln.get(pid) or {}
+        toks = [t for t in rec.get(other_lang, []) if any(t[0] < b and a < t[1] for a, b in other) and E._is_content(other_lang, t)]
+        key_ = ' '.join(t[2] for t in toks)
+        return ([(min(a for a, _ in other), max(b for _, b in other))], key_) if key_ else ([], None)
+
     def book_of(pid):
         return 'kvk' if '-kvk-' in pid else 'oms'
+
+    # reference corpus counts (scripts/build_reference_en.py): the statistical step of paragraph 1.1.4
+    ref = {}
+    ref_path = os.path.join(DATA, 'reference_en.json')
+    if os.path.exists(ref_path):
+        ref['en'] = json.load(open(ref_path, encoding='utf-8'))
+    ref_path = os.path.join(DATA, 'reference_uz.json')
+    if os.path.exists(ref_path):
+        ref['uz'] = json.load(open(ref_path, encoding='utf-8'))
+
+    def ref_measures(lang_, pat_, lemma_, c_first_, c_last_):
+        R = ref.get(lang_)
+        if not R:
+            return None
+        o = R['pairs'].get(pat_ + '|' + lemma_, 0)
+        f1_, f2_ = R['lemma'].get(c_first_, 0), R['lemma'].get(c_last_, 0)
+        m = measures(o, f1_, f2_, R['n']) if o else {}
+        return dict(m, f=o, f1=f1_, f2=f2_, n=R['n'])
 
     out = []
     for (lang, pat, lemma), e in entries.items():
@@ -372,7 +415,9 @@ def main():
         per_book = {}
         for o in e['occ']:
             pid, spans = o[0], o[1]
-            sp, key = E.equivalent_spans(pid, lang, [tuple(x) for x in spans])
+            sp, key = researcher_equivalent(pid, lang, spans)
+            if not sp:
+                sp, key = E.equivalent_spans(pid, lang, [tuple(x) for x in spans])
             o.append(key if (sp and key) else None)      # [pair id, spans, equivalent key or None]
             st = per_book.setdefault(book_of(pid), {'occ': 0, 'eq': 0, 'single': 0, 'multi': 0})
             st['occ'] += 1
@@ -399,6 +444,7 @@ def main():
             'forms': dict(e['forms'].most_common(6)),
             'log_dice': assoc.get('log_dice'),
             'assoc': assoc,
+            'ref': ref_measures(lang, pat, lemma if lang == 'en' else e['lemma'], c_first, c_last),
             'eq_stats': per_book,
             'translations': [{'key': k, 'text': display_form(trans_text[k], 'en' if lang == 'uz' else 'uz'), 'count': c,
                               'forms': dict(trans_text[k].most_common(4))} for k, c in trans.most_common(6)],

@@ -4,6 +4,31 @@ Har bir bosqichda o‘tkazilgan avtomatlashtirilgan va qo‘lda bajarilgan sinov
 
 ---
 
+## v3.7 Sinovlari — 2026-10-15 (lokal, 8777-port; v3.6 birlashtirilgan kod ustida qayta o‘tkazildi)
+
+| № | Sinov | Natija |
+|---|-------|--------|
+| 1 | `python -m py_compile server.py ui_components.py suggest.py` | ISHLAYDI |
+| 2 | locales/uz,en,ru.json — JSON yaroqliligi | ISHLAYDI |
+| 3 | `/api/suggest?q=yura` → yuragi (19), yura (11), yuradi (8)… | ISHLAYDI |
+| 4 | `/api/suggest?q=hea` → head (172), heard (117), heart (85)… | ISHLAYDI |
+| 5 | `suggest.similar('yurok')` → yurak (d=1); `qishlak` → qishloq; `kongil` → ko‘ngil; `hart` → heart | ISHLAYDI |
+| 6 | `/qidiruv?q=yurok` sahifasida «Buni nazarda tutdingizmi» chiplari | ISHLAYDI |
+| 7 | Tezlik chekovi: 35 ta ketma-ket /qidiruv → 29×200, 6×429; chekov oynasi o‘tgach yana 200. v3.6 birlashgan kodda qayta: 34 ta → 25×200, 9×429 | ISHLAYDI |
+| 8 | Asosiy so‘rovlar: ko‘ngil (454 ms), og‘ir uyqu (377 ms), heart (102 ms), qaror (213 ms) — hammasi 200 | ISHLAYDI |
+| 9 | Maxfiy yo‘llar: /server.py, /data/full_corpus.json, /suggest.py → 404 | ISHLAYDI |
+| 10 | Bosh sahifa, /kollokatsiyalar, /metodologiya → 200; CSS ?v=3.6 ulangan | ISHLAYDI |
+| 11 | Oltin testlar (`scripts/run_gold_tests.py`): 18/21 | QISMAN — 3 ta FAIL (qishloq family 115→111, shark 66→61, deep sleep 2→1) v3.2–3.3 korpus qayta tekislashidan qolgan eski kutilmalar; v3.6 kodi qidiruv sonlariga ta’sir qilmaydi. Kutilmalarni yangilash — tadqiqotchi qarori. |
+| 12 | Autocomplete birinchi qurilishi 330 ms (bir marta), keyingi so‘rovlar ~20 ms | ISHLAYDI |
+| 13 | Per-million chastota qidiruv sarlavhasida («Million so‘zga ≈ N marta») | ISHLAYDI |
+| 14 | GDEX tartibi bilan oltin testlar qayta: 18/21 (o‘zgarmadi — sonlar tartibga bog‘liq emas) | ISHLAYDI |
+| 15 | 20-so‘rovli test (joylashdan keyin, S5-qoida): 20/20 PASS, eng sekini 0,13 s | ISHLAYDI |
+| 16 | tilcor.uz (VPS, 15.10 11:51): himoyalangan 5 yo‘l → 404; 11 sahifa (uz/en/ru) → 200; /api/suggest, «nazarda tutdingizmi», tc-ac, «Million so‘zga» — hammasi jonli saytda ishlaydi; «korpus yuklandi: 10076 ta jumla» | ISHLAYDI |
+
+v3.7 holati: **tilcor.uz da jonli**. VPS zaxirasi: /root/tilcor_backups/tilcor_before_v37_20261015_115123.tar.gz
+
+Holat: lokal. tilcor.uz ga hali joylanmagan.
+
 ## 5-Bosqich (Step 05) Sinovlari — 2026-10-13
 
 ### 1. 20 ta So‘rovli Avtomatlashtirilgan Test To‘plami (`scripts/test_20_queries.py`)

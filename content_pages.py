@@ -178,7 +178,7 @@ T['uz'] = {
     's_title': 'Korpus statistikasi',
     's_lead': 'Bu sahifadagi barcha raqamlar korpus ma’lumotidan so‘rov paytida hisoblanadi.',
     's_size_title': '1. Matnlar hajmi',
-    's_size_note': 'Token — so‘z belgilari ketma-ketligi (o‘zbekcha tutuq belgisi so‘z ichida qoladi), kichik harfga keltirilgan. Hapaks — matnda bir marta uchragan shakl. TTR — shakllar sonining tokenlar soniga nisbati; matn uzunligiga bog‘liq bo‘lgani uchun turli hajmdagi matnlarni bu ko‘rsatkich bilan bevosita solishtirib bo‘lmaydi.',
+    's_size_note': 'Token — harflar ketma-ketligi, kichik harfga keltirilgan; so‘z ichidagi tutuq belgisi (<em>ko‘ngil, ma’no, didn’t</em>) va chiziqcha (<em>qah-qah</em>) so‘zni bo‘lmaydi. Bu jadval butun segmentlangan matnni sanaydi, juft topilmagan gaplar ham kiradi. 3–6-bo‘limlarda esa so‘z darajasidagi tekislash tokenlari sanaladi: faqat juftlangan gaplar, chiziqchali so‘z va inglizcha <em>’s</em>, <em>n’t</em> alohida token, shuning uchun u yerdagi sonlar bundan farq qiladi. Hapaks — matnda bir marta uchragan shakl. TTR — shakllar sonining tokenlar soniga nisbati; matn uzunligiga bog‘liq bo‘lgani uchun turli hajmdagi matnlarni bu ko‘rsatkich bilan bevosita solishtirib bo‘lmaydi.',
     's_head': ['Matn', 'Tili', 'Tokenlar', 'Shakllar', 'Hapakslar', 'TTR'],
     's_pairs_title': '2. Parallel juftliklar',
     's_pairs_head': ['Juftlik', 'Jami', '1.1-paragrafda tahlil qilingan', 'Avtomatik — ikki usul mos', 'Avtomatik — faqat hunalign', 'Avtomatik — tayanch nuqta'],
@@ -335,7 +335,7 @@ T['en'] = {
     's_title': 'Corpus statistics',
     's_lead': 'Every figure on this page is computed from the corpus data at the time of the request.',
     's_size_title': '1. Size of the texts',
-    's_size_note': 'A token is a run of word characters (an Uzbek apostrophe inside a word stays part of it), lower-cased. A hapax is a form that occurs once in the text. TTR is the number of forms divided by the number of tokens; it depends on text length, so texts of different size cannot be compared with it directly.',
+    's_size_note': 'A token is a run of letters, lower-cased; an apostrophe inside a word (<em>ko‘ngil, ma’no, didn’t</em>) and a hyphen (<em>qah-qah</em>) do not split it. This table counts the whole segmented text, including the sentences that have no pair. Sections 3–6 count the tokens of the word alignment instead: paired sentences only, with the parts of a hyphenated word and English <em>’s</em>, <em>n’t</em> as separate tokens, so their figures differ from these. A hapax is a form that occurs once in the text. TTR is the number of forms divided by the number of tokens; it depends on text length, so texts of different size cannot be compared with it directly.',
     's_head': ['Text', 'Language', 'Tokens', 'Forms', 'Hapaxes', 'TTR'],
     's_pairs_title': '2. Parallel pairs',
     's_pairs_head': ['Pair', 'Total', 'Analysed in paragraph 1.1', 'Automatic — two methods agree', 'Automatic — hunalign only', 'Automatic — pin'],
@@ -492,7 +492,7 @@ T['ru'] = {
     's_title': 'Статистика корпуса',
     's_lead': 'Все цифры на этой странице вычисляются из данных корпуса в момент запроса.',
     's_size_title': '1. Объём текстов',
-    's_size_note': 'Токен — последовательность буквенных символов (узбекский апостроф внутри слова остаётся его частью), в нижнем регистре. Гапакс — форма, встретившаяся в тексте один раз. TTR — отношение числа форм к числу токенов; оно зависит от длины текста, поэтому тексты разного объёма по нему напрямую не сравниваются.',
+    's_size_note': 'Токен — последовательность букв в нижнем регистре; апостроф внутри слова (<em>ko‘ngil, ma’no, didn’t</em>) и дефис (<em>qah-qah</em>) слово не разделяют. Таблица считает весь сегментированный текст, включая предложения без пары. В разделах 3–6 считаются токены пословного выравнивания: только выровненные предложения, части слова через дефис и английские <em>’s</em>, <em>n’t</em> — отдельные токены, поэтому там числа другие. Гапакс — форма, встретившаяся в тексте один раз. TTR — отношение числа форм к числу токенов; оно зависит от длины текста, поэтому тексты разного объёма по нему напрямую не сравниваются.',
     's_head': ['Текст', 'Язык', 'Токены', 'Формы', 'Гапаксы', 'TTR'],
     's_pairs_title': '2. Параллельные пары',
     's_pairs_head': ['Пара', 'Всего', 'Разобрано в параграфе 1.1', 'Автоматически — оба метода совпали', 'Автоматически — только hunalign', 'Автоматически — якорь'],
@@ -659,7 +659,7 @@ T['uz'].update({
     's_meas_profile_head': ['O‘lchov', 'O‘rtacha uchrash soni', 'Ikki marta uchraganlar ulushi'],
     's_meas_top': 'Har bir o‘lchov bo‘yicha birinchi 8 kollokatsiya (qavs ichida — uchrash soni)',
     's_meas_top_head': ['O‘lchov', 'Kollokatsiyalar'],
-    's_meas_reading': 'Jadvallarni o‘qish: MI komponentlari kam uchraydigan, ammo deyarli faqat birga keladigan birikmalarni yuqoriga chiqaradi, shuning uchun uning ro‘yxati boshida korpusda ikki marta uchragan nomlar va atamalar turadi; t-score va G² yuqori chastotali birikmalarni afzal ko‘radi va chastota ro‘yxatiga yaqin tartib beradi; logDice ikki chekka orasida turadi. Bu farq MI va t-score haqida adabiyotda aytilgan kuzatishga mos keladi (Gablasova va boshq., 2017). Kichik korpusda MI ikki-uch uchrashga tayanadi, shuning uchun dissertatsiyada u faqat chastota filtri bilan qo‘llanadi (metodologiya, 8-band).',
+    's_meas_reading': 'Jadvallarni o‘qish: MI komponentlari kam uchraydigan, ammo deyarli faqat birga keladigan birikmalarni yuqoriga chiqaradi, shuning uchun uning ro‘yxati boshida korpusda ikki marta uchragan nomlar va atamalar turadi; t-score va G² yuqori chastotali birikmalarni afzal ko‘radi va chastota ro‘yxatiga yaqin tartib beradi; logDice ikki chekka orasida turadi. Bu farq MI va t-score haqida adabiyotda aytilgan kuzatishga mos keladi (Gablasova va boshq., 2017). Kichik korpusda MI ikki-uch uchrashga tayanadi, shuning uchun dissertatsiyada u faqat chastota filtri bilan qo‘llanadi (metodologiya, 9-band).',
     's_ch3_title': '5. III bob uchun ma’lumot',
     's_ch3': 'III bobdagi miqdoriy tahlil uchun 3- va 4-bo‘limlardagi jadvallar asos bo‘ladi: ular korpusdagi barcha kollokatsiyalar bo‘yicha avtomatik hisoblangan, har bir raqam ortidagi gaplarni esa kollokatsiya sahifasida ko‘rish mumkin. Dissertatsiyaning 1.1-paragrafida qo‘lda tahlil qilingan birliklar sifat tahlili uchun namuna sifatida alohida belgilangan.',
 })
@@ -707,7 +707,7 @@ T['en'].update({
     's_meas_profile_head': ['Measure', 'Mean frequency', 'Share occurring twice'],
     's_meas_top': 'The first 8 collocations by each measure (frequency in brackets)',
     's_meas_top_head': ['Measure', 'Collocations'],
-    's_meas_reading': 'Reading the tables: MI promotes combinations whose components are rare but occur almost only together, so its list opens with names and terms that occur twice in the corpus; t-score and G² prefer frequent combinations and give an order close to plain frequency; logDice lies between the two. This matches what the literature says about MI and t-score (Gablasova et al., 2017). In a small corpus MI rests on two or three occurrences, which is why the dissertation uses it only with a frequency filter (methodology, section 8).',
+    's_meas_reading': 'Reading the tables: MI promotes combinations whose components are rare but occur almost only together, so its list opens with names and terms that occur twice in the corpus; t-score and G² prefer frequent combinations and give an order close to plain frequency; logDice lies between the two. This matches what the literature says about MI and t-score (Gablasova et al., 2017). In a small corpus MI rests on two or three occurrences, which is why the dissertation uses it only with a frequency filter (methodology, section 9).',
     's_ch3_title': '5. Data for chapter III',
     's_ch3': 'The tables of sections 3 and 4 are the basis of the quantitative analysis in chapter III: they are computed automatically over all collocations of the corpus, and the sentences behind each figure can be seen on the page of the collocation. The units analysed by hand in paragraph 1.1 of the dissertation are marked separately as a sample for the qualitative analysis.',
 })
@@ -755,7 +755,7 @@ T['ru'].update({
     's_meas_profile_head': ['Мера', 'Средняя частота', 'Доля встретившихся дважды'],
     's_meas_top': 'Первые 8 коллокаций по каждой мере (в скобках — частота)',
     's_meas_top_head': ['Мера', 'Коллокации'],
-    's_meas_reading': 'Как читать таблицы: MI поднимает сочетания, компоненты которых редки, но встречаются почти только вместе, поэтому его список открывают имена и термины, встретившиеся в корпусе дважды; t-score и G² предпочитают частые сочетания и дают порядок, близкий к простой частоте; logDice находится между ними. Это согласуется с тем, что говорится в литературе о MI и t-score (Gablasova et al., 2017). В малом корпусе MI опирается на два-три употребления, поэтому в диссертации он применяется только с частотным фильтром (методология, раздел 8).',
+    's_meas_reading': 'Как читать таблицы: MI поднимает сочетания, компоненты которых редки, но встречаются почти только вместе, поэтому его список открывают имена и термины, встретившиеся в корпусе дважды; t-score и G² предпочитают частые сочетания и дают порядок, близкий к простой частоте; logDice находится между ними. Это согласуется с тем, что говорится в литературе о MI и t-score (Gablasova et al., 2017). В малом корпусе MI опирается на два-три употребления, поэтому в диссертации он применяется только с частотным фильтром (методология, раздел 9).',
     's_ch3_title': '5. Данные для главы III',
     's_ch3': 'Таблицы разделов 3 и 4 служат основой количественного анализа главы III: они вычислены автоматически по всем коллокациям корпуса, а предложения, стоящие за каждой цифрой, видны на странице коллокации. Единицы, разобранные вручную в параграфе 1.1 диссертации, отмечены отдельно как выборка для качественного анализа.',
 })
@@ -766,15 +766,15 @@ T['ru'].update({'s_by_pattern': 'По моделям', 's_col_pattern': 'Мод�
 
 T['uz'].update({
     's_freq': 'Chastota',
-    's_meas_reading': 'Jadvallarni o‘qish. MI komponentlari kam uchraydigan, ammo deyarli faqat birga keladigan birikmalarni yuqoriga chiqaradi: uning ro‘yxati boshida korpusda ikki marta uchragan atamalar va kam qo‘llanadigan birikmalar turadi (<em>pattalik soliq</em>, <em>milch cow</em>). t-score butun ro‘yxat bo‘yicha chastotaga eng yaqin o‘lchov. G² ro‘yxatining boshida ham yuqori chastotali birikmalar turadi, lekin butun tartib bo‘yicha u MI va logDice bilan ko‘proq mos keladi. logDice ro‘yxatining boshida ham ikki marta uchragan birikmalar ko‘pchilikni tashkil etadi, ammo MI dan farqli ravishda u yerda chastotali birikmalar ham uchraydi. MI va t-score o‘rtasidagi bu farq adabiyotda ham qayd etilgan (Gablasova va boshq., 2017). Kichik korpusda MI ikki-uch uchrashga tayanadi, shuning uchun dissertatsiyada u faqat chastota filtri bilan qo‘llanadi (metodologiya, 8-band).',
+    's_meas_reading': 'Jadvallarni o‘qish. MI komponentlari kam uchraydigan, ammo deyarli faqat birga keladigan birikmalarni yuqoriga chiqaradi: uning ro‘yxati boshida korpusda ikki marta uchragan atamalar va kam qo‘llanadigan birikmalar turadi (<em>pattalik soliq</em>, <em>milch cow</em>). t-score butun ro‘yxat bo‘yicha chastotaga eng yaqin o‘lchov. G² ro‘yxatining boshida ham yuqori chastotali birikmalar turadi, lekin butun tartib bo‘yicha u MI va logDice bilan ko‘proq mos keladi. logDice ro‘yxatining boshida ham ikki marta uchragan birikmalar ko‘pchilikni tashkil etadi, ammo MI dan farqli ravishda u yerda chastotali birikmalar ham uchraydi. MI va t-score o‘rtasidagi bu farq adabiyotda ham qayd etilgan (Gablasova va boshq., 2017). Kichik korpusda MI ikki-uch uchrashga tayanadi, shuning uchun dissertatsiyada u faqat chastota filtri bilan qo‘llanadi (metodologiya, 9-band).',
 })
 T['en'].update({
     's_freq': 'Frequency',
-    's_meas_reading': 'Reading the tables. MI promotes combinations whose components are rare but occur almost only together: its list opens with terms and uncommon combinations that occur twice in the corpus (<em>pattalik soliq</em>, <em>milch cow</em>). Over the whole list, t-score is the measure closest to frequency. The top of the G² list also consists of frequent combinations, but over the whole ranking G² agrees more with MI and logDice. Combinations occurring twice also make up most of the top of the logDice list, but unlike MI it also contains frequent ones there. This difference between MI and t-score is also noted in the literature (Gablasova et al., 2017). In a small corpus MI rests on two or three occurrences, which is why the dissertation uses it only with a frequency filter (methodology, section 8).',
+    's_meas_reading': 'Reading the tables. MI promotes combinations whose components are rare but occur almost only together: its list opens with terms and uncommon combinations that occur twice in the corpus (<em>pattalik soliq</em>, <em>milch cow</em>). Over the whole list, t-score is the measure closest to frequency. The top of the G² list also consists of frequent combinations, but over the whole ranking G² agrees more with MI and logDice. Combinations occurring twice also make up most of the top of the logDice list, but unlike MI it also contains frequent ones there. This difference between MI and t-score is also noted in the literature (Gablasova et al., 2017). In a small corpus MI rests on two or three occurrences, which is why the dissertation uses it only with a frequency filter (methodology, section 9).',
 })
 T['ru'].update({
     's_freq': 'Частота',
-    's_meas_reading': 'Как читать таблицы. MI поднимает сочетания, компоненты которых редки, но встречаются почти только вместе: его список открывают термины и редкие сочетания, встретившиеся в корпусе дважды (<em>pattalik soliq</em>, <em>milch cow</em>). По всему списку ближе всего к частоте t-score. В начале списка G² тоже стоят частые сочетания, но по всему ранжированию G² больше согласуется с MI и logDice. В начале списка logDice большинство также составляют сочетания, встретившиеся дважды, но, в отличие от MI, там есть и частые. Это различие между MI и t-score отмечается и в литературе (Gablasova et al., 2017). В малом корпусе MI опирается на два-три употребления, поэтому в диссертации он применяется только с частотным фильтром (методология, раздел 8).',
+    's_meas_reading': 'Как читать таблицы. MI поднимает сочетания, компоненты которых редки, но встречаются почти только вместе: его список открывают термины и редкие сочетания, встретившиеся в корпусе дважды (<em>pattalik soliq</em>, <em>milch cow</em>). По всему списку ближе всего к частоте t-score. В начале списка G² тоже стоят частые сочетания, но по всему ранжированию G² больше согласуется с MI и logDice. В начале списка logDice большинство также составляют сочетания, встретившиеся дважды, но, в отличие от MI, там есть и частые. Это различие между MI и t-score отмечается и в литературе (Gablasova et al., 2017). В малом корпусе MI опирается на два-три употребления, поэтому в диссертации он применяется только с частотным фильтром (методология, раздел 9).',
 })
 
 T['uz'].update({'m_unpaired': 'Tekislashda juft topilmagan {unpaired} ta gap (hunalign 1–0 va 0–1 bog‘lamlari) ham qidiruvga kiritilgan: ular izoh bilan ko‘rsatiladi va juftliklar soniga kirmaydi. Bunday gap tarjimaning o‘zi haqida ham dalil bo‘lishi mumkin — tushirib qoldirish, qo‘shish yoki gaplarni birlashtirish.'})
@@ -797,6 +797,238 @@ T['ru'].update({
 for _l in ('uz', 'en', 'ru'):
     T[_l]['m_walign'] = T[_l]['m_walign'][:3] + [T[_l]['m_walign_check']]
 
+# v3.5: the corpus dictionary is section 7; the sections after it move down by one
+T['uz']['about_what'] = T['uz']['about_what'] + ['Tarjimonlar qo‘llagan so‘zlardan avtomatik tuzilgan o‘zbekcha–inglizcha va inglizcha–o‘zbekcha korpus lug‘atini beradi: har bir tarjima soni va kitobdagi misoli bilan.']
+T['en']['about_what'] = T['en']['about_what'] + ['It offers an Uzbek–English and English–Uzbek corpus dictionary built automatically from the words the translators used: every translation with its count and an example from the book.']
+T['ru']['about_what'] = T['ru']['about_what'] + ['Он предлагает узбекско-английский и англо-узбекский корпусный словарь, автоматически построенный по словам переводчиков: каждый перевод с частотой и примером из книги.']
+T['uz'].update({
+    'm_dict_title': '7. Korpus lug‘ati',
+    'm_dict': [
+        '«Lug‘at» bo‘limidagi o‘zbekcha–inglizcha va inglizcha–o‘zbekcha lug‘at bosma lug‘atdan ham, mashina tarjimasidan ham olinmagan: har bir tarjima — ikki kitob tarjimonlari shu so‘z o‘rnida qo‘llagan so‘z. Lug‘at 5-banddagi so‘z tekislashidan avtomatik tuziladi.',
+        'O‘zbekcha so‘z shakllari lug‘at shakliga keltiriladi. Fe’l shakli o‘zak va -moq ko‘rinishida beriladi (dedi, degan, deydi → demoq); o‘zak platformaning fe’llar ro‘yxatida bo‘lishi yoki matnlarda bir necha fe’l qo‘shimchasi bilan uchrashi kerak. Boshqa so‘zlarda kelishik, egalik va ko‘plik qo‘shimchalari olib tashlanadi, ammo qolgan asos matnlarda boshqa qo‘shimchalar bilan ham uchrashi shart (xotini → xotin, yuragi → yurak, ko‘ngli → ko‘ngil). Ham fe’l, ham ot oxirida kela oladigan qo‘shimcha (-di, -gan, -ar, -sa) fe’l deb faqat tekislangan inglizcha so‘z fe’l bo‘lganda o‘qiladi: oldi «took» → olmoq, oldida «in front of» → oldi. Chiziqcha bilan yozilgan so‘z butunligicha olinadi (qah-qah, tez-tez, co-wife).',
+        'Tarjima lug‘atga kiradi, agar juftlik korpusda kamida 3 marta bog‘langan bo‘lsa, bosh so‘z bog‘lanishlarining kamida 3 foizini tashkil etsa va ikki tomonlama bog‘liq bo‘lsa: Dice = 2n / (bosh so‘z bog‘lanishlari + tarjima bog‘lanishlari) ≥ 0,05. Oxirgi shart juda ko‘p uchraydigan so‘zning (demoq, kelmoq, now) hamma so‘zga «tarjima» bo‘lib chiqishiga yo‘l qo‘ymaydi. Grammatik ravish (never, here, very; hech, juda) sifat va ravishdan boshqa so‘zga, yordamchi fe’l (have, make; qilmoq, bo‘lmoq) fe’ldan boshqa so‘zga tarjima sifatida berilmaydi, teskari yo‘nalishda ham: bunday bog‘lanish so‘zga emas, birikmaga tegishli (ko‘nglim bormaydi ↔ I would never, bu yerda ↔ here). Tarjimalar n · Dice bo‘yicha tartiblanadi; kishi va joy nomlari kirmaydi. Har bir tarjimaga kitobdan bitta misol gap juftligi beriladi: avval 1.1-paragrafda tahlil qilingan juftliklar, keyin ikkala tekislash o‘tishi mos kelgan va hunalign bahosi past bo‘lmagan (kamida 0,3) juftliklar tanlanadi.',
+        'Lug‘atda {uz} ta o‘zbekcha va {en} ta inglizcha bosh so‘z bor. U shu ikki tarjimonning tanlovini ko‘rsatadi, so‘zning umumiy tildagi barcha ma’nolarini emas: masalan, ko‘ngil so‘zi uchun «heart», «soul» va «calm» chiqadi, oxirgisi ko‘nglini tinchitmoq birikmasidan.',
+        'Sun’iy intellekt yordamida bajarilgan tanlab tekshiruvda (14.10.2026; lug‘atning ikki qismidan 50 ta tasodifiy tarjima, har biri lug‘atdagi misoli bilan) 39 tasi to‘g‘ri, 6 tasi qisman to‘g‘ri, 5 tasi noto‘g‘ri chiqdi. Qisman to‘g‘ri tarjimalarning ko‘pi birikma ichidagi so‘zlar (nazar tashlamoq ↔ look, ovoz chiqarib ↔ aloud): so‘z darajasidagi tekislash birikmani bir butun deb ko‘rmaydi, shuning uchun lug‘at sahifasida har bir so‘zning yonida u qatnashgan kollokatsiya nomzodlari ham beriladi. Noto‘g‘ri tarjimalar tarjimon gapni boshqacha qurgan joylarda qo‘shni so‘z bog‘langanidan kelib chiqqan (blue-eyed beauty ↔ moviy ko‘zli dilbar: beauty ↔ ko‘zli). Bu tadqiqotchi tekshiruvi emas; lug‘at tarjimalari inson tekshiruvining alohida vazifasi (statistika, 7-bo‘lim).',
+    ],
+    'm_dict_limit': 'Korpus lug‘ati avtomatik tuzilgan. Lemmalashtirish qoidalarga tayangani uchun ayrim bosh so‘z qo‘shimchasi bilan qolishi (yer-suvi), so‘z noto‘g‘ri o‘zakka keltirilishi (qursin → qurmoq) yoki omonimlar bitta bosh so‘zga tushishi mumkin (yosh «young» va yosh «tear»). Kam uchraydigan so‘zlarning tarjimasi kam misolga tayanadi.',
+})
+T['en'].update({
+    'm_dict_title': '7. Corpus dictionary',
+    'm_dict': [
+        'The Uzbek–English and English–Uzbek dictionary of the “Dictionary” section is taken neither from a printed dictionary nor from machine translation: every translation is a word the translators of the two books used for this word. It is built automatically from the word alignment of section 5.',
+        'Uzbek word forms are brought to a dictionary form. A verb form is given as stem + -moq (dedi, degan, deydi → demoq); the stem must be in the platform’s verb list or occur in the texts with several verb endings. In other words case, possessive and plural endings are removed, but the base that remains must itself occur in the texts with other endings (xotini → xotin, yuragi → yurak, ko‘ngli → ko‘ngil). An ending that can close both a verb and a noun (-di, -gan, -ar, -sa) is read as a verb ending only when the aligned English word is a verb: oldi “took” → olmoq, oldida “in front of” → oldi. A hyphenated word is kept whole (qah-qah, tez-tez, co-wife).',
+        'A translation is included if the pair is linked at least 3 times in the corpus, makes up at least 3 per cent of the links of the headword and is associated in both directions: Dice = 2n / (links of the headword + links of the translation) ≥ 0.05. The last condition keeps a very frequent word (demoq, kelmoq, now) from turning up as the “translation” of everything. A grammatical adverb (never, here, very; hech, juda) is not given as the translation of a word that is not an adjective or an adverb, nor a light verb (have, make; qilmoq, bo‘lmoq) as the translation of a word that is not a verb, and the other way round: such a link belongs to a combination, not to the word (ko‘nglim bormaydi ↔ I would never, bu yerda ↔ here). Translations are ordered by n · Dice; names of persons and places are left out. Each translation has one example sentence pair from the book: the pairs analysed in paragraph 1.1 first, then pairs on which both alignment passes agree and whose hunalign score is not low (at least 0.3).',
+        'The dictionary has {uz} Uzbek and {en} English headwords. It shows the choices of these two translators, not every meaning the word has in the language: for ko‘ngil it gives “heart”, “soul” and “calm”, the last from the combination ko‘nglini tinchitmoq.',
+        'In an AI-assisted spot check (14.10.2026; 50 random translations from the two parts of the dictionary, each with its example in the dictionary) 39 were correct, 6 partly correct and 5 wrong. Most of the partly correct ones are words inside a combination (nazar tashlamoq ↔ look, ovoz chiqarib ↔ aloud): word alignment does not see a combination as a whole, which is why the dictionary page lists the collocation candidates of each word next to it. The wrong ones come from places where the translator built the sentence differently and a neighbouring word was linked (blue-eyed beauty ↔ moviy ko‘zli dilbar: beauty ↔ ko‘zli). This is not the researcher’s evaluation; the dictionary translations are a separate task of the human evaluation (statistics, section 7).',
+    ],
+    'm_dict_limit': 'The corpus dictionary is built automatically. As the lemmatisation is rule-based, a headword may keep an ending (yer-suvi), be brought to a wrong stem (qursin → qurmoq), or homonyms may fall under one headword (yosh “young” and yosh “tear”). The translations of rare words rest on few examples.',
+})
+T['ru'].update({
+    'm_dict_title': '7. Корпусный словарь',
+    'm_dict': [
+        'Узбекско-английский и англо-узбекский словарь раздела «Словарь» не взят ни из печатного словаря, ни из машинного перевода: каждый перевод — слово, которым переводчики двух книг передали это слово. Он автоматически строится по пословному выравниванию из раздела 5.',
+        'Узбекские словоформы приводятся к словарной форме. Глагольная форма даётся как основа + -moq (dedi, degan, deydi → demoq); основа должна быть в списке глаголов платформы или встречаться в текстах с несколькими глагольными окончаниями. У остальных слов отсекаются падежные, притяжательные окончания и окончание множественного числа, но оставшаяся основа сама должна встречаться в текстах с другими окончаниями (xotini → xotin, yuragi → yurak, ko‘ngli → ko‘ngil). Окончание, которое может закрывать и глагол, и имя (-di, -gan, -ar, -sa), читается как глагольное, только если выровненное английское слово — глагол: oldi «took» → olmoq, oldida «in front of» → oldi. Слово через дефис берётся целиком (qah-qah, tez-tez, co-wife).',
+        'Перевод включается, если пара связана в корпусе не менее 3 раз, составляет не менее 3 процентов связей заглавного слова и связана в обе стороны: Dice = 2n / (связи заглавного слова + связи перевода) ≥ 0,05. Последнее условие не даёт очень частому слову (demoq, kelmoq, now) оказаться «переводом» всего. Грамматическое наречие (never, here, very; hech, juda) не даётся как перевод слова, которое не является прилагательным или наречием, а лёгкий глагол (have, make; qilmoq, bo‘lmoq) — как перевод не глагола, и наоборот: такая связь относится к сочетанию, а не к слову (ko‘nglim bormaydi ↔ I would never, bu yerda ↔ here). Переводы упорядочены по n · Dice; имена людей и названия мест не включаются. Для каждого перевода дана одна пара предложений из книги: сначала пары, разобранные в параграфе 1.1, затем пары, на которых совпали оба прохода выравнивания и оценка hunalign не низкая (не меньше 0,3).',
+        'В словаре {uz} узбекских и {en} английских заглавных слов. Он показывает выбор этих двух переводчиков, а не все значения слова в языке: для ko‘ngil даются «heart», «soul» и «calm», последнее — из сочетания ko‘nglini tinchitmoq.',
+        'При выборочной проверке с помощью ИИ (14.10.2026; 50 случайных переводов из двух частей словаря, каждый со своим примером в словаре) 39 оказались верными, 6 — частично верными, 5 — неверными. Частично верные — в основном слова внутри сочетания (nazar tashlamoq ↔ look, ovoz chiqarib ↔ aloud): пословное выравнивание не видит сочетание как целое, поэтому на странице словаря рядом с каждым словом даны кандидаты в коллокации с ним. Неверные возникли там, где переводчик построил предложение иначе и связано соседнее слово (blue-eyed beauty ↔ moviy ko‘zli dilbar: beauty ↔ ko‘zli). Она не заменяет оценку исследователя: переводы словаря — отдельное задание экспертной оценки (статистика, раздел 7).',
+    ],
+    'm_dict_limit': 'Корпусный словарь составлен автоматически. Поскольку лемматизация основана на правилах, заглавное слово может сохранить окончание (yer-suvi), получить неверную основу (qursin → qurmoq) или омонимы могут попасть в одно заглавное слово (yosh «young» и yosh «tear»). Переводы редких слов опираются на немногие примеры.',
+})
+for _l in ('uz', 'en', 'ru'):
+    for _k, _n in (('m_cand_title', 8), ('m_stat_title', 9), ('m_rel_title', 10), ('m_limits_title', 11)):
+        T[_l][_k] = re.sub(r'^\d+\.', '%d.' % _n, T[_l][_k])
+    T[_l]['m_limits'] = T[_l]['m_limits'] + [T[_l]['m_dict_limit']]
+
+
+# ---------------------------------------------------------------------------------------------
+# v3.6: tests for chapter III, the open reference corpus, comparable texts, human evaluation
+# ---------------------------------------------------------------------------------------------
+T['uz'].update({
+    's_auto_title': '3. Kollokatsiya nomzodlarining tarjimada berilishi',
+    's_assoc_title': '4. Assotsiatsiya o‘lchovlarini qiyoslash (tadqiqot korpusi ichida)',
+    's_test_title': 'Yo‘nalishlar orasidagi farqning statistik testi',
+    's_test_note': 'Jadvaldagi har bir qator — kontingensiya jadvali bo‘yicha Pirson xi-kvadrati va log-likelihood (G², Dunning, 1993) testi, ta’sir kattaligi — Kramer V (Cramér, 1946). Uchrashlar nomzod turlari ichida guruhlanadi (bir nomzodning bir necha uchrashi mustaqil emas), shuning uchun p qiymatlari taxminiy; ta’sir kattaligi va «tur darajasida» qatori (har bir nomzod bir marta: uchrashlarining kamida yarmida muqobil topilganmi) ishonchliroq ko‘rsatkich.',
+    's_test_head': ['Taqqoslash', 'n', 'χ² (df)', 'G²', 'p', 'Kramer V', 'Imkoniyatlar nisbati (95 % oraliq)'],
+    's_t_eq4': 'Muqobil topilgan ulushi: to‘rt yo‘nalish',
+    's_t_eq2': 'Muqobil topilgan ulushi: Cho‘lpon asliyati → Fort va Hemingway asliyati → G‘ofurov',
+    's_t_eq2t': 'Xuddi shu, tur darajasida',
+    's_t_sm4': 'Bitta so‘z yoki so‘z birikmasi bilan berilish: to‘rt yo‘nalish',
+    's_t_sm2': 'Bitta so‘z yoki so‘z birikmasi: Cho‘lpon → Fort va Hemingway → G‘ofurov',
+    's_ref_title': '5. Tayanch korpus: inglizcha nomzodlarning tildagi odatiyligi',
+    's_ref_lead': '1.1.4-bandga ko‘ra kollokatsiya maqomi tayanch korpusdagi chastota va assotsiatsiya bilan belgilanadi. BNC platformaga ulanguncha ochiq tarqatiladigan korpuslardan tayanch korpus tuzildi va u tadqiqot korpusidagi bilan bir xil usulda — spaCy (en_core_web_sm) sintaktik tahlili va bir xil bog‘lanish qoliplari bilan — sanaldi (scripts/build_reference_en.py).',
+    's_ref_head': ['Qism', 'Tokenlar'],
+    's_ref_cov': 'Inglizcha nomzodlar: {all}; tayanch korpusda uchraydi: {any}; kamida 5 marta (1.1.4-band, 3-jadval): {five}. Kamida 5 marta uchraganlarda tadqiqot korpusidagi va tayanch korpusdagi logDice o‘rtasidagi Spirmen korrelyatsiyasi: {rho}.',
+    's_ref_top': 'Tayanch korpusda logDice eng yuqori bo‘lgan nomzodlar (tayanchda kamida 5 marta)',
+    's_ref_top_head': ['Nomzod', 'Qolip', 'Korpusda', 'Tayanchda', 'logDice (tayanch)', 'MI (tayanch)'],
+    's_ref_caveat': 'Cheklovlar: tayanch korpus ({tokens} token) BNC dan (100 mln so‘z) ancha kichik va asosan amerika ingliz tilidan iborat; Gutenberg qismi XIX asr va XX asr boshi nasri. Shuning uchun past chastotali birikmalar bu yerda «uchramaydi» bo‘lib chiqishi mumkin; maqom uchun chegaraviy logDice qiymati «Inson tekshiruvi» natijalarida kalibrlanadi. O‘zbekcha nomzodlar uchun tayanch korpus hali ulanmagan: skript tadqiqotchi bergan matn fayllari (masalan, Leipzig korpuslari yoki milliy korpusdan olingan matnlar) bilan ishlaydi.',
+    's_cmp_title': '6. Teng (qiyosiy) matnlar: asliyat va tarjima tili',
+    's_cmp_lead': 'Korpus har bir tilda bitta asliyat va bitta tarjima matnini o‘z ichiga oladi. Bu Bernardini (2007) tavsiflagan dizaynni — parallel, teng (qiyosiy) va tayanch korpusni birlashtirishni — qo‘llash imkonini beradi: bir tildagi asliyat va tarjima matnlari bir xil ko‘rsatkichlar bilan solishtiriladi (scripts/build_comparable_stats.py).',
+    's_cmp_head': ['Matn', 'Tili', 'Tokenlar', 'STTR', 'Mustaqil so‘zlar ulushi', 'Nomzod uchrashi / 1 000 token'],
+    's_cmp_en_head': ['Matn', 'Bog‘lanish qolipi uchrashlari / 1 000 token', 'Tayanch korpusda ≥ 5 marta', 'Tayanchda logDice ≥ 7', 'Matnda bir marta uchragan birikmalar'],
+    's_cmp_tests_head': ['Ko‘rsatkich', 'Til', 'χ² (df)', 'p', 'Kramer V'],
+    's_cmp_t_cand': 'Nomzod uchrashlari zichligi', 's_cmp_t_density': 'Mustaqil so‘zlar ulushi', 's_cmp_t_attested': 'Tayanchda ≥ 5 marta uchraydigan birikmalar ulushi',
+    's_cmp_t_typical': 'Tayanchda logDice ≥ 7 bo‘lgan birikmalar ulushi', 's_cmp_t_once': 'Bir marta uchragan birikmalar ulushi',
+    's_cmp_note': 'Tokenlar — juftlangan gaplardagi so‘z tekislashi tokenlari (1-bo‘limdagi izohga qarang). Ko‘rsatkichlar faqat bir til ichida, asliyat va tarjima o‘rtasida solishtiriladi: o‘zbek va ingliz tillarida so‘zning chegarasi va yordamchi so‘zlar ulushi turlicha. STTR — 1 000 tokenli ketma-ket bo‘laklardagi shakllar/tokenlar nisbatining o‘rtachasi (butun matnlarning TTR i uzunlik farqi tufayli qiyoslanmaydi). Ingliz tilida bog‘lanish qoliplarining barcha uchrashlari (bir marta uchraganlari ham) tayanch korpus bilan tekshirildi.',
+    's_cmp_caveat': 'Talqin uchun ogohlantirish: har bir katakda bitta asar bor, shuning uchun asliyat va tarjima tili farqi muallif uslubi, janr va davr farqidan ajratilmaydi (masalan, Hemingway uslubidagi takrorlar). Natijalar gipoteza uchun asos bo‘ladi, umumlashma uchun esa har bir tilda bir nechta asliyat va tarjima matni kerak.',
+    's_val_title': '7. Inson tekshiruvi natijalari',
+    's_val_ready': 'Tanlanmalar tayyor: besh vazifa (gap juftliklari, so‘z muqobillari, o‘zbekcha va inglizcha kollokatsiya nomzodlari, lug‘at tarjimalari), har birida 50 birlikli o‘quv to‘plami va 200 birlikli asosiy tanlanma (qat’iy urug‘ {seed}). Baholar tadqiqotchi kabinetida qo‘yiladi; aniqlik, ishonch oralig‘i va Koen kappasi shu bo‘limda avtomatik chiqadi.',
+    's_ch3_title': '8. III bob uchun ma’lumot',
+    's_ch3': 'III bobdagi miqdoriy tahlil uchun 3–6-bo‘limlardagi jadvallar asos bo‘ladi: ular korpusdagi barcha nomzodlar bo‘yicha avtomatik hisoblangan, har bir raqam ortidagi gaplarni esa nomzod sahifasida ko‘rish mumkin. Qaysi nomzod kollokatsiya ekanini 1.1.4-banddagi qaror tartibi belgilaydi: lingvistik baho «Inson tekshiruvi» bo‘limida, statistik tasdiq tayanch korpusda.',
+})
+T['en'].update({
+    's_auto_title': '3. How the collocation candidates are rendered in translation',
+    's_assoc_title': '4. Comparing association measures (within the research corpus)',
+    's_test_title': 'Significance of the differences between the directions',
+    's_test_note': 'Each row is Pearson’s chi-square and the log-likelihood test (G², Dunning, 1993) on a contingency table; the effect size is Cramér’s V (Cramér, 1946). Occurrences are grouped within candidate types (several occurrences of one candidate are not independent), so the p-values are approximate; the effect size and the “type level” row (every candidate counted once: is an equivalent found in at least half of its occurrences?) are the more reliable figures.',
+    's_test_head': ['Comparison', 'n', 'χ² (df)', 'G²', 'p', 'Cramér’s V', 'Odds ratio (95% interval)'],
+    's_t_eq4': 'Share with an equivalent found: four directions',
+    's_t_eq2': 'Share with an equivalent: Cho‘lpon original → Fort and Hemingway original → G‘ofurov',
+    's_t_eq2t': 'The same, type level',
+    's_t_sm4': 'Rendered by a single word or by a word combination: four directions',
+    's_t_sm2': 'Single word or word combination: Cho‘lpon → Fort and Hemingway → G‘ofurov',
+    's_ref_title': '5. Reference corpus: how usual the English candidates are in the language',
+    's_ref_lead': 'By section 1.1.4 the status of a collocation is set by its frequency and association in a reference corpus. Until the BNC is connected to the platform, a reference corpus was assembled from openly distributed corpora and counted in the same way as the research corpus — with the spaCy parser (en_core_web_sm) and the same dependency patterns (scripts/build_reference_en.py).',
+    's_ref_head': ['Part', 'Tokens'],
+    's_ref_cov': 'English candidates: {all}; found in the reference corpus: {any}; at least 5 times (section 1.1.4, table 3): {five}. Spearman correlation of the logDice in the research corpus and in the reference corpus, over the candidates found at least 5 times: {rho}.',
+    's_ref_top': 'Candidates with the highest logDice in the reference corpus (at least 5 times there)',
+    's_ref_top_head': ['Candidate', 'Pattern', 'In the corpus', 'In the reference', 'logDice (reference)', 'MI (reference)'],
+    's_ref_caveat': 'Limitations: the reference corpus ({tokens} tokens) is much smaller than the BNC (100 million words) and mostly American English; its Gutenberg part is 19th and early 20th century prose. Rare combinations may therefore come out as “not found”; the threshold of logDice for the status is calibrated on the results of the human evaluation. For the Uzbek candidates no reference corpus is connected yet: the script works with text files supplied by the researcher (for example the Leipzig corpora or texts taken from the national corpus).',
+    's_cmp_title': '6. Comparable texts: original and translated language',
+    's_cmp_lead': 'The corpus holds one original and one translated text in each language. This allows the design described by Bernardini (2007) — a parallel, a comparable and a reference corpus combined: the original and the translated text of a language are compared with the same measures (scripts/build_comparable_stats.py).',
+    's_cmp_head': ['Text', 'Language', 'Tokens', 'STTR', 'Share of content words', 'Candidate occurrences / 1,000 tokens'],
+    's_cmp_en_head': ['Text', 'Dependency-pattern occurrences / 1,000 tokens', 'At least 5 times in the reference', 'Reference logDice ≥ 7', 'Combinations occurring once in the text'],
+    's_cmp_tests_head': ['Measure', 'Language', 'χ² (df)', 'p', 'Cramér’s V'],
+    's_cmp_t_cand': 'Density of candidate occurrences', 's_cmp_t_density': 'Share of content words', 's_cmp_t_attested': 'Share of combinations found ≥ 5 times in the reference',
+    's_cmp_t_typical': 'Share of combinations with reference logDice ≥ 7', 's_cmp_t_once': 'Share of combinations occurring once',
+    's_cmp_note': 'Tokens are the word-alignment tokens of the paired sentences (see the note to section 1). The measures are compared only within a language, between the original and the translation: Uzbek and English differ in what counts as a word and in the share of function words. STTR is the mean form/token ratio of consecutive 1,000-token chunks (the TTR of whole texts is not comparable because of their different length). In English every occurrence of the dependency patterns (also those occurring once) was checked in the reference corpus.',
+    's_cmp_caveat': 'A warning for interpretation: every cell holds one work, so the difference between original and translated language cannot be separated from the author’s style, the genre and the period (for example Hemingway’s repetitions). The results ground a hypothesis; a generalisation needs several original and translated texts in each language.',
+    's_val_title': '7. Results of the human evaluation',
+    's_val_ready': 'The samples are ready: five tasks (sentence pairs, word equivalents, Uzbek and English collocation candidates, dictionary translations), each with a training set of 50 units and a main sample of 200 (fixed seed {seed}). The judgements are made in the researcher’s area; precision, confidence intervals and Cohen’s kappa appear in this section automatically.',
+    's_ch3_title': '8. Data for chapter III',
+    's_ch3': 'The tables of sections 3–6 are the basis of the quantitative analysis in chapter III: they are computed automatically over all candidates of the corpus, and the sentences behind each figure can be seen on the candidate’s page. Which candidate is a collocation is decided by the procedure of section 1.1.4: the linguistic judgement in the human evaluation, the statistical confirmation in the reference corpus.',
+})
+T['ru'].update({
+    's_auto_title': '3. Передача кандидатов в коллокации в переводе',
+    's_assoc_title': '4. Сравнение мер ассоциации (внутри исследовательского корпуса)',
+    's_test_title': 'Статистическая значимость различий между направлениями',
+    's_test_note': 'Каждая строка — критерий хи-квадрат Пирсона и логарифмического правдоподобия (G², Dunning, 1993) по таблице сопряжённости; мера эффекта — V Крамера (Cramér, 1946). Употребления сгруппированы внутри типов кандидатов (несколько употреблений одного кандидата не независимы), поэтому значения p приблизительны; мера эффекта и строка «на уровне типов» (каждый кандидат учитывается один раз: найден ли эквивалент не менее чем в половине употреблений) надёжнее.',
+    's_test_head': ['Сравнение', 'n', 'χ² (df)', 'G²', 'p', 'V Крамера', 'Отношение шансов (95%-й интервал)'],
+    's_t_eq4': 'Доля с найденным эквивалентом: четыре направления',
+    's_t_eq2': 'Доля с эквивалентом: оригинал Чулпана → Форт и оригинал Хемингуэя → Гафуров',
+    's_t_eq2t': 'То же на уровне типов',
+    's_t_sm4': 'Передача одним словом или сочетанием слов: четыре направления',
+    's_t_sm2': 'Одно слово или сочетание: Чулпан → Форт и Хемингуэй → Гафуров',
+    's_ref_title': '5. Опорный корпус: насколько обычны английские кандидаты в языке',
+    's_ref_lead': 'По разделу 1.1.4 статус коллокации определяется её частотой и ассоциацией в опорном корпусе. Пока BNC не подключён к платформе, опорный корпус собран из открыто распространяемых корпусов и подсчитан тем же способом, что и исследовательский, — синтаксическим анализатором spaCy (en_core_web_sm) и теми же моделями связей (scripts/build_reference_en.py).',
+    's_ref_head': ['Часть', 'Токены'],
+    's_ref_cov': 'Английских кандидатов: {all}; встречаются в опорном корпусе: {any}; не менее 5 раз (раздел 1.1.4, таблица 3): {five}. Корреляция Спирмена между logDice в исследовательском и в опорном корпусе для кандидатов, встретившихся не менее 5 раз: {rho}.',
+    's_ref_top': 'Кандидаты с наибольшим logDice в опорном корпусе (не менее 5 раз в нём)',
+    's_ref_top_head': ['Кандидат', 'Модель', 'В корпусе', 'В опорном', 'logDice (опорный)', 'MI (опорный)'],
+    's_ref_caveat': 'Ограничения: опорный корпус ({tokens} токенов) намного меньше BNC (100 млн слов) и в основном представляет американский английский; часть Gutenberg — проза XIX и начала XX века. Поэтому редкие сочетания могут оказаться «не найденными»; порог logDice для статуса калибруется по результатам экспертной проверки. Для узбекских кандидатов опорный корпус пока не подключён: скрипт работает с текстовыми файлами исследователя (например, корпусами Лейпцига или текстами из национального корпуса).',
+    's_cmp_title': '6. Сопоставимые тексты: оригинальный и переводной язык',
+    's_cmp_lead': 'Корпус содержит в каждом языке один оригинальный и один переводной текст. Это позволяет применить схему, описанную Бернардини (2007), — объединение параллельного, сопоставимого и опорного корпусов: оригинальный и переводной тексты одного языка сравниваются по одним и тем же показателям (scripts/build_comparable_stats.py).',
+    's_cmp_head': ['Текст', 'Язык', 'Токены', 'STTR', 'Доля знаменательных слов', 'Употребления кандидатов / 1 000 токенов'],
+    's_cmp_en_head': ['Текст', 'Употребления моделей связей / 1 000 токенов', 'Не менее 5 раз в опорном', 'logDice в опорном ≥ 7', 'Сочетания, встретившиеся в тексте один раз'],
+    's_cmp_tests_head': ['Показатель', 'Язык', 'χ² (df)', 'p', 'V Крамера'],
+    's_cmp_t_cand': 'Плотность употреблений кандидатов', 's_cmp_t_density': 'Доля знаменательных слов', 's_cmp_t_attested': 'Доля сочетаний, встречающихся в опорном ≥ 5 раз',
+    's_cmp_t_typical': 'Доля сочетаний с logDice в опорном ≥ 7', 's_cmp_t_once': 'Доля сочетаний, встретившихся один раз',
+    's_cmp_note': 'Токены — токены пословного выравнивания выровненных предложений (см. примечание к разделу 1). Показатели сравниваются только внутри одного языка, между оригиналом и переводом: в узбекском и английском по-разному определяются границы слова и доля служебных слов. STTR — среднее отношение форм к токенам по последовательным отрезкам в 1 000 токенов (TTR целых текстов несопоставим из-за разной длины). В английском все употребления моделей связей (и встретившиеся один раз) проверены по опорному корпусу.',
+    's_cmp_caveat': 'Предупреждение для интерпретации: в каждой ячейке одно произведение, поэтому различие оригинального и переводного языка не отделяется от стиля автора, жанра и эпохи (например, повторов у Хемингуэя). Результаты дают основание для гипотезы; для обобщения нужны несколько оригинальных и переводных текстов в каждом языке.',
+    's_val_title': '7. Результаты экспертной проверки',
+    's_val_ready': 'Выборки готовы: пять задач (пары предложений, пословные эквиваленты, узбекские и английские кандидаты в коллокации, переводы словаря), в каждой обучающий набор из 50 единиц и основная выборка из 200 (фиксированное зерно {seed}). Оценки ставятся в кабинете исследователя; точность, доверительные интервалы и каппа Коэна появляются в этом разделе автоматически.',
+    's_ch3_title': '8. Данные для главы III',
+    's_ch3': 'Основой количественного анализа в главе III служат таблицы разделов 3–6: они вычислены автоматически по всем кандидатам корпуса, а предложения за каждой цифрой можно увидеть на странице кандидата. Что является коллокацией, определяет порядок решений раздела 1.1.4: лингвистическая оценка — в экспертной проверке, статистическое подтверждение — в опорном корпусе.',
+})
+
+# v3.6: the automatically extracted units are "collocation candidates" (1.1.4): their status is set by the
+# linguistic judgement and by the reference corpus, so the statistics and methodology texts name them so.
+T['uz'].update({
+    'm_equiv_title': '6. Kollokatsiya nomzodlarini ajratish',
+    'm_equiv': 'Kollokatsiya nomzodlari har ikki tilda korpusning o‘zidan ajratiladi va kamida ikki marta uchraganlari olinadi (Bernardini, 2007, b. 8 dagi chastota > 1 chegarasi bilan bir xil). Nomzod hali kollokatsiya degani emas: uning toifasini 1.1.4-banddagi lingvistik shartlar, maqomini tayanch korpusdagi statistik tasdiq belgilaydi (9- va 10-bandlar).',
+    's_auto_note': 'Jadval korpusdagi barcha kollokatsiya nomzodlari (kamida 2 marta uchraganlar) va ularning har bir uchrashi bo‘yicha avtomatik hisoblangan. Ekvivalent metodologiyaning 5-bandidagi so‘z darajasidagi tekislash bilan topiladi va har doim tarjimonning kitobdagi so‘zidir.',
+    's_top_title_s_dir_uz_src': 'Cho‘lpon asliyatida eng ko‘p uchragan nomzodlar va ularning «Night and Day»dagi ekvivalentlari',
+    's_top_title_s_dir_en_src': 'Hemingway asliyatida eng ko‘p uchragan nomzodlar va ularning «Chol va dengiz»dagi ekvivalentlari',
+    's_meas_uz': 'O‘zbekcha nomzodlar (Cho‘lpon asliyati va G‘ofurov tarjimasi)',
+    's_meas_en': 'Inglizcha nomzodlar (Hemingway asliyati va Fort tarjimasi)',
+    's_meas_n': '{types} ta nomzod; N = {tokens} token.',
+    's_meas_profile': 'Har bir o‘lchov bo‘yicha birinchi 50 nomzod',
+    's_meas_top': 'Har bir o‘lchov bo‘yicha birinchi 8 nomzod (qavs ichida — uchrash soni)',
+    's_assoc': 'Nomzodning maqomi 1.1-paragrafga ko‘ra katta tayanch korpusdagi ko‘rsatkichlar bilan belgilanadi (5-bo‘lim). Bu bo‘limdagi qiymatlar tadqiqot korpusining o‘zida hisoblangan va boshqa savolga javob beradi: bir xil birikmalar to‘plamini to‘rt o‘lchov — MI, t-score, logDice va log-likelihood (G², Dunning, 1993) — qanday tartiblaydi. O₁₁ — birikmaning uchrash soni, R₁ va C₁ — birinchi va oxirgi komponentning shu tildagi matnlarda uchrash soni, N — shu tildagi tokenlar soni (Evert, 2008).',
+})
+T['en'].update({
+    'm_equiv_title': '6. Extraction of collocation candidates',
+    'm_equiv': 'Collocation candidates are extracted from the corpus itself in both languages; those occurring at least twice are kept (the same as the frequency > 1 threshold of Bernardini, 2007, p. 8). A candidate is not yet a collocation: its category is set by the linguistic conditions of section 1.1.4, its status by the statistical confirmation in a reference corpus (sections 9 and 10).',
+    's_auto_note': 'The table is computed automatically over all collocation candidates of the corpus (those occurring at least twice) and every one of their occurrences. The equivalent is found with the word alignment of section 5 of the methodology and is always the translator’s own word in the book.',
+    's_top_title_s_dir_uz_src': 'The most frequent candidates of Cho‘lpon’s original and their equivalents in «Night and Day»',
+    's_top_title_s_dir_en_src': 'The most frequent candidates of Hemingway’s original and their equivalents in «Chol va dengiz»',
+    's_meas_uz': 'Uzbek candidates (Cho‘lpon’s original and G‘ofurov’s translation)',
+    's_meas_en': 'English candidates (Hemingway’s original and Fort’s translation)',
+    's_meas_n': '{types} candidates; N = {tokens} tokens.',
+    's_meas_profile': 'The first 50 candidates by each measure',
+    's_meas_top': 'The first 8 candidates by each measure (frequency in brackets)',
+    's_assoc': 'According to paragraph 1.1, the status of a candidate is decided by the measures of a large reference corpus (section 5). The values in this section are computed within the research corpus and answer another question: how the four measures — MI, t-score, logDice and log-likelihood (G², Dunning, 1993) — order the same set of combinations. O₁₁ is the frequency of the combination, R₁ and C₁ the frequencies of its first and last component in the texts of that language, N the number of tokens of that language (Evert, 2008).',
+})
+T['ru'].update({
+    'm_equiv_title': '6. Извлечение кандидатов в коллокации',
+    'm_equiv': 'Кандидаты в коллокации извлекаются из самого корпуса на обоих языках; сохраняются встретившиеся не менее двух раз (так же, как порог частоты > 1 у Bernardini, 2007, с. 8). Кандидат ещё не коллокация: его категорию определяют лингвистические условия раздела 1.1.4, статус — статистическое подтверждение в опорном корпусе (разделы 9 и 10).',
+    's_auto_note': 'Таблица вычислена автоматически по всем кандидатам в коллокации (встретившимся не менее двух раз) и каждому их употреблению. Эквивалент находится пословным выравниванием (раздел 5 методологии) и всегда является собственным словом переводчика в книге.',
+    's_top_title_s_dir_uz_src': 'Самые частые кандидаты оригинала Чулпана и их эквиваленты в «Night and Day»',
+    's_top_title_s_dir_en_src': 'Самые частые кандидаты оригинала Хемингуэя и их эквиваленты в «Chol va dengiz»',
+    's_meas_uz': 'Узбекские кандидаты (оригинал Чулпана и перевод Гафурова)',
+    's_meas_en': 'Английские кандидаты (оригинал Хемингуэя и перевод Форта)',
+    's_meas_n': '{types} кандидатов; N = {tokens} токенов.',
+    's_meas_profile': 'Первые 50 кандидатов по каждой мере',
+    's_meas_top': 'Первые 8 кандидатов по каждой мере (в скобках — частота)',
+    's_assoc': 'Согласно параграфу 1.1, статус кандидата определяется мерами большого опорного корпуса (раздел 5). Значения этого раздела вычислены внутри исследуемого корпуса и отвечают на другой вопрос: как четыре меры — MI, t-score, logDice и логарифмическое правдоподобие (G², Dunning, 1993) — упорядочивают один и тот же набор сочетаний. O₁₁ — частота сочетания, R₁ и C₁ — частоты его первого и последнего компонента в текстах этого языка, N — число токенов этого языка (Evert, 2008).',
+})
+for _l, (a, b) in {'uz': ('Kollokatsiyalar', 'Nomzodlar'), 'en': ('Collocations', 'Candidates'), 'ru': ('Коллокаций', 'Кандидатов')}.items():
+    T[_l]['s_dir_head'] = [b if x == a else x for x in T[_l]['s_dir_head']]
+for _l, (a, b) in {'uz': ('Kollokatsiya', 'Nomzod'), 'en': ('Collocation', 'Candidate'), 'ru': ('Коллокация', 'Кандидат')}.items():
+    T[_l]['s_top_head'] = [b if x == a else x for x in T[_l]['s_top_head']]
+for _l, (a, b) in {'uz': ('Kollokatsiyalar', 'Nomzodlar'), 'en': ('Collocations', 'Candidates'), 'ru': ('Коллокации', 'Кандидаты')}.items():
+    T[_l]['s_meas_top_head'] = [b if x == a else x for x in T[_l]['s_meas_top_head']]
+
+# v3.6: methodology texts on the reference corpus, the comparable design and the human evaluation
+T['uz'].update({
+    'm_corpus': 'Korpus ikki juftlikdan iborat: Cho‘lponning «Kecha va kunduz» romani va uning Christopher Fort qilgan inglizcha tarjimasi «Night and Day» (o‘zbekchadan inglizchaga); E. Hemingwayning «The Old Man and the Sea» qissasi va uning Ibrohim G‘ofurov qilgan o‘zbekcha tarjimasi «Chol va dengiz» (inglizchadan o‘zbekchaga). Parallel tahlilda har bir asar faqat o‘z tarjimasi bilan qiyoslanadi. Shu bilan birga har bir tilda bitta asliyat va bitta tarjima matni bor, shuning uchun korpus teng (qiyosiy) korpus sifatida ham ishlaydi: bir tildagi asliyat va tarjima matnlari bir xil ko‘rsatkichlar bilan solishtiriladi (Bernardini, 2007; «Statistika», 6-bo‘lim).',
+    'm_stat': [
+        'Badiiy korpus kichik bo‘lgani uchun maqom tadqiqot korpusidagi raqamlar bilan emas, katta tayanch korpusdagi ko‘rsatkichlar bilan belgilanadi (Bernardini, 2007). Rejada inglizcha birikmalar uchun Britaniya milliy korpusi (BNC), o‘zbekcha birikmalar uchun O‘zbek tili milliy korpusi yoki uzWaC (tanlov II bobda asoslanadi).',
+        'Dastlabki parametrlar: hisob birligi — lemma; tayanch korpusda kamida 5 marta uchrash; asosiy o‘lchov — logDice (Rychlý, 2008); MI faqat chastota filtri bilan; t-score faqat ishonchlilik ko‘rsatkichi sifatida (Gablasova va boshq., 2017); chastota million so‘zga nisbatan. Chegaraviy qiymatlar oldindan belgilanmaydi, qo‘lda annotatsiya qilingan to‘plamda kalibrlanadi.',
+        'BNC ulanguncha inglizcha nomzodlar uchun ochiq tarqatiladigan korpuslardan tuzilgan tayanch korpus ishlatiladi: Brown korpusi (Francis va Kučera, 1979), MASC (Ide va boshq., 2010) va NLTK dagi Project Gutenberg tanlovining nasriy badiiy qismi (Bird va boshq., 2009) — jami {ref_tokens} token. U tadqiqot korpusidagi bilan bir xil usulda — spaCy sintaktik tahlili va bir xil bog‘lanish qoliplari bilan — sanaladi, shuning uchun ikki korpusdagi ko‘rsatkichlar qiyoslanadi. Har bir inglizcha nomzod sahifasida uning tayanch korpusdagi chastotasi va o‘lchovlari ko‘rsatiladi; logDice chegarasi inson tekshiruvi natijasida kalibrlanadi (10-band). O‘zbekcha tayanch korpus uchun skript tayyor, unga matn fayllari kerak.',
+    ],
+    'm_rel': 'Annotatsiyani ikki mustaqil annotator — muallif va ikkinchi filolog — yozma yo‘riqnoma asosida bajaradi: avval 50 birlikli o‘quv to‘plami, so‘ngra birliklarning kamida 20 foizi (200 tadan kam emas) mustaqil belgilanadi. Kelishuv Koen kappasi bilan hisoblanadi (Cohen, 1960); κ ≥ 0,8 — yaxshi ishonchlilik, 0,67–0,8 — ehtiyotkor xulosa uchun yetarli (Artstein va Poesio, 2008, b. 576). Platformaning «Inson tekshiruvi» bo‘limida beshta vazifa bo‘yicha qat’iy tasodifiy tanlanmalar (har birida 50 + 200 birlik) va ikki annotator uchun alohida kirish bor; kollokatsiya nomzodlari 1.1.4-banddagi qaror tartibining 1–4 va 6-savollari bo‘yicha baholanadi. Aniqlik Uilson usulidagi 95 % ishonch oralig‘i bilan (Wilson, 1927), kelishuv Koen kappasi bilan avtomatik hisoblanadi va «Statistika» sahifasining 7-bo‘limida chiqadi.',
+    'm_ref_limit': 'Inglizcha tayanch korpus vaqtinchalik: u BNC dan ancha kichik, asosan amerika ingliz tili va XIX asr nasridan iborat; shuning uchun kam uchraydigan birikmalar unda topilmasligi mumkin.',
+    'm_cmp_limit': 'Teng matnlar qiyosida har bir tilda bitta asliyat va bitta tarjima bor: asliyat va tarjima tili farqi muallif uslubi, janr va davr farqidan ajratilmaydi.',
+})
+T['en'].update({
+    'm_corpus': 'The corpus consists of two pairs: Cho‘lpon’s novel «Kecha va kunduz» and its English translation «Night and Day» by Christopher Fort (Uzbek into English); E. Hemingway’s novella «The Old Man and the Sea» and its Uzbek translation «Chol va dengiz» by Ibrohim G‘ofurov (English into Uzbek). In the parallel analysis each work is compared only with its own translation. At the same time each language has one original and one translated text, so the corpus also works as a comparable corpus: the original and the translated text of a language are compared with the same measures (Bernardini, 2007; Statistics, section 6).',
+    'm_stat': [
+        'Because the literary corpus is small, the status is set not by the figures of the research corpus but by the measures of a large reference corpus (Bernardini, 2007). The plan is the British National Corpus (BNC) for English combinations and the Uzbek National Corpus or uzWaC for Uzbek ones (the choice is argued in chapter II).',
+        'Preliminary parameters: the unit of counting is the lemma; at least 5 occurrences in the reference corpus; the main measure is logDice (Rychlý, 2008); MI only with a frequency filter; t-score only as an indicator of reliability (Gablasova et al., 2017); frequency per million words. Thresholds are not fixed in advance but calibrated on a manually annotated set.',
+        'Until the BNC is connected, the English candidates are checked in a reference corpus assembled from openly distributed corpora: the Brown Corpus (Francis & Kučera, 1979), MASC (Ide et al., 2010) and the prose fiction of the Project Gutenberg selection in NLTK (Bird et al., 2009) — {ref_tokens} tokens in all. It is counted in the same way as the research corpus — with the spaCy parser and the same dependency patterns — so the figures of the two corpora are comparable. The page of every English candidate shows its frequency and measures in the reference corpus; the threshold of logDice is calibrated on the human evaluation (section 10). The script for an Uzbek reference corpus is ready; it needs text files.',
+    ],
+    'm_rel': 'The annotation is done by two independent annotators — the author and a second philologist — with a written guide: first a training set of 50 units, then at least 20 per cent of the units (not fewer than 200) are annotated independently. Agreement is measured with Cohen’s kappa (Cohen, 1960); κ ≥ 0.8 means good reliability, 0.67–0.8 is enough for tentative conclusions (Artstein & Poesio, 2008, p. 576). The platform’s “Human evaluation” area holds fixed random samples for five tasks (50 + 200 units each) and separate sign-ins for the two annotators; collocation candidates are judged with questions 1–4 and 6 of the decision procedure of section 1.1.4. Precision with a 95% Wilson interval (Wilson, 1927) and agreement with Cohen’s kappa are computed automatically and shown in section 7 of the Statistics page.',
+    'm_ref_limit': 'The English reference corpus is provisional: it is much smaller than the BNC and consists mostly of American English and 19th-century prose, so rare combinations may not be found in it.',
+    'm_cmp_limit': 'The comparison of comparable texts has one original and one translated text per language: the difference between original and translated language cannot be separated from the author’s style, the genre and the period.',
+})
+T['ru'].update({
+    'm_corpus': 'Корпус состоит из двух пар: роман Чулпана «Kecha va kunduz» и его английский перевод «Night and Day» Кристофера Форта (с узбекского на английский); повесть Э. Хемингуэя «The Old Man and the Sea» и её узбекский перевод «Chol va dengiz» Иброхима Гафурова (с английского на узбекский). В параллельном анализе каждое произведение сравнивается только со своим переводом. Вместе с тем в каждом языке есть один оригинальный и один переводной текст, поэтому корпус работает и как сопоставимый: оригинальный и переводной тексты одного языка сравниваются по одним показателям (Bernardini, 2007; «Статистика», раздел 6).',
+    'm_stat': [
+        'Поскольку художественный корпус мал, статус определяется не цифрами исследуемого корпуса, а показателями большого опорного корпуса (Bernardini, 2007). По плану — Британский национальный корпус (BNC) для английских сочетаний и Национальный корпус узбекского языка или uzWaC для узбекских (выбор обосновывается во II главе).',
+        'Предварительные параметры: единица счёта — лемма; не менее 5 употреблений в опорном корпусе; основная мера — logDice (Rychlý, 2008); MI — только с частотным фильтром; t-score — только как показатель надёжности (Gablasova et al., 2017); частота на миллион слов. Пороги заранее не задаются, а калибруются на вручную размеченном наборе.',
+        'Пока BNC не подключён, английские кандидаты проверяются по опорному корпусу из открыто распространяемых корпусов: Brown Corpus (Francis & Kučera, 1979), MASC (Ide et al., 2010) и художественная проза из выборки Project Gutenberg в NLTK (Bird et al., 2009) — всего {ref_tokens} токенов. Он подсчитан тем же способом, что и исследуемый корпус, — анализатором spaCy и теми же моделями связей, поэтому показатели двух корпусов сопоставимы. На странице каждого английского кандидата показаны его частота и меры в опорном корпусе; порог logDice калибруется по экспертной проверке (раздел 10). Скрипт для узбекского опорного корпуса готов; ему нужны текстовые файлы.',
+    ],
+    'm_rel': 'Разметку выполняют два независимых аннотатора — автор и второй филолог — по письменной инструкции: сначала обучающий набор из 50 единиц, затем не менее 20 процентов единиц (не менее 200) размечаются независимо. Согласие измеряется каппой Коэна (Cohen, 1960); κ ≥ 0,8 — хорошая надёжность, 0,67–0,8 — достаточно для осторожных выводов (Artstein & Poesio, 2008, p. 576). В разделе платформы «Экспертная проверка» есть фиксированные случайные выборки для пяти задач (по 50 + 200 единиц) и отдельные входы для двух аннотаторов; кандидаты в коллокации оцениваются по вопросам 1–4 и 6 порядка решений раздела 1.1.4. Точность с 95%-м интервалом Уилсона (Wilson, 1927) и согласие по каппе Коэна вычисляются автоматически и показываются в разделе 7 страницы «Статистика».',
+    'm_ref_limit': 'Английский опорный корпус временный: он намного меньше BNC и состоит в основном из американского английского и прозы XIX века, поэтому редкие сочетания в нём могут не найтись.',
+    'm_cmp_limit': 'В сравнении сопоставимых текстов на каждый язык приходится один оригинальный и один переводной текст: различие оригинального и переводного языка не отделяется от стиля автора, жанра и эпохи.',
+})
+for _l in ('uz', 'en', 'ru'):
+    T[_l]['m_limits'] = T[_l]['m_limits'] + [T[_l]['m_ref_limit'], T[_l]['m_cmp_limit']]
+
+T['uz']['g_status_v2'] = 'Hozirgi holat: inson tekshiruvining {total} birligidan annotator A {a} tasini, annotator B {b} tasini baholagan. Natijalar «Statistika» sahifasining 7-bo‘limida chiqadi.'
+T['en']['g_status_v2'] = 'Current state: of the {total} units of the human evaluation, annotator A has judged {a} and annotator B {b}. The results appear in section 7 of the Statistics page.'
+T['ru']['g_status_v2'] = 'Текущее состояние: из {total} единиц экспертной проверки аннотатор A оценил {a}, аннотатор B — {b}. Результаты появляются в разделе 7 страницы «Статистика».'
+
 REFERENCES = [
     'Artstein, R., & Poesio, M. (2008). Inter-coder agreement for computational linguistics. <em>Computational Linguistics, 34</em>(4), 555–596. https://doi.org/10.1162/coli.07-034-R2',
     'Bernardini, S. (2007). Collocations in translated language: Combining parallel, comparable and reference corpora. In <em>Proceedings of the Corpus Linguistics Conference (CL2007)</em> (pp. 1–16). University of Birmingham.',
@@ -814,6 +1046,11 @@ REFERENCES = [
     'Hemingway, E. (1952). <em>The old man and the sea</em>. Charles Scribner’s Sons. [Elektron nusxa: Asiaing.com]',
     'Xeminguey, E. (1986). <em>Chol va dengiz</em> (I. G‘ofurov, Tarj.). Yosh gvardiya. [Elektron nusxa: kutubxonachi.uz]',
     'Östling, R., & Tiedemann, J. (2016). Efficient word alignment with Markov chain Monte Carlo. <em>The Prague Bulletin of Mathematical Linguistics, 106</em>, 125–146. https://doi.org/10.1515/pralin-2016-0013',
+    'Bird, S., Klein, E., & Loper, E. (2009). <em>Natural language processing with Python</em>. O’Reilly Media.',
+    'Cramér, H. (1946). <em>Mathematical methods of statistics</em>. Princeton University Press.',
+    'Francis, W. N., & Kučera, H. (1979). <em>Brown corpus manual: Manual of information to accompany a standard corpus of present-day edited American English, for use with digital computers</em> (Rev. ed.). Department of Linguistics, Brown University.',
+    'Ide, N., Baker, C., Fellbaum, C., & Passonneau, R. (2010). The Manually Annotated Sub-Corpus: A community resource for and by the people. In <em>Proceedings of the ACL 2010 Conference Short Papers</em> (pp. 68–73). Association for Computational Linguistics. https://aclanthology.org/P10-2013/',
+    'Wilson, E. B. (1927). Probable inference, the law of succession, and statistical inference. <em>Journal of the American Statistical Association, 22</em>(158), 209–212.',
     'Yarowsky, D., Ngai, G., & Wicentowski, R. (2001). Inducing multilingual text analysis tools via robust projection across aligned corpora. In <em>Proceedings of the First International Conference on Human Language Technology Research</em>. https://aclanthology.org/H01-1035/',
 ]
 REFERENCES.sort(key=lambda r: re.sub('<[^>]+>', '', r).replace('Ö', 'O').lower())
@@ -932,13 +1169,24 @@ def render_methodology(lang, is_admin, st):
                        + _p(tr(lang, 'm_unpaired', unpaired=n(st.get('unpaired'), lang))), 'gaplar')
             + _section(tr(lang, 'm_walign_title'), ''.join(_p(x) for x in L['m_walign']), 'tekislash')
             + _section(tr(lang, 'm_equiv_title'), _p(tr(lang, 'm_equiv')) + _ul(L['m_equiv_items']), 'kollokatsiyalar')
+            + _section(tr(lang, 'm_dict_title'), ''.join(_p(x.replace('{uz}', n(st.get('dict_uz'), lang)).replace('{en}', n(st.get('dict_en'), lang)))
+                                                         for x in L['m_dict']), 'lugat')
             + _section(tr(lang, 'm_cand_title'), _p(tr(lang, 'm_cand')) + _p(tr(lang, 'm_reference', ref=n(st['reference_active'], lang))), 'malumotnoma')
-            + _section(tr(lang, 'm_stat_title'), ''.join(_p(x) for x in L['m_stat']), 'statistika')
+            + _section(tr(lang, 'm_stat_title'), ''.join(_p(x.replace('{ref_tokens}', n(st.get('ref_tokens'), lang))) for x in L['m_stat']), 'statistika')
             + _section(tr(lang, 'm_rel_title'), _p(tr(lang, 'm_rel')), 'ishonchlilik')
             + _section(tr(lang, 'm_limits_title'), _ul(L['m_limits']), 'cheklovlar')
             + _section(tr(lang, 'm_refs_title'), '<ul class="tc-small" style="list-style:none;padding:0">' + ''.join(
                 '<li style="padding-left:2em;text-indent:-2em">%s</li>' % localize_reference(r, lang) for r in REFERENCES) + '</ul>', 'adabiyotlar'))
     return _shell(lang, '/methodology.html', is_admin, tr(lang, 'm_title'), body)
+
+
+def _validation_status(lang):
+    import validation as V
+    prog = V.progress()
+    a = sum(p['A']['train'] + p['A']['main'] for p in prog.values())
+    b = sum(p['B']['train'] + p['B']['main'] for p in prog.values())
+    total = sum(p['train'] + p['main'] for p in prog.values())
+    return tr(lang, 'g_status_v2', a=n(a, lang), b=n(b, lang), total=n(total, lang))
 
 
 def render_guidelines(lang, is_admin, ann):
@@ -950,7 +1198,7 @@ def render_guidelines(lang, is_admin, ann):
             + _section(tr(lang, 'g_title'), steps)
             + _section(tr(lang, 'g_base_title'), _table(L['g_base_head'], L['g_base_rows']) + '<p style="margin-top:12px">%s</p>' % tr(lang, 'g_base_note'))
             + _section(tr(lang, 'g_equiv_title'), equiv)
-            + _section(tr(lang, 'g_rel_title'), _p(tr(lang, 'm_rel')) + _p(tr(lang, 'g_status_now', ann=n(ann.get('confirmed'), lang), shared=n(ann.get('shared'), lang)))))
+            + _section(tr(lang, 'g_rel_title'), _p(tr(lang, 'm_rel')) + _p(_validation_status(lang))))
     return _shell(lang, '/annotation_guidelines.html', is_admin, tr(lang, 'g_title'), body)
 
 
@@ -1087,7 +1335,119 @@ def measure_comparison(colls, lang):
     return out
 
 
-def render_statistics(lang, is_admin, st, sizes, ann, colls=None):
+
+def _num(x, lang, d=2):
+    if x is None:
+        return '—'
+    t = ('%.' + str(d) + 'f') % x
+    return t if lang == 'en' else t.replace('.', ',').replace('-', '−')
+
+
+def _test_row(label, res, lang, orr=None):
+    import analysis as A
+    if not res:
+        return (label, '—', '—', '—', '—', '—', '—')
+    return (label, n(res['n'], lang), '%s (%d)' % (_num(res['chi2'], lang, 1), res['df']), _num(res['g2'], lang, 1),
+            A.fmt_p(res['p_chi2'], lang), _num(res['v'], lang, 3),
+            ('%s (%s–%s)' % (_num(orr[0], lang), _num(orr[1], lang), _num(orr[2], lang))) if orr else '—')
+
+
+def direction_tests(colls, lang):
+    """Chi-square / G² tests of the direction differences of section 3."""
+    import analysis as A
+    agg = {}
+    types = {}
+    for c_lang, book, key in DIRECTIONS:
+        d = {'occ': 0, 'eq': 0, 'single': 0, 'multi': 0}
+        tt = [0, 0]
+        for it in colls:
+            st = (it.get('eq_stats') or {}).get(book)
+            if it['lang'] != c_lang or not st:
+                continue
+            for k in d:
+                d[k] += st[k]
+            if st['occ']:
+                tt[0 if st['eq'] * 2 >= st['occ'] else 1] += 1
+        agg[key], types[key] = d, tt
+    keys = [k for _, _, k in DIRECTIONS]
+    eq_tab = [[agg[k]['eq'], agg[k]['occ'] - agg[k]['eq']] for k in keys]
+    sm_tab = [[agg[k]['single'], agg[k]['multi']] for k in keys]
+    a, b = 's_dir_uz_src', 's_dir_en_src'
+    rows = [
+        _test_row(tr(lang, 's_t_eq4'), A.contingency(eq_tab), lang),
+        _test_row(tr(lang, 's_t_eq2'), A.contingency([eq_tab[0], eq_tab[1]]), lang, A.odds_ratio(*eq_tab[0], *eq_tab[1])),
+        _test_row(tr(lang, 's_t_eq2t'), A.contingency([types[a], types[b]]), lang, A.odds_ratio(*types[a], *types[b])),
+        _test_row(tr(lang, 's_t_sm4'), A.contingency(sm_tab), lang),
+        _test_row(tr(lang, 's_t_sm2'), A.contingency([sm_tab[0], sm_tab[1]]), lang, A.odds_ratio(*sm_tab[0], *sm_tab[1])),
+    ]
+    return ('<h3 style="margin:28px 0 6px">%s</h3><p class="tc-section__note">%s</p>' % (tr(lang, 's_test_title'), tr(lang, 's_test_note'))
+            + _table(T[lang]['s_test_head'], rows, 'lrrrrrr'))
+
+
+def reference_section(colls, ref_info, lang):
+    if not ref_info:
+        return ''
+    en = [it for it in colls if it['lang'] == 'en']
+    with_ref = [it for it in en if (it.get('ref') or {}).get('f')]
+    five = [it for it in with_ref if it['ref']['f'] >= 5 and it['ref'].get('log_dice') is not None]
+    rho = spearman([it['assoc']['log_dice'] for it in five], [it['ref']['log_dice'] for it in five]) if len(five) > 3 else None
+    parts = _table(T[lang]['s_ref_head'], [(html.escape(p['name']), n(p['tokens'], lang)) for p in ref_info['parts']]
+                   + [('<em>%s</em>' % tr(lang, 's_total'), n(ref_info['n'], lang))], 'lr', total_last=True)
+    top = sorted(five, key=lambda it: (-it['ref']['log_dice'], it['lemma']))[:15]
+    top_rows = [('<a class="tc-serif" lang="en" href="%s">%s</a>' % (ui.with_lang('/kollokatsiya/' + it['id'], lang), html.escape(it.get('display') or '')),
+                 html.escape(ui.pattern_label(it['pattern'], lang)), n(it['freq'], lang), n(it['ref']['f'], lang),
+                 _num(it['ref']['log_dice'], lang), _num(it['ref'].get('mi'), lang)) for it in top]
+    body = ('<div class="tc-prose">%s</div>' % _p(tr(lang, 's_ref_lead')) + parts
+            + '<p class="tc-prose" style="margin-top:14px">%s</p>' % tr(lang, 's_ref_cov', all=n(len(en), lang), any=n(len(with_ref), lang),
+                                                                       five=n(len(five), lang), rho=_num(rho, lang))
+            + '<h3 style="margin:24px 0 10px">%s</h3>' % tr(lang, 's_ref_top') + _table(T[lang]['s_ref_top_head'], top_rows, 'nnrrrr')
+            + '<p class="tc-small tc-muted tc-prose" style="margin-top:12px">%s</p>' % tr(lang, 's_ref_caveat', tokens=n(ref_info['n'], lang)))
+    return _section(tr(lang, 's_ref_title'), body, 'tayanch', prose=False)
+
+
+def comparable_section(cmp, lang):
+    if not cmp:
+        return ''
+    import analysis as A
+    names = {('en', 'hemingway'): '«The Old Man and the Sea»', ('en', 'cholpon'): '«Night and Day»',
+             ('uz', 'cholpon'): '«Kecha va kunduz»', ('uz', 'hemingway'): '«Chol va dengiz»'}
+    role = {'original': tr(lang, 'role_original'), 'translated': tr(lang, 'role_translation')}
+    rows, en_rows = [], []
+    for r in cmp['texts']:
+        title = '%s <span class="tc-muted">(%s)</span>' % (names[(r['lang'], r['book'])], role[r['role']])
+        def p1(a, b):
+            return (_num(100.0 * a / b, lang, 1) + (' %' if lang != 'en' else '%')) if b else '—'
+        rows.append((title, tr(lang, 'lang_' + r['lang']), n(r['tokens'], lang), _num(r['sttr'], lang, 3), p1(r['density'], 1),
+                     _num(r['cand_per_1000'], lang, 1)))
+        if r['lang'] == 'en':
+            en_rows.append((title, _num(r['pairs_per_1000'], lang, 1), p1(r['ref_attested'], r['pair_occ']),
+                            p1(r['ref_typical'], r['pair_occ']), p1(r['once_types'], r['pair_types'])))
+    trows = []
+    for lg in ('en', 'uz'):
+        for k in ('cand', 'density', 'attested', 'typical', 'once'):
+            res = (cmp['tests'].get(lg) or {}).get(k)
+            if res:
+                trows.append((tr(lang, 's_cmp_t_' + k), tr(lang, 'lang_' + lg), '%s (%d)' % (_num(res['chi2'], lang, 1), res['df']),
+                              A.fmt_p(res['p_chi2'], lang), _num(res['v'], lang, 3)))
+    body = ('<div class="tc-prose">%s</div>' % _p(tr(lang, 's_cmp_lead')) + _table(T[lang]['s_cmp_head'], rows, 'lnrrrr')
+            + '<div style="margin-top:16px">%s</div>' % _table(T[lang]['s_cmp_en_head'], en_rows, 'lrrrr')
+            + '<p class="tc-small tc-muted tc-prose" style="margin-top:10px">%s</p>' % tr(lang, 's_cmp_note')
+            + '<div style="margin-top:16px">%s</div>' % _table(T[lang]['s_cmp_tests_head'], trows, 'lnrrr')
+            + '<p class="tc-prose" style="margin-top:14px">%s</p>' % tr(lang, 's_cmp_caveat'))
+    return _section(tr(lang, 's_cmp_title'), body, 'teng-matnlar', prose=False)
+
+
+def validation_section(lang, colls):
+    import validation as V
+    import validation_pages as VP
+    res = V.results()
+    has = any((res.get(t_) or {}).get('A', {}).get('n') for t_ in V.TASKS)
+    body = '<div class="tc-prose">%s</div>' % _p(tr(lang, 's_val_ready', seed=V.samples().get('seed', '—')))
+    if has:
+        body += '<div style="margin-top:14px">%s</div>' % VP.results_html(lang, res, V.calibration(colls or []))
+    return _section(tr(lang, 's_val_title'), body, 'inson-tekshiruvi', prose=False)
+
+def render_statistics(lang, is_admin, st, sizes, ann, colls=None, ref_info=None, cmp=None):
     L = T[lang]
     order = [('book-cholpon-uz', '«Kecha va kunduz»', 'role_original', 'lang_uz'),
              ('book-cholpon-en', '«Night and Day»', 'role_translation', 'lang_en'),
@@ -1116,6 +1476,7 @@ def render_statistics(lang, is_admin, st, sizes, ann, colls=None):
         auto_sec = _section(tr(lang, 's_auto_title'),
                             '<div class="tc-prose">%s</div>' % _p(tr(lang, 's_auto_note')) + summary_html
                             + '<p class="tc-small tc-muted tc-prose" style="margin-top:10px">%s</p>' % tr(lang, 's_auto_cols')
+                            + direction_tests(colls, lang)
                             + '<h3 style="margin:24px 0 4px">%s</h3>' % tr(lang, 's_by_pattern') + details + top_html, 'tarjima-tahlili', prose=False)
         meas_sec = _section(tr(lang, 's_assoc_title'),
                             '<div class="tc-prose">%s</div>' % _p(tr(lang, 's_assoc')) + '<h3 style="margin:16px 0 10px">%s</h3>' % tr(lang, 's_formulas_title')
@@ -1124,6 +1485,6 @@ def render_statistics(lang, is_admin, st, sizes, ann, colls=None):
     body = (_h1(tr(lang, 's_title'), tr(lang, 's_lead'))
             + _section(tr(lang, 's_size_title'), _table(L['s_head'], rows, 'lnrrrr') + '<p class="tc-small tc-muted tc-prose" style="margin-top:10px">%s</p>' % tr(lang, 's_size_note'), prose=False)
             + _section(tr(lang, 's_pairs_title'), _table(L['s_pairs_head'], pair_rows, 'lrrrrr'), prose=False)
-            + auto_sec + meas_sec
+            + auto_sec + meas_sec + reference_section(colls or [], ref_info, lang) + comparable_section(cmp, lang) + validation_section(lang, colls)
             + _section(tr(lang, 's_ch3_title'), _p(tr(lang, 's_ch3', ann=n(ann.get('confirmed'), lang)))))
     return ui.page(lang, tr(lang, 's_title'), body, '/methodology_statistics.html', is_admin)

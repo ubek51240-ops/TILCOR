@@ -54,6 +54,30 @@ POS_UNKNOWN = "so‘z turkumi aniqlanmagan"
 
 TEMPLATE_EXAMPLE_RE = re.compile(r"^(He|She|They) (noticed|said|thought) that .+ (was|were) (crucial|important)\.?$", re.I)
 
+_JUNK_EXAMPLE_RE = re.compile(r"\[\d+\]|www\.|kutubxonasi|-\s*\d+\s*-")
+
+
+def _example_quality(src: str, tgt: str) -> int:
+    """GDEX uslubidagi sodda misol sifati bahosi (SkELL namunasida; yuqoriroq = yaxshiroq).
+    Gapning mazmuniga aralashmaydi, faqat ko'rsatish tartibiga ta'sir qiladi."""
+    score = 0
+    words = src.split()
+    n = len(words)
+    if 6 <= n <= 22:
+        score += 3          # o'qish uchun qulay uzunlik
+    elif 4 <= n <= 30:
+        score += 1
+    s = src.strip()
+    if s and s[0].isupper() and s[-1:] in '.!?…»”':
+        score += 2          # to'liq gap (bosh harf + tinish belgisi)
+    if not _JUNK_EXAMPLE_RE.search(src):
+        score += 1          # sahifa/izoh belgilarisiz
+    if '\n' not in src:
+        score += 1
+    if tgt and len(tgt.split()) >= 3:
+        score += 1          # tarjima tomoni ham to'laqonli
+    return score
+
 
 def _clean_reference_example(item: dict):
     """Example sentence of a reference-base entry, or None.
@@ -962,8 +986,12 @@ def execute_unified_search(
     # 1. confirmed pairs with confirmed equivalents (ranking_weight=1)
     # 2. confirmed pairs (ranking_weight=2)
     # 3. automatic pairs (ranking_weight=3)
-    # Within each group: by book order and page
-    matched_corpus_sentences.sort(key=lambda s: (s['ranking_weight'], 0 if s['book'] == 'cholpon' else 1, s['sort_page']))
+    # Within each group: example quality (GDEX-style, SkELL namunasida), then book order and page.
+    # Sifat bahosi tartibni faqat bir xil tasdiqlanish darajasi ichida o'zgartiradi (7.1 saqlanadi).
+    for s in matched_corpus_sentences:
+        s['example_quality'] = _example_quality(s.get('query_raw') or '', s.get('other_raw') or '')
+    matched_corpus_sentences.sort(key=lambda s: (s['ranking_weight'], -s['example_quality'],
+                                                 0 if s['book'] == 'cholpon' else 1, s['sort_page']))
 
     # Format Words list
     words_list = []

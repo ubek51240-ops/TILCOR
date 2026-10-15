@@ -1,9 +1,10 @@
+import os
 #!/usr/bin/env python3
 import sys
 import paramiko
 
 sys.stdout.reconfigure(encoding='utf-8')
-HOST, USER, PASS = "189.74.100.111", "root", "AcL0hzLOh16zDoM$"
+HOST, USER, PASS = "189.74.100.111", "root", os.environ.get("TILCOR_VPS_PASSWORD", "")
 
 c = paramiko.SSHClient()
 c.set_missing_host_key_policy(paramiko.AutoAddPolicy())

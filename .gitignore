@@ -29,15 +29,18 @@ __pycache__/
 *$py.class
 
 # Backups & Temporary files
+backups/
 backups/*.db
 backups/*.sha256
-backups/backup_step*
-backups/stage*
-backups/step*
 *.restore_tmp
-*.zip
 secrets/
 *.password
 
 # local backups made by cleaning scripts
 data/*.before_*.json
+
+# human evaluation: written on the server, never shipped in an update
+data/validation/annotations.json
+data/validation/annotations.json.tmp
+# open reference corpora downloaded for scripts/build_reference_en.py
+nltk_data/

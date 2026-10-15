@@ -11,7 +11,7 @@ from datetime import datetime
 import ui_components as ui
 
 SITE_URL = "https://tilcor.uz"
-PLATFORM_VERSION = "3.3"
+PLATFORM_VERSION = "3.5"
 
 
 def _citation(lang, title, kind_key, path):
