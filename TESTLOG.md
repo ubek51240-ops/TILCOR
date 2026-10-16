@@ -36,6 +36,24 @@ v3.7 holati: **tilcor.uz da jonli**. VPS zaxirasi: /root/tilcor_backups/tilcor_b
 | 3 | Lokal: /kollokatsiya/en-a6bb116b06 (old woman), en-a6eca9a7bc (closed the door), en-789a864a39 (run away) sahifalarida «Internet manbalardagi muqobillar» bo‘limi chiqadi; muqobilsiz sahifada (old man) chiqmaydi | ISHLAYDI |
 | 4 | data/internet_equivalents.json ommaviy berilmaydi (404) | ISHLAYDI |
 
+## v3.7.3 Sinovlari — 2026-10-16 (to‘liq qamrov)
+
+| № | Sinov | Natija |
+|---|-------|--------|
+| 1 | 36 ta batch (1 436 nomzod) + avvalgi 120 → jami 1 555 yozuv; 180 topildi, 1 375 topilmadi; URLsiz/mashina-tarjimali 3 muqobil rad | ISHLAYDI |
+| 2 | Tasodifiy 6 yozuv tekshirildi (fair share→ziyouz lug‘ati, saw clearly→Injil Mark, old city→Chikago glossariysi) — URL lar ochiladi | ISHLAYDI |
+| 3 | Birlashtirilgan JSON yaroqliligi va dublikatsizlik (en kaliti bo‘yicha) | ISHLAYDI |
+
+## v3.8 Sinovlari — 2026-10-16 (internet kollokatsiyalari)
+
+| № | Sinov | Natija |
+|---|-------|--------|
+| 1 | 6 agent natijasi birlashdi: 424 xom → 417 juftlik (dublikat/yaroqsizlar chiqarildi); manba turlari normallashtirildi | ISHLAYDI |
+| 2 | Tasodifiy 4 URL tekshirildi (Tatoeba, Lexilogos UDHR, preply) — hammasi ochiladi (200) | ISHLAYDI |
+| 3 | Lokal: /kollokatsiyalar?manba=internet (sarlavha, oltin belgi, jadval), ?q=heart filtri, 3-sahifa — hammasi 200 | ISHLAYDI |
+| 4 | /kollokatsiyalar sahifasida yangi ro‘yxatga havola | ISHLAYDI |
+| 5 | data/internet_collocations.json ommaviy berilmaydi (404) | ISHLAYDI |
+
 Holat: lokal. tilcor.uz ga hali joylanmagan.
 
 ## 5-Bosqich (Step 05) Sinovlari — 2026-10-13

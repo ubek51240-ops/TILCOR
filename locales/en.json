@@ -399,5 +399,9 @@
   "freq_pm": "≈ {n} per million words.",
   "inet_eq_title": "Equivalents from internet sources",
   "inet_eq_note": "The equivalents below come from open online dictionaries and academic sources; each is shown with its source, link and access date. They are not corpus data and are excluded from the statistics until the researcher confirms them.",
-  "inet_eq_badge": "Internet source — awaiting researcher confirmation"
+  "inet_eq_badge": "Internet source — awaiting researcher confirmation",
+  "inet_coll_title": "Collocations from internet sources",
+  "inet_coll_lead": "English–Uzbek collocation pairs gathered from open online dictionaries, academic papers and parallel texts. Each pair is shown with its source, link and access date; this list is not corpus data and stays out of the statistics until the researcher confirms it.",
+  "inet_coll_note": "Pairs gathered from open internet sources, each with its source and link",
+  "inet_col_source": "Source"
 }

@@ -2636,6 +2636,10 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             page = safe_int(params.get('page', ['1'])[0])
             if params.get('manba', [''])[0] == 'malumotnoma':
                 html_content = ui_components.render_reference_page(lang, is_admin=is_admin, items=get_active_collocations(), page_no=page)
+            elif params.get('manba', [''])[0] == 'internet':
+                html_content = ui_components.render_internet_collocs_page(
+                    lang, is_admin=is_admin, items=get_internet_collocations(), page_no=page,
+                    q=params.get('q', [''])[0].strip()[:80])
             else:
                 html_content = ui_components.render_kollokatsiyalar_page(
                     lang, is_admin=is_admin, pattern=params.get('qolip', [''])[0], page=page, items=collocation_index_items(),
@@ -3153,6 +3157,24 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
 # =====================================================================
 # Search pipeline used by the public pages: unified search + word alignment layer
 # =====================================================================
+# INTERNET sinfidagi (D-bo'lim) kollokatsiyalar ro'yxati: internetdagi ochiq manbalardan
+# yig'ilgan inglizcha-o'zbekcha juftliklar, har biri manba + URL + murojaat sanasi bilan.
+_INET_COLLOCS = []
+
+def get_internet_collocations():
+    global _INET_COLLOCS
+    if not _INET_COLLOCS:
+        p = os.path.join(DIRECTORY, 'data', 'internet_collocations.json')
+        if os.path.exists(p):
+            try:
+                with open(p, 'r', encoding='utf-8') as f:
+                    _INET_COLLOCS = [r for r in json.load(f) if r.get('en') and r.get('uz') and r.get('url')]
+                print(f"[*] Internet kollokatsiyalari yuklandi: {len(_INET_COLLOCS)} ta")
+            except Exception as e:
+                print(f"[!] internet_collocations.json o'qishda xatolik: {e}")
+                _INET_COLLOCS = []
+    return _INET_COLLOCS
+
 # INTERNET sinfidagi (D-bo'lim) ingliz kollokatsiyalarining manbali o'zbekcha muqobillari.
 # Har bir yozuv manba nomi, URL va murojaat sanasi bilan; tadqiqotchi tasdig'igacha
 # alohida yorliq bilan ko'rsatiladi, statistikaga kirmaydi.

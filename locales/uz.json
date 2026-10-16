@@ -399,5 +399,9 @@
   "freq_pm": "Million so‘zga ≈ {n} marta.",
   "inet_eq_title": "Internet manbalardagi muqobillar",
   "inet_eq_note": "Quyidagi muqobillar internetdagi ochiq lug‘at va akademik manbalardan olingan; har biri manbasi, havolasi va murojaat sanasi bilan ko‘rsatiladi. Ular korpus ma’lumoti emas va tadqiqotchi tasdig‘igacha statistikaga kirmaydi.",
-  "inet_eq_badge": "Internet manba — tadqiqotchi tasdig‘i kutilmoqda"
+  "inet_eq_badge": "Internet manba — tadqiqotchi tasdig‘i kutilmoqda",
+  "inet_coll_title": "Internet manbalardagi kollokatsiyalar",
+  "inet_coll_lead": "Internetdagi ochiq lug‘at, akademik maqola va parallel matnlardan yig‘ilgan inglizcha–o‘zbekcha kollokatsiya juftliklari. Har bir juftlik manbasi, havolasi va murojaat sanasi bilan ko‘rsatiladi; bu ro‘yxat korpus ma’lumoti emas va tadqiqotchi tasdig‘igacha statistikaga kirmaydi.",
+  "inet_coll_note": "Internetdagi ochiq manbalardan yig‘ilgan juftliklar, manbasi va havolasi bilan",
+  "inet_col_source": "Manba"
 }

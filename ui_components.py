@@ -842,10 +842,12 @@ def render_kollokatsiyalar_page(lang='uz', is_admin=False, pattern='', status=''
             '<div class="tc-chips" id="qoliplar" style="margin-top:12px">%s</div><div class="tc-chips" style="margin-top:12px">%s</div>%s%s'
             '<p class="tc-muted tc-small tc-num" style="margin-top:14px">%s</p><div class="tc-colls" style="margin-top:6px">%s</div>%s'
             '<p class="tc-section__note" style="margin-top:30px"><a href="%s">%s</a>. %s</p>'
+            '<p class="tc-section__note" style="margin-top:10px"><a href="%s">%s</a>. %s</p>'
             % (T(lang, 'coll_page_title'), T(lang, 'coll_page_lead'), stats, tabs, chips, sorts, order_note, find,
                html.escape(count_phrase(len(items), 'coll_count_word', lang)), ''.join(collocation_block(c, lang, measure=order) for c in chunk),
                _pager(lang, page_no, total_pages, lambda p: url(page=p)),
-               with_lang('/kollokatsiyalar?manba=malumotnoma', lang), T(lang, 'ref_lists_title'), T(lang, 'ref_lists_note')))
+               with_lang('/kollokatsiyalar?manba=malumotnoma', lang), T(lang, 'ref_lists_title'), T(lang, 'ref_lists_note'),
+               with_lang('/kollokatsiyalar?manba=internet', lang), T(lang, 'inet_coll_title'), T(lang, 'inet_coll_note')))
     return globals()['page'](lang, get_i18n(lang, 'coll_page_title'), body, '/kollokatsiyalar', is_admin)
 
 
@@ -864,6 +866,54 @@ def render_reference_page(lang='uz', is_admin=False, items=None, page_no=1):
                T(lang, 'col_english'), T(lang, 'label_pattern'), T(lang, 'col_source_list'), rows,
                _pager(lang, page_no, total_pages, lambda p: with_lang('/kollokatsiyalar?manba=malumotnoma&page=%d' % p, lang))))
     return page(lang, get_i18n(lang, 'ref_lists_title'), body, '/kollokatsiyalar', is_admin)
+
+
+def render_internet_collocs_page(lang='uz', is_admin=False, items=None, page_no=1, q=''):
+    """INTERNET sinfidagi kollokatsiyalar (D-bo'lim): har bir juftlik manba, URL va murojaat
+    sanasi bilan. Korpus ma'lumoti emas; tadqiqotchi tasdig'igacha statistikaga kirmaydi."""
+    items = items or []
+    if q:
+        ql = q.lower()
+        items = [it for it in items if ql in (it.get('en') or '').lower() or ql in (it.get('uz') or '').lower()]
+    per = 40
+    total_pages = max(1, (len(items) + per - 1) // per)
+    page_no = max(1, min(int(page_no or 1), total_pages))
+
+    def src_cell(it):
+        url = it.get('url') or ''
+        host = url.split('/')[2] if '://' in url else url
+        return ('%s — <a href="%s" rel="nofollow">%s</a><br>%s: %s'
+                % (html.escape(it.get('source_name') or ''), html.escape(url), html.escape(host),
+                   T(lang, 'access_date'), html.escape(it.get('access_date') or '')))
+
+    rows = ''.join('<tr><td class="tc-serif" lang="en">%s</td><td class="tc-serif" lang="uz">%s</td>'
+                   '<td>%s</td><td class="tc-small tc-muted">%s</td></tr>'
+                   % (html.escape(it.get('en') or ''), html.escape(it.get('uz') or ''),
+                      html.escape(pattern_label(it.get('pattern', ''), lang) if it.get('pattern') else ''), src_cell(it))
+                   for it in items[(page_no - 1) * per: page_no * per])
+
+    def url_(p):
+        qs = [('manba', 'internet')] + ([('q', q)] if q else []) + ([('page', str(p))] if p > 1 else [])
+        return with_lang('/kollokatsiyalar?' + urllib.parse.urlencode(qs), lang)
+
+    hidden = '<input type="hidden" name="manba" value="internet">'
+    if lang != 'uz':
+        hidden += '<input type="hidden" name="lang" value="%s">' % lang
+    find = ('<form method="get" action="/kollokatsiyalar" class="tc-search" style="max-width:520px;margin-top:16px">'
+            '<input type="search" name="q" value="%s" placeholder="%s" aria-label="%s">%s'
+            '<button class="tc-btn tc-btn--ghost" type="submit">%s</button></form>'
+            % (html.escape(q), T(lang, 'coll_filter_placeholder'), T(lang, 'coll_filter_placeholder'), hidden, T(lang, 'btn_apply')))
+    body = ('<p class="tc-small"><a href="%s">%s</a></p><h1 style="margin-top:8px">%s</h1><p class="tc-lead">%s</p>'
+            '<p style="margin-top:10px"><span class="tc-badge tc-badge--amber">%s</span></p>%s'
+            '<p class="tc-muted tc-small tc-num" style="margin-top:14px">%s</p>'
+            '<div class="tc-panel tc-scroll" style="margin-top:8px;padding:4px 8px"><table class="tc-table"><thead><tr>'
+            '<th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr></thead><tbody>%s</tbody></table></div>%s'
+            % (with_lang('/kollokatsiyalar', lang), T(lang, 'coll_page_title'),
+               T(lang, 'inet_coll_title'), T(lang, 'inet_coll_lead'), T(lang, 'inet_eq_badge'), find,
+               html.escape(count_phrase(len(items), 'coll_count_word', lang)),
+               T(lang, 'col_english'), T(lang, 'col_uzbek'), T(lang, 'label_pattern'), T(lang, 'inet_col_source'), rows,
+               _pager(lang, page_no, total_pages, url_)))
+    return page(lang, get_i18n(lang, 'inet_coll_title'), body, '/kollokatsiyalar', is_admin)
 
 
 def _uniq_forms(forms, exclude=''):

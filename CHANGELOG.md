@@ -4,6 +4,36 @@ Ushbu hujjat doktorlik dissertatsiyasi talablari doirasida har bir bosqichda kir
 
 ---
 
+## [v3.8] — Internet manbalardagi kollokatsiyalar ro‘yxati — 2026-10-16
+
+Tadqiqotchi topshirig‘i: internetdan inglizcha–o‘zbekcha kollokatsiyalarni yig‘ib saytga qo‘shish.
+
+- **Yangi ma’lumot:** `data/internet_collocations.json` — 6 ta mustaqil qidiruv jarayoni (akademik maqolalar,
+  somatik iboralar, fe’l+ot kundalik birikmalar, sifat+ot, tabiat/vaqt, rasmiy-akademik registr) orqali
+  internetdan yig‘ilgan **417 ta inglizcha–o‘zbekcha kollokatsiya juftligi**. Har bir juftlik: manba nomi,
+  aniq URL, murojaat sanasi (2026-10-16) va sahifadan so‘zma-so‘z dalil bilan (D-bo‘lim INTERNET sinfi).
+- Manba turlari: akademik maqola 158, boshqa (parallel rasmiy hujjatlar, Tatoeba, glossariylar) 181,
+  lug‘at saytlari 56, Vikilug‘at 22. Mashina tarjimasi/AI manbalar filtrda avtomatik rad etiladi;
+  bir so‘zli «juftliklar» kollokatsiya sifatida qabul qilinmaydi; dublikatlar (en+uz kaliti) chiqarilgan.
+- **Yangi sahifa:** `/kollokatsiyalar?manba=internet` — jadval (inglizcha · o‘zbekcha · qolip · manba-havola),
+  ichki qidiruv va sahifalash; oltin «Internet manba — tadqiqotchi tasdig‘i kutilmoqda» belgisi bilan.
+  Kollokatsiyalar sahifasidan havola qo‘shildi. Ro‘yxat korpus ma’lumoti emas va statistikaga kirmaydi.
+- Uch tilda yangi kalitlar (`inet_coll_*`).
+
+## [v3.7.3] — Internet manbalardagi muqobillar: TO‘LIQ qamrov — 2026-10-16
+
+Tadqiqotchi topshirig‘iga binoan qidiruv korpusdagi BARCHA inglizcha kollokatsiya nomzodlariga kengaytirildi.
+
+- **Qamrov:** 1 555 ta nomzod (atoqli otlilardan tashqari barcha inglizcha nomzodlar) 40 tadan 40 ta mustaqil
+  qidiruv jarayonida tekshirildi. Natija: **180 tasiga manbali o‘zbekcha muqobil topildi**, 1 375 tasi «topilmadi».
+- «Topilmadi» ulushining yuqoriligi kutilgan ilmiy natija: nomzodlarning aksariyati korpusga xos erkin
+  birikmalar yoki gap parchalari bo‘lib, konvensional kollokatsiya emas (1.1-band farqlash mezoniga dalil).
+- Manbalar avvalgidek: Vikilug‘at, Glosbe, akademik maqolalar, parallel nashr matnlari (Injil, UDHR),
+  Tatoeba, Chikago universiteti o‘zbek glossariysi, ziyouz.com dagi lug‘atlar. Har muqobil URL + murojaat
+  sanasi + so‘zma-so‘z dalil bilan; mashina tarjimasi filtrda avtomatik rad etiladi.
+- `data/internet_equivalents.json` yangilandi (120 → 1 555 yozuv); sayt kodi o‘zgarmagan (v3.7.2 bo‘limi
+  avtomatik barcha yangi yozuvlarni ko‘rsatadi).
+
 ## [v3.7.2] — Internet manbalardagi muqobillar (birinchi to‘plam) — 2026-10-15
 
 Tadqiqotchi topshirig‘i: inglizcha kollokatsiyalarga internetdagi tekshirilsa bo‘ladigan manbalardan
