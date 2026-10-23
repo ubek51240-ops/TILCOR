@@ -583,6 +583,31 @@ def render_home_page(lang='uz', stats=None, is_admin=False, featured=None):
 # ---------------------------------------------------------------------
 # SEARCH RESULTS
 # ---------------------------------------------------------------------
+CURATED_LABELS = {
+    'uz': ('Tekshirilgan muqobillar', 'tasdiqlangan', 'tasdiqlovchi', 'manba', 'namuna'),
+    'en': ('Verified alternatives', 'verified', 'verified by', 'source', 'example'),
+    'ru': ('Проверенные варианты', 'проверено', 'проверил', 'источник', 'пример'),
+}
+
+
+def render_curated(res, lang):
+    """Reviewed collocation alternatives from data/collocation_alternatives.json (empty when none match)."""
+    alts = res.get('curated_alternatives') or []
+    if not alts:
+        return ''
+    title, status_label, by_label, src_label, _ = CURATED_LABELS.get(lang, CURATED_LABELS['uz'])
+    rows = []
+    for a in alts:
+        by = (' <span class="tc-small">%s: %s</span>' % (by_label, html.escape(', '.join(a.get('verified_by') or [])))
+              if a.get('verified_by') else '')
+        rows.append('<li><span class="tc-serif" lang="%s">%s</span> &rarr; <span class="tc-serif tc-strong" lang="%s">%s</span>'
+                    ' <span class="tc-small tc-muted">%s: %s · %s</span>%s</li>'
+                    % (a['query_lang'], html.escape(a['query']), a['alternative_lang'], html.escape(a['alternative']),
+                       src_label, html.escape(a.get('book') or ''), status_label, by))
+    return ('<section class="tc-section"><div class="tc-section__head"><h2>%s</h2></div><ul class="tc-list">%s</ul></section>'
+            % (title, ''.join(rows)))
+
+
 def render_equivalents(res, lang, query):
     eqs = res.get('equivalents') or []
     cov = res.get('equivalent_coverage') or {}
@@ -770,10 +795,10 @@ def render_qidiruv_page(lang='uz', query='', book='', search_res=None, is_admin=
                 dym_html = ('<p style="margin-top:14px">%s</p><div class="tc-chips" style="margin-top:8px">%s</div>'
                             % (T(lang, 'did_you_mean'), chips))
             body += '<div class="tc-panel" style="margin-top:24px"><p>%s</p>%s</div>' % (T(lang, 'not_in_corpus'), dym_html)
-            body += render_collocations(res, lang)
+            body += render_curated(res, lang) + render_collocations(res, lang)
         else:
-            body += (render_equivalents(res, lang, query) + render_word_forms(res, lang) + render_collocations(res, lang)
-                     + render_sentences(res, lang, lambda p: url(page=p)))
+            body += (render_curated(res, lang) + render_equivalents(res, lang, query) + render_word_forms(res, lang)
+                     + render_collocations(res, lang) + render_sentences(res, lang, lambda p: url(page=p)))
     path = '/qidiruv' + ('?' + urllib.parse.urlencode(qs) if qs else '')
     return globals()['page'](lang, query or get_i18n(lang, 'nav_word_search'), body, path, is_admin)
 

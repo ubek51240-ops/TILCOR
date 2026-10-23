@@ -1,0 +1,58 @@
+[
+  {
+    "id": "alt-001",
+    "query_lang": "en",
+    "query": "fished alone",
+    "alternative_lang": "uz",
+    "alternative": "baliq ovlardi",
+    "candidate_id": "col-hem-1",
+    "pair_id": "pair-hemingway-old-man-sea",
+    "book": "The Old Man and the Sea",
+    "occurrence_ids": [
+      "occ-00002",
+      "occ-00003"
+    ],
+    "verified_by": [
+      "admin",
+      "reviewer"
+    ],
+    "status": "tasdiqlangan",
+    "source": "data/phd_corpus.db"
+  },
+  {
+    "id": "alt-002",
+    "query_lang": "en",
+    "query": "deep wrinkles",
+    "alternative_lang": "uz",
+    "alternative": "chuqur ajinlar",
+    "candidate_id": "col-hem-3",
+    "pair_id": "pair-hemingway-old-man-sea",
+    "book": "The Old Man and the Sea",
+    "occurrence_ids": [
+      "occ-00007",
+      "occ-00008"
+    ],
+    "verified_by": [],
+    "status": "tasdiqlangan",
+    "source": "data/phd_corpus.db"
+  },
+  {
+    "id": "alt-003",
+    "query_lang": "uz",
+    "query": "koʻngli tusamoq",
+    "alternative_lang": "en",
+    "alternative": "hearts wished for",
+    "candidate_id": "col-kk-1",
+    "pair_id": "pair-cholpon-night-and-day",
+    "book": "Kecha va kunduz (roman)",
+    "occurrence_ids": [
+      "occ-00001"
+    ],
+    "verified_by": [
+      "admin",
+      "reviewer"
+    ],
+    "status": "tasdiqlangan",
+    "source": "data/phd_corpus.db"
+  }
+]

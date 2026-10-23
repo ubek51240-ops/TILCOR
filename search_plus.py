@@ -23,6 +23,29 @@ _lock = threading.Lock()
 _index = {}
 
 
+def _load_alternatives():
+    """Reviewed collocation -> Uzbek/English alternative pairs (scripts/build_collocation_alternatives.py)."""
+    try:
+        with open(os.path.join(DATA_DIR, 'collocation_alternatives.json'), encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"[!] collocation alternatives not loaded: {e}")
+        return []
+
+
+def curated_alternatives(query, q_lang):
+    """Reviewed alternatives whose collocation equals the query (apostrophes and case ignored)."""
+    key = uz_norm(query.lower()) if q_lang == 'uz' else ' '.join(query.lower().split())
+    out = []
+    for a in _load_alternatives():
+        if a.get('query_lang') != q_lang:
+            continue
+        akey = uz_norm(a['query'].lower()) if q_lang == 'uz' else ' '.join(a['query'].lower().split())
+        if akey == key:
+            out.append(a)
+    return out
+
+
 def _load_index():
     with _lock:
         if 'items' not in _index:
@@ -142,6 +165,7 @@ def enrich(res, corpus_by_id, page=1, per_page=20):
         w['translations'] = [{'text': _display(form_eq_text[nf][k]), 'count': n} for k, n in c.most_common(4)] if c else []
 
     res['corpus_collocations'] = find_collocations(res, q_lang, corpus_by_id)
+    res['curated_alternatives'] = curated_alternatives(res.get('query') or '', q_lang)
 
     total = len(sentences)
     pages = max(1, (total + per_page - 1) // per_page)
