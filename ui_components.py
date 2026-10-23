@@ -881,14 +881,14 @@ def render_reference_page(lang='uz', is_admin=False, items=None, page_no=1):
     per = 50
     total_pages = max(1, (len(items) + per - 1) // per)
     page_no = max(1, min(int(page_no or 1), total_pages))
-    rows = ''.join('<tr><td class="tc-serif" lang="en">%s</td><td>%s</td><td class="tc-small tc-muted">%s</td></tr>'
-                   % (html.escape(it.get('english') or ''), html.escape(pattern_label(it.get('pattern', ''), lang)), html.escape(it.get('sourceBook') or ''))
+    rows = ''.join('<tr><td class="tc-serif" lang="uz">%s</td><td class="tc-serif" lang="en">%s</td><td>%s</td><td class="tc-small tc-muted">%s</td></tr>'
+                   % (html.escape(it.get('uzbek') or ''), html.escape(it.get('english') or ''), html.escape(pattern_label(it.get('pattern', ''), lang)), html.escape(it.get('sourceBook') or ''))
                    for it in items[(page_no - 1) * per: page_no * per])
     body = ('<p class="tc-small"><a href="%s">%s</a></p><h1 style="margin-top:8px">%s</h1><p class="tc-lead">%s</p>'
             '<div class="tc-panel tc-scroll" style="margin-top:22px;padding:4px 8px"><table class="tc-table"><thead><tr>'
-            '<th>%s</th><th>%s</th><th>%s</th></tr></thead><tbody>%s</tbody></table></div>%s'
+            '<th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr></thead><tbody>%s</tbody></table></div>%s'
             % (with_lang('/kollokatsiyalar', lang), T(lang, 'coll_page_title'), T(lang, 'ref_lists_title'), T(lang, 'ref_lists_note'),
-               T(lang, 'col_english'), T(lang, 'label_pattern'), T(lang, 'col_source_list'), rows,
+               T(lang, 'col_uzbek'), T(lang, 'col_english'), T(lang, 'label_pattern'), T(lang, 'col_source_list'), rows,
                _pager(lang, page_no, total_pages, lambda p: with_lang('/kollokatsiyalar?manba=malumotnoma&page=%d' % p, lang))))
     return page(lang, get_i18n(lang, 'ref_lists_title'), body, '/kollokatsiyalar', is_admin)
 
