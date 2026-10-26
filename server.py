@@ -1074,13 +1074,13 @@ def search_collocations(query='', source='all', pattern='all', category='all', s
 
     # Sorting
     if sort == 'mi':
-        filtered.sort(key=lambda x: x.get('miScore', 0), reverse=True)
+        filtered.sort(key=lambda x: (x.get('miScore') or 0), reverse=True)
     elif sort == 'tscore':
-        filtered.sort(key=lambda x: x.get('tScore', 0), reverse=True)
+        filtered.sort(key=lambda x: (x.get('tScore') or 0), reverse=True)
     elif sort in ['ll', 'loglikelihood']:
-        filtered.sort(key=lambda x: x.get('logLikelihood', 0), reverse=True)
+        filtered.sort(key=lambda x: (x.get('logLikelihood') or 0), reverse=True)
     elif sort == 'freq':
-        filtered.sort(key=lambda x: x.get('freq', 0), reverse=True)
+        filtered.sort(key=lambda x: (x.get('freq') or 0), reverse=True)
     elif sort == 'uzbek':
         filtered.sort(key=lambda x: x.get('uzbek', ''))
     elif sort == 'english':
@@ -2635,7 +2635,9 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
         if req_path in ('/kollokatsiyalar', '/kollokatsiyalar/'):
             page = safe_int(params.get('page', ['1'])[0])
             if params.get('manba', [''])[0] == 'malumotnoma':
-                html_content = ui_components.render_reference_page(lang, is_admin=is_admin, items=get_active_collocations(), page_no=page)
+                html_content = ui_components.render_reference_page(
+                    lang, is_admin=is_admin, items=get_active_collocations(), page_no=page,
+                    q=params.get('q', [''])[0].strip()[:80])
             elif params.get('manba', [''])[0] == 'internet':
                 html_content = ui_components.render_internet_collocs_page(
                     lang, is_admin=is_admin, items=get_internet_collocations(), page_no=page,

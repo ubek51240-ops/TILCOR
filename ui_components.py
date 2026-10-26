@@ -876,20 +876,38 @@ def render_kollokatsiyalar_page(lang='uz', is_admin=False, pattern='', status=''
     return globals()['page'](lang, get_i18n(lang, 'coll_page_title'), body, '/kollokatsiyalar', is_admin)
 
 
-def render_reference_page(lang='uz', is_admin=False, items=None, page_no=1):
+def render_reference_page(lang='uz', is_admin=False, items=None, page_no=1, q=''):
     items = items or []
+    if q:
+        ql = q.lower()
+        items = [it for it in items if ql in (it.get('english') or '').lower() or ql in (it.get('uzbek') or '').lower() or ql in (it.get('sourceBook') or '').lower()]
     per = 50
     total_pages = max(1, (len(items) + per - 1) // per)
     page_no = max(1, min(int(page_no or 1), total_pages))
     rows = ''.join('<tr><td class="tc-serif" lang="uz">%s</td><td class="tc-serif" lang="en">%s</td><td>%s</td><td class="tc-small tc-muted">%s</td></tr>'
                    % (html.escape(it.get('uzbek') or ''), html.escape(it.get('english') or ''), html.escape(pattern_label(it.get('pattern', ''), lang)), html.escape(it.get('sourceBook') or ''))
                    for it in items[(page_no - 1) * per: page_no * per])
-    body = ('<p class="tc-small"><a href="%s">%s</a></p><h1 style="margin-top:8px">%s</h1><p class="tc-lead">%s</p>'
-            '<div class="tc-panel tc-scroll" style="margin-top:22px;padding:4px 8px"><table class="tc-table"><thead><tr>'
+
+    def url_(p):
+        qs = [('manba', 'malumotnoma')] + ([('q', q)] if q else []) + ([('page', str(p))] if p > 1 else [])
+        return with_lang('/kollokatsiyalar?' + urllib.parse.urlencode(qs), lang)
+
+    hidden = '<input type="hidden" name="manba" value="malumotnoma">'
+    if lang != 'uz':
+        hidden += '<input type="hidden" name="lang" value="%s">' % lang
+    find = ('<form method="get" action="/kollokatsiyalar" class="tc-search" style="max-width:520px;margin-top:16px">'
+            '<input type="search" name="q" value="%s" placeholder="%s" aria-label="%s">%s'
+            '<button class="tc-btn tc-btn--ghost" type="submit">%s</button></form>'
+            % (html.escape(q), T(lang, 'coll_filter_placeholder'), T(lang, 'coll_filter_placeholder'), hidden, T(lang, 'btn_apply')))
+
+    body = ('<p class="tc-small"><a href="%s">%s</a></p><h1 style="margin-top:8px">%s</h1><p class="tc-lead">%s</p>%s'
+            '<p class="tc-muted tc-small tc-num" style="margin-top:14px">%s</p>'
+            '<div class="tc-panel tc-scroll" style="margin-top:8px;padding:4px 8px"><table class="tc-table"><thead><tr>'
             '<th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr></thead><tbody>%s</tbody></table></div>%s'
-            % (with_lang('/kollokatsiyalar', lang), T(lang, 'coll_page_title'), T(lang, 'ref_lists_title'), T(lang, 'ref_lists_note'),
+            % (with_lang('/kollokatsiyalar', lang), T(lang, 'coll_page_title'), T(lang, 'ref_lists_title'), T(lang, 'ref_lists_note'), find,
+               html.escape(count_phrase(len(items), 'coll_count_word', lang)),
                T(lang, 'col_uzbek'), T(lang, 'col_english'), T(lang, 'label_pattern'), T(lang, 'col_source_list'), rows,
-               _pager(lang, page_no, total_pages, lambda p: with_lang('/kollokatsiyalar?manba=malumotnoma&page=%d' % p, lang))))
+               _pager(lang, page_no, total_pages, url_)))
     return page(lang, get_i18n(lang, 'ref_lists_title'), body, '/kollokatsiyalar', is_admin)
 
 
