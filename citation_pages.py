@@ -11,7 +11,7 @@ from datetime import datetime
 import ui_components as ui
 
 SITE_URL = "https://tilcor.uz"
-PLATFORM_VERSION = "3.5"
+PLATFORM_VERSION = "3.9"
 
 
 def _citation(lang, title, kind_key, path):
@@ -26,7 +26,7 @@ def _citation(lang, title, kind_key, path):
 def _sections(lang, res, query, path):
     def make_url(p):
         return ui.with_lang('%s?page=%d' % (path, p), lang)
-    return (ui.render_equivalents(res, lang, query) + ui.render_word_forms(res, lang)
+    return (ui.render_equivalents(res, lang, query) + ui.render_word_forms(res, lang) + ui.render_tags(res, lang, query)
             + ui.render_collocations(res, lang) + ui.render_sentences(res, lang, make_url))
 
 

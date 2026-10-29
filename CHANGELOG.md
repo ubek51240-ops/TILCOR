@@ -4,6 +4,36 @@ Ushbu hujjat doktorlik dissertatsiyasi talablari doirasida har bir bosqichda kir
 
 ---
 
+## [v3.9] — Morfologik va semantik teglash moduli saytga ulandi — 2026-10-29
+
+Modul (`tagging.py`, `data/tags_index.json`, `scripts/build_tags_index.py`, 2026-10-16) 2026-10-29 gacha serverga
+ulanmagan edi; endi uchta sahifa va bitta API orqali ommaviy ko‘rinadi. Barcha teglar «Avtomatik teg — tadqiqotchi
+tasdig‘i kutilmoqda» belgisi bilan, III bob statistikasiga kirmaydi (S8-qoida); hech narsa o‘ylab topilmaydi — o‘zak
+faqat korpusda tasdiqlangan bo‘lsa ajratiladi, semantik maydon Princeton WordNet 3.0 leksikograf fayllaridan,
+o‘zbekcha so‘z uchun tarjimonning kitobdagi so‘zi orqali proyeksiya (KORPUS sinfi).
+
+- **Qidiruv (`/qidiruv`) va doimiy sahifa (`/soz/<so‘z>`):** «So‘z shakllari» jadvalida yangi «Morfologiya» ustuni —
+  lemma + qo‘shimchalar zanjiri (yurak + -lar + -i + -da), o‘zbekcha interfeysda maktab grammatikasi atamalari
+  (egalik, III shaxs; o‘rin-payt kelishigi), inglizcha/ruscha interfeysda Universal Dependencies belgilari
+  (Case=Loc|Number=Plur|Person[psor]=3); so‘z turkumi to‘liq so‘z bilan. Yangi «Teglar (avtomatik)» bo‘limi —
+  qidirilgan so‘zning lemmasi, so‘z turkumi, semantik maydoni (noun.body → «tana a’zolari») va 3.1-band semantik guruhi.
+- **Kollokatsiya sahifasi (`/kollokatsiya/<id>`):** «Teglar (avtomatik)» bo‘limi — komponentlar jadvali (asos /
+  kollokat roli, so‘z turkumi, morfologiya, semantik maydon), kollokatsiyaning asos so‘z bo‘yicha belgilangan semantik
+  guruhi, matndagi shakllar tahlili (berdi = bermoq + -di). Lug‘at shaklidagi fe’lda -moq qo‘shimcha sifatida ko‘rsatilmaydi.
+- **Kollokatsiyalar ro‘yxati (`/kollokatsiyalar`):** semantik guruh bo‘yicha filtr (`?guruh=inson_ruhiyati` …) —
+  7 ta guruh chiplari jonli sonlari bilan; har kartaning meta qatorida guruh nomi. Noto‘g‘ri guruh kodi e’tiborsiz qoladi.
+- **API:** `/api/tags?q=<so‘z>&til=uz|en` — har bir so‘z uchun lemma, so‘z turkumi, qo‘shimchalar, UD belgilari, semantik
+  maydon va guruh; indeks metama’lumoti (versiya, WordNet, proyeksiya usuli). Tezlik chekovi 120/daqiqa (takliflar kabi).
+- **Interfeys:** 40 ta yangi kalit (`tags_*`, `sem_*`, `pos_*`) uch tilda; ruscha so‘z turkumlari qisqartmadan to‘liq
+  so‘zga o‘tkazildi (сущ. → существительное; S3-qoida: so‘z turkumi to‘liq so‘z bilan). Iqtibos qatorida platforma versiyasi 3.9.
+- **Xavfsizlik:** `tagging.py`, `data/tags_index.json`, `scripts/` ommaviy berilmaydi (404). Teglash xatosi sahifani
+  buzmaydi — bo‘lim shunchaki chiqmaydi, xato jurnalga yoziladi.
+- **Kod:** `ui_components.py` (render_tags, render_collocation_tags, morph_html, pos_label, sem_group_label, guruh filtri),
+  `server.py` (`/api/tags`, `guruh` parametri), `citation_pages.py`, `locales/*.json`, `scripts/locale_keys_v39.py`,
+  `scripts/verify_v39_pages.py` (21 ta tekshiruv), `scripts/deploy_v39_to_vps.py`.
+- Ma’lum chegara: semantik proyeksiya ko‘p ma’noli so‘zlarda eng ko‘p uchragan ma’noni oladi (yurak → heart →
+  noun.cognition «aql, bilish», noun.body emas) — bu avtomatik natija, tadqiqotchi tekshiruvi talab qilinadi.
+
 ## [v3.8] — Internet manbalardagi kollokatsiyalar ro‘yxati — 2026-10-16
 
 Tadqiqotchi topshirig‘i: internetdan inglizcha–o‘zbekcha kollokatsiyalarni yig‘ib saytga qo‘shish.

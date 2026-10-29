@@ -4,6 +4,24 @@ Har bir bosqichda o‘tkazilgan avtomatlashtirilgan va qo‘lda bajarilgan sinov
 
 ---
 
+## v3.9 Sinovlari — 2026-10-29 (teglash modulining saytga ulanishi; lokal, 8791-port)
+
+| № | Sinov | Natija |
+|---|-------|--------|
+| 1 | Zaxira: `backups/local_pre_v39_integr_20261029_142538.zip` (369 fayl, 33,8 MB) | ISHLAYDI |
+| 2 | `python -m py_compile server.py ui_components.py citation_pages.py tagging.py` | ISHLAYDI |
+| 3 | `scripts/test_tags.py`: oltin 200-token namunada lemma va so‘z turkumi ≥ 90 %, namunaviy shakllar 22/22, inglizcha 8/8, semantik qamrov 2503/2536 (98,7 %) | ISHLAYDI |
+| 4 | `scripts/test_locales.py`: uz/en/ru 442 ta kalit, hammasi mavjud | ISHLAYDI |
+| 5 | `scripts/verify_v39_pages.py http://127.0.0.1:8791`: 21/21 — /qidiruv (uz/en/ru), /soz/yurak, /kollokatsiya/uz-2d594a3d8a va en-92df8fc4e3, /kollokatsiyalar guruh filtri, /api/tags; /tagging.py, /data/tags_index.json, /server.py → 404 | ISHLAYDI |
+| 6 | `/api/tags?q=yuraklarida` → yurak, ot, [-lar, -i, -da], Case=Loc\|Number=Plur\|Person[psor]=3 | ISHLAYDI |
+| 7 | Lug‘at shaklidagi fe’l (bermoq) morfologiyada «bermoq + -moq» ko‘rsatilmaydi | ISHLAYDI |
+| 8 | Oltin testlar (`scripts/run_gold_tests.py`): 18/21 — o‘sha 3 ta eski FAIL (qishloq 115→111, shark 66→61, deep sleep 2→1), v3.9 ta’siri yo‘q | QISMAN (tadqiqotchi qarori kutilmoqda) |
+| 9 | 20-so‘rovli test (`scripts/test_20_queries.py`): 20/20, eng sekini 0,15 s | ISHLAYDI |
+| 10 | Sahifa tezligi: /qidiruv?q=yurak 0,82 s (birinchi, indeks yuklanishi bilan), keyingilari 0,15–0,5 s; /kollokatsiya/… 0,01 s | ISHLAYDI |
+| 11 | tilcor.uz (VPS, 29.10 14:51): zaxira `/root/tilcor_backups/tilcor_before_v39_20261029_145046.tar.gz` (70 MB); rsync, COMPILE_OK, `systemctl is-active tilcor` → active, «korpus yuklandi: 10076 ta jumla»; 5 ta maxfiy yo‘l → 404; 11 sahifa (uz/en/ru) → 200; `verify_v39_pages.py https://tilcor.uz` → 21/21 OK (sahifalar 0,6–1,6 s) | ISHLAYDI |
+
+v3.9 holati: **tilcor.uz da jonli** (29.10.2026).
+
 ## v3.7 Sinovlari — 2026-10-15 (lokal, 8777-port; v3.6 birlashtirilgan kod ustida qayta o‘tkazildi)
 
 | № | Sinov | Natija |

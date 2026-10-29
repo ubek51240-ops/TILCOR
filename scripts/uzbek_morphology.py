@@ -117,18 +117,21 @@ def analyze_token(word):
 # 200-Token Evaluation Benchmark Sample from Cho'lpon & Hemingway
 EVAL_200_SAMPLE = [
     # (Word, Gold_Stem, Gold_POS)
+    # v3.9 (2026-10-16), tadqiqotchi qarori: namunaning o‘z konvensiyasiga zid 6 yozuv tuzatildi —
+    # o‘rilgan o‘r→o‘ril, mavjlardi mavjlan→mavjla, g‘amli g‘am→g‘amli (nisbat qo‘shimchasi lemmada, kuchli/chiroyli kabi),
+    # o‘zlari NOUN→PRON, birinchi ADJ→NUM, edi VERB→AUX. Eski namuna: backups/local_pre_v39_fix_20261016_155756.zip
     ("bahor", "bahor", "NOUN"), ("nafasi", "nafas", "NOUN"), ("ko‘ngillarni", "ko‘ngil", "NOUN"),
     ("qitiklay", "qitiqla", "VERB"), ("boshladi", "boshla", "VERB"), ("tabiatning", "tabiat", "NOUN"),
     ("dildiragan", "dildira", "VERB"), ("tanlariga", "tan", "NOUN"), ("iliq", "iliq", "ADJ"),
     ("qon", "qon", "NOUN"), ("yugurdi", "yugur", "VERB"), ("tollarning", "tol", "NOUN"),
     ("ko‘m-ko‘k", "ko‘k", "ADJ"), ("sochpopuklari", "sochpopuk", "NOUN"), ("qizlarning", "qiz", "NOUN"),
-    ("mayda", "mayda", "ADJ"), ("o‘rilgan", "o‘r", "VERB"), ("kokillariday", "kokil", "NOUN"),
+    ("mayda", "mayda", "ADJ"), ("o‘rilgan", "o‘ril", "VERB"), ("kokillariday", "kokil", "NOUN"),
     ("selkillay", "selkilla", "VERB"), ("muz", "muz", "NOUN"), ("tagida", "tag", "NOUN"),
     ("loyqalanib", "loyqalan", "VERB"), ("oqqan", "oq", "VERB"), ("suvlarning", "suv", "NOUN"),
-    ("g‘amli", "g‘am", "ADJ"), ("yuzlari", "yuz", "NOUN"), ("kuldi", "kul", "VERB"),
-    ("o‘zlari", "o‘z", "NOUN"), ("daryolarga", "daryo", "NOUN"), ("shoshildi", "shoshil", "VERB"),
+    ("g‘amli", "g‘amli", "ADJ"), ("yuzlari", "yuz", "NOUN"), ("kuldi", "kul", "VERB"),
+    ("o‘zlari", "o‘z", "PRON"), ("daryolarga", "daryo", "NOUN"), ("shoshildi", "shoshil", "VERB"),
     ("daraxtlarning", "daraxt", "NOUN"), ("uchlarida", "uch", "NOUN"), ("qushlar", "qush", "NOUN"),
-    ("ko‘rindi", "ko‘rin", "VERB"), ("bahorning", "bahor", "NOUN"), ("birinchi", "birinchi", "ADJ"),
+    ("ko‘rindi", "ko‘rin", "VERB"), ("bahorning", "bahor", "NOUN"), ("birinchi", "birinchi", "NUM"),
     ("qushi", "qush", "NOUN"), ("qishning", "qish", "NOUN"), ("tuxumini", "tuxum", "NOUN"),
     ("chaqdi", "chaq", "VERB"), ("yigitlar", "yigit", "NOUN"), ("tayoqlarni", "tayoq", "NOUN"),
     ("oldilar", "ol", "VERB"), ("chavandozlar", "chavandoz", "NOUN"), ("otlarni", "ot", "NOUN"),
@@ -151,7 +154,7 @@ EVAL_200_SAMPLE = [
     ("dengizda", "dengiz", "NOUN"), ("yolg‘iz", "yolg‘iz", "ADJ"), ("qayiq", "qayiq", "NOUN"),
     ("suzardi", "suz", "VERB"), ("cholning", "chol", "NOUN"), ("yuzi", "yuz", "NOUN"),
     ("qoraygan", "qoray", "VERB"), ("qo‘llari", "qo‘l", "NOUN"), ("qadoq", "qadoq", "NOUN"),
-    ("edi", "edi", "VERB"), ("baliq", "baliq", "NOUN"), ("ovlash", "ovla", "VERB"),
+    ("edi", "edi", "AUX"), ("baliq", "baliq", "NOUN"), ("ovlash", "ovla", "VERB"),
     ("san’atini", "san’at", "NOUN"), ("puxta", "puxta", "ADJ"), ("egallagan", "egalla", "VERB"),
     ("eshkaklarni", "eshkak", "NOUN"), ("mahkam", "mahkam", "ADV"), ("ushladi", "ushla", "VERB"),
     ("katta", "katta", "ADJ"), ("to‘lqinlar", "to‘lqin", "NOUN"), ("keldi", "kel", "VERB"),
@@ -161,7 +164,7 @@ EVAL_200_SAMPLE = [
     ("qabul", "qabul", "NOUN"), ("qildi", "qil", "VERB"), ("chuqur", "chuqur", "ADJ"),
     ("ajinlar", "ajin", "NOUN"), ("ko‘rindi", "ko‘rin", "VERB"), ("oq", "oq", "ADJ"),
     ("sochlar", "soch", "NOUN"), ("to‘zg‘idi", "to‘zg‘i", "VERB"), ("ko‘k", "ko‘k", "ADJ"),
-    ("suvlar", "suv", "NOUN"), ("mavjlardi", "mavjlan", "VERB"), ("baliqni", "baliq", "NOUN"),
+    ("suvlar", "suv", "NOUN"), ("mavjlardi", "mavjla", "VERB"), ("baliqni", "baliq", "NOUN"),
     ("tutdi", "tut", "VERB"), ("ovqat", "ovqat", "NOUN"), ("yedi", "ye", "VERB"),
     ("suv", "suv", "NOUN"), ("ichdi", "ich", "VERB"), ("orom", "orom", "NOUN"),
     ("oldi", "ol", "VERB"), ("kuchli", "kuchli", "ADJ"), ("zarba", "zarba", "NOUN"),

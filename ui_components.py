@@ -647,6 +647,7 @@ def render_word_forms(res, lang):
     if not words:
         return ''
     q_lang = res.get('selected_lang') or 'uz'
+    TG = _tg()
     rows = []
     for w in words[:40]:
         grp = w.get('group', 'exact')
@@ -656,13 +657,170 @@ def render_word_forms(res, lang):
         trs = w.get('translations') or []
         tr_html = ', '.join('<span class="tc-serif" lang="%s">%s</span> <span class="tc-muted tc-num">(%s)</span>'
                             % (other_lang(q_lang), html.escape(t['text']), format_number(t['count'], lang)) for t in trs) or '<span class="tc-muted">—</span>'
-        rows.append('<tr><td class="tc-serif" lang="%s"><mark class="q">%s</mark></td><td>%s</td><td class="tc-small">%s</td><td>%s</td></tr>'
-                    % (q_lang, html.escape(w.get('word', '')), grp_txt, counts, tr_html))
+        morph = '<span class="tc-muted">—</span>'
+        if TG:
+            try:
+                a = TG.analyze(q_lang, w.get('word', ''))
+                morph = '%s<div class="tc-small tc-muted">%s</div>' % (morph_html(a, lang, q_lang), html.escape(pos_label(a.get('pos'), lang)))
+            except Exception as e:
+                print(f"[!] tagging (word forms): {e}")
+        rows.append('<tr><td class="tc-serif" lang="%s"><mark class="q">%s</mark></td><td>%s</td><td class="tc-small">%s</td><td>%s</td><td class="tc-small">%s</td></tr>'
+                    % (q_lang, html.escape(w.get('word', '')), grp_txt, counts, tr_html, morph))
+    morph_head = '%s <span class="tc-badge tc-badge--amber" title="%s">%s</span>' % (T(lang, 'tags_morph'), T(lang, 'tags_badge'), html.escape(_TG_METHOD))
     return ('<section class="tc-section"><div class="tc-section__head"><h2>%s <span class="tc-count tc-num">%s</span></h2></div>'
             '<p class="tc-section__note">%s</p><div class="tc-panel tc-scroll" style="padding:4px 8px"><table class="tc-table">'
-            '<thead><tr><th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr></thead><tbody>%s</tbody></table></div></section>'
+            '<thead><tr><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr></thead><tbody>%s</tbody></table></div></section>'
             % (T(lang, 'sec_words'), format_number(len(words), lang), T(lang, 'sec_words_note'), T(lang, 'col_form'),
-               T(lang, 'col_kind'), T(lang, 'col_in_corpus'), T(lang, 'col_book_translation'), ''.join(rows)))
+               T(lang, 'col_kind'), T(lang, 'col_in_corpus'), T(lang, 'col_book_translation'), morph_head, ''.join(rows)))
+
+
+# ---------------------------------------------------------------------
+# v3.9 — automatic morphological and semantic tags (tagging.py)
+# Every tag is «avtomatik — tadqiqotchi tasdig‘i kutilmoqda» and never enters the Chapter III statistics.
+# ---------------------------------------------------------------------
+_TG_METHOD = 'avtomatik'
+_POS_KEYS = {'ot': 'pos_noun', 'fe’l': 'pos_verb', 'sifat': 'pos_adj', 'ravish': 'pos_adv', 'olmosh': 'pos_pron', 'son': 'pos_num',
+             'ko‘makchi': 'pos_postp', 'bog‘lovchi': 'pos_conj', 'yuklama': 'pos_part', 'modal so‘z': 'pos_modal', 'undov': 'pos_intj',
+             'to‘liqsiz fe’l': 'pos_aux', 'atoqli ot': 'pos_propn', 'taqlid so‘z': 'pos_onom', 'juft / takroriy so‘z': 'pos_paired',
+             'so‘z turkumi aniqlanmagan': 'pos_unknown', 'aniqlanmagan': 'pos_unknown', 'predlog': 'pos_prep',
+             'aniqlovchi (determinativ)': 'pos_det', 'ko‘makchi fe’l': 'pos_aux_verb', 'ergashtiruvchi bog‘lovchi': 'pos_sconj'}
+_TG = {}
+
+
+def _tg():
+    """The tagging module, imported once; None when it cannot be loaded (pages then show no tags)."""
+    if 'mod' not in _TG:
+        try:
+            import tagging
+            _TG['mod'] = tagging
+        except Exception as e:
+            print(f"[!] tagging import: {e}")
+            _TG['mod'] = None
+    return _TG['mod']
+
+
+def _same_word(a, b):
+    try:
+        from word_family import uz_norm
+        return bool(a) and bool(b) and uz_norm(a.strip().lower()) == uz_norm(b.strip().lower())
+    except Exception:
+        return (a or '').strip().lower() == (b or '').strip().lower()
+
+
+def pos_label(pos, lang):
+    key = _POS_KEYS.get(pos or '')
+    return get_i18n(lang, key) if key else (pos or get_i18n(lang, 'pos_unknown'))
+
+
+def sem_group_label(code, lang):
+    return get_i18n(lang, 'sem_' + code) if code else ''
+
+
+def morph_html(a, lang, q_lang):
+    """'yurak + -lar + -i + -da' with the affix labels (uz interface) or the UD features (en, ru)."""
+    morphs = [m for m in (a.get('morphs') or []) if m.get('affix') and m['affix'] != '∅']
+    if _same_word(a.get('surface'), a.get('lemma')):
+        # the dictionary form itself (bermoq): the infinitive ending is part of the lemma, not an inflection
+        morphs = [m for m in morphs if m['affix'] not in ('-moq', '-mak')]
+    chain = '<span class="tc-serif" lang="%s">%s</span>' % (q_lang, html.escape(a.get('lemma') or ''))
+    chain += ''.join(' + %s' % html.escape(m['affix']) for m in morphs)
+    detail = '; '.join(m.get('label') or '' for m in morphs if m.get('label')) if lang == 'uz' else (a.get('ud') or '')
+    if detail:
+        chain += '<div class="tc-small tc-muted">%s</div>' % html.escape(detail)
+    return chain
+
+
+def sem_html(sem, lang):
+    if not sem or not sem.get('field'):
+        return '<span class="tc-muted">%s</span>' % T(lang, 'tags_no_sem')
+    field = html.escape(sem['field'])
+    if lang == 'uz' and sem.get('field_uz'):
+        field = '%s <span class="tc-muted">(%s)</span>' % (html.escape(sem['field_uz']), field)
+    out = field
+    if sem.get('via'):
+        out += '<div class="tc-small tc-muted">%s: <span lang="en">%s</span></div>' % (T(lang, 'tags_via'), html.escape(sem['via']))
+    return out
+
+
+def tags_badge(lang):
+    return '<span class="tc-badge tc-badge--amber">%s</span>' % T(lang, 'tags_badge')
+
+
+def tags_source_line(lang):
+    TG = _tg()
+    meta = {}
+    try:
+        meta = TG.index_meta() if TG else {}
+    except Exception:
+        meta = {}
+    parts = [T(lang, 'tags_note')]
+    if meta.get('wordnet'):
+        parts.append('%s: %s; apertium-uzb (%s).' % (T(lang, 'tags_source'), html.escape(meta['wordnet']),
+                                                     html.escape(((meta.get('apertium') or {}).get('commit') or '')[:7] or '—')))
+    return '<p class="tc-section__note" style="margin-top:10px">%s</p>' % ' '.join(parts)
+
+
+def render_tags(res, lang, query):
+    """Tags of the searched word(s): lemma, part of speech, affix chain, semantic field and 3.1 group."""
+    TG = _tg()
+    if not TG or not query:
+        return ''
+    q_lang = res.get('selected_lang') or 'uz'
+    words = re.findall(r"[\wʻʼ‘’'`-]+", query)[:4]
+    rows = []
+    try:
+        for w in words:
+            t = TG.word_tags(q_lang, w)
+            rows.append('<tr><td class="tc-serif" lang="%s">%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>'
+                        % (q_lang, html.escape(w), morph_html(t, lang, q_lang), html.escape(pos_label(t.get('pos'), lang)),
+                           sem_html(t.get('sem'), lang), html.escape(sem_group_label((t.get('sem') or {}).get('group'), lang)) or '<span class="tc-muted">—</span>'))
+    except Exception as e:
+        print(f"[!] tagging (render_tags): {e}")
+        return ''
+    if not rows:
+        return ''
+    return ('<section class="tc-section"><div class="tc-section__head"><h2>%s</h2>%s</div>'
+            '<div class="tc-panel tc-scroll" style="padding:4px 8px"><table class="tc-table"><thead><tr><th>%s</th><th>%s</th><th>%s</th>'
+            '<th>%s</th><th>%s</th></tr></thead><tbody>%s</tbody></table></div>%s</section>'
+            % (T(lang, 'tags_title'), tags_badge(lang), T(lang, 'tags_word'), T(lang, 'tags_morph'), T(lang, 'col_pos'),
+               T(lang, 'tags_sem_field'), T(lang, 'tags_sem_group'), ''.join(rows), tags_source_line(lang)))
+
+
+def render_collocation_tags(lang, item):
+    """Tags of one corpus collocation: components (base / collocate), their morphology and semantics, the 3.1 group."""
+    TG = _tg()
+    if not TG:
+        return ''
+    try:
+        t = TG.collocation_tags(item)
+    except Exception as e:
+        print(f"[!] tagging (collocation): {e}")
+        return ''
+    q_lang = item.get('lang') or 'uz'
+    rows = ''
+    for c in t.get('components') or []:
+        role = T(lang, 'tags_role_base' if c.get('role') == 'asos' else 'tags_role_coll')
+        rows += ('<tr><td class="tc-serif" lang="%s">%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>'
+                 % (q_lang, html.escape(c.get('surface') or ''), '<span class="tc-badge%s">%s</span>' % (' tc-badge--tile' if c.get('role') == 'asos' else '', role),
+                    html.escape(pos_label(c.get('pos'), lang)), morph_html(c, lang, q_lang), sem_html(c.get('sem'), lang)))
+    group = t.get('group')
+    if group:
+        g_line = ('<p style="margin-top:12px"><span class="tc-small tc-muted">%s:</span> <span class="tc-strong">%s</span>'
+                  '<span class="tc-small tc-muted"> · %s</span></p><p class="tc-small tc-muted">%s</p>'
+                  % (T(lang, 'tags_sem_group'), html.escape(sem_group_label(group, lang)), html.escape(t.get('field') or ''),
+                     T(lang, 'tags_group_by_base')))
+    else:
+        g_line = '<p class="tc-small tc-muted" style="margin-top:12px">%s: %s</p>' % (T(lang, 'tags_sem_group'), T(lang, 'tags_no_sem'))
+    glosses = [(f, g) for f, g in (t.get('forms') or []) if g]
+    forms_html = ''
+    if glosses:
+        forms_html = ('<p class="tc-small tc-muted" style="margin-top:12px">%s:</p><ul class="tc-list tc-small">%s</ul>'
+                      % (T(lang, 'tags_forms_gloss'), ''.join('<li lang="%s">%s</li>' % (q_lang, html.escape(g)) for f, g in glosses)))
+    return ('<section class="tc-section"><div class="tc-section__head"><h2>%s</h2>%s</div>'
+            '<div class="tc-panel tc-scroll" style="padding:4px 8px"><table class="tc-table"><thead><tr><th>%s</th><th>%s</th><th>%s</th>'
+            '<th>%s</th><th>%s</th></tr></thead><tbody>%s</tbody></table></div><div class="tc-panel" style="margin-top:12px">%s%s</div>%s</section>'
+            % (T(lang, 'tags_title'), tags_badge(lang), T(lang, 'tags_component'), T(lang, 'tags_role'), T(lang, 'col_pos'),
+               T(lang, 'tags_morph'), T(lang, 'tags_sem_field'), rows, g_line, forms_html, tags_source_line(lang)))
 
 
 MEASURE_LABELS = (('log_dice', 'logDice'), ('mi', 'MI'), ('t', 't-score'), ('g2', 'G²'))
@@ -701,6 +859,14 @@ def collocation_block(c, lang, show_example=True, open_example=False, measure=''
         meta += '; ' + html.escape(where)
     if measure and (c.get('assoc') or {}).get(measure) is not None:
         meta += '; %s %s' % (dict(MEASURE_LABELS)[measure], format_decimal(c['assoc'][measure], lang, 1 if measure == 'g2' else 2))
+    TG = _tg()
+    if TG:
+        try:
+            g = TG.group_of(c['id'])
+            if g:
+                meta += '; <span title="%s">%s</span>' % (T(lang, 'tags_badge'), html.escape(sem_group_label(g, lang)))
+        except Exception:
+            pass
     return ('<div class="tc-coll"><div class="tc-coll__head"><a class="tc-coll__name" lang="%s" href="%s">%s</a></div>'
             '<div class="tc-coll__meta">%s</div>%s%s</div>'
             % (q_lang, link, html.escape(c.get('display') or c.get('lemma') or ''), meta, tr_html, ex_html))
@@ -798,7 +964,7 @@ def render_qidiruv_page(lang='uz', query='', book='', search_res=None, is_admin=
             body += render_curated(res, lang) + render_collocations(res, lang)
         else:
             body += (render_curated(res, lang) + render_equivalents(res, lang, query) + render_word_forms(res, lang)
-                     + render_collocations(res, lang) + render_sentences(res, lang, lambda p: url(page=p)))
+                     + render_tags(res, lang, query) + render_collocations(res, lang) + render_sentences(res, lang, lambda p: url(page=p)))
     path = '/qidiruv' + ('?' + urllib.parse.urlencode(qs) if qs else '')
     return globals()['page'](lang, query or get_i18n(lang, 'nav_word_search'), body, path, is_admin)
 
@@ -811,10 +977,13 @@ EN_PATTERNS = ('adjective + noun', 'verb + noun', 'noun + verb', 'verb + adverb'
                'adverb + adjective', 'noun + noun')
 
 
-def render_kollokatsiyalar_page(lang='uz', is_admin=False, pattern='', status='', page=1, items=None, til='uz', q='', order='', **_):
+def render_kollokatsiyalar_page(lang='uz', is_admin=False, pattern='', status='', page=1, items=None, til='uz', q='', order='', guruh='', **_):
     lang = lang if lang in ('uz', 'en', 'ru') else 'uz'
     til = til if til in ('uz', 'en') else 'uz'
     order = order if order in dict(MEASURE_LABELS) else ''
+    TG = _tg()
+    sem_codes = [code for code, _lbl in TG.SEM_GROUPS] if TG else []
+    guruh = guruh if guruh in sem_codes else ''
     all_items = items or []
     n_uz = sum(1 for it in all_items if it['lang'] == 'uz')
     n_en = len(all_items) - n_uz
@@ -829,6 +998,16 @@ def render_kollokatsiyalar_page(lang='uz', is_admin=False, pattern='', status=''
         items = [it for it in items if it['pattern'] == pattern]
     else:
         pattern = ''
+    # v3.9: semantic group filter (3.1-band), counts are live from the tag index
+    g_counts = {}
+    if TG:
+        try:
+            g_counts = dict(TG.group_counts(items))
+            if guruh:
+                items = [it for it in items if TG.group_of(it['id']) == guruh]
+        except Exception as e:
+            print(f"[!] tagging (group filter): {e}")
+            g_counts, guruh = {}, ''
     if q:
         ql = q.lower()
         items = [it for it in items if ql in (it.get('display') or '').lower() or ql in it['lemma'].lower()]
@@ -838,16 +1017,24 @@ def render_kollokatsiyalar_page(lang='uz', is_admin=False, pattern='', status=''
     chunk = items[(page_no - 1) * per: page_no * per]
 
     def url(**kw):
-        params = {'til': til, 'qolip': pattern, 'q': q, 'tartib': order}
+        params = {'til': til, 'qolip': pattern, 'guruh': guruh, 'q': q, 'tartib': order}
         params.update(kw)
         return with_lang('/kollokatsiyalar?' + urllib.parse.urlencode(dict((k, v) for k, v in params.items() if v)), lang)
 
-    tabs = ''.join('<a class="tc-chip" href="%s"%s>%s</a>' % (url(til=code, qolip='', page=''), cur_attr(til == code), T(lang, key))
+    tabs = ''.join('<a class="tc-chip" href="%s"%s>%s</a>' % (url(til=code, qolip='', guruh='', page=''), cur_attr(til == code), T(lang, key))
                    for code, key in (('uz', 'coll_tab_uz'), ('en', 'coll_tab_en')))
     chips = '<a class="tc-chip" href="%s"%s>%s</a>' % (url(qolip='', page=''), cur_attr(not pattern), T(lang, 'pat_all'))
     chips += ''.join('<a class="tc-chip" href="%s"%s>%s <span class="tc-num tc-muted">%s</span></a>'
                      % (url(qolip=p, page=''), cur_attr(pattern == p), html.escape(pattern_label(p, lang)), format_number(counts[p], lang))
                      for p in pats if counts.get(p))
+    g_chips = ''
+    if g_counts:
+        g_chips = '<a class="tc-chip" href="%s"%s>%s</a>' % (url(guruh='', page=''), cur_attr(not guruh), T(lang, 'sem_all'))
+        g_chips += ''.join('<a class="tc-chip" href="%s"%s>%s <span class="tc-num tc-muted">%s</span></a>'
+                           % (url(guruh=code, page=''), cur_attr(guruh == code), html.escape(sem_group_label(code, lang)), format_number(g_counts[code], lang))
+                           for code in sem_codes if g_counts.get(code))
+        g_chips = ('<div class="tc-chips" id="guruhlar" style="margin-top:12px"><span class="tc-small tc-muted" style="align-self:center" title="%s">%s:</span>%s</div>'
+                   % (T(lang, 'tags_badge'), T(lang, 'tags_sem_group'), g_chips))
     sorts = '<span class="tc-small tc-muted" style="align-self:center">%s:</span>' % T(lang, 'coll_order_label')
     sorts += '<a class="tc-chip" href="%s"%s>%s</a>' % (url(tartib='', page=''), cur_attr(not order), T(lang, 'coll_order_freq'))
     sorts += ''.join('<a class="tc-chip" href="%s"%s>%s</a>' % (url(tartib=k, page=''), cur_attr(order == k), lbl) for k, lbl in MEASURE_LABELS)
@@ -856,6 +1043,8 @@ def render_kollokatsiyalar_page(lang='uz', is_admin=False, pattern='', status=''
         hidden += '<input type="hidden" name="tartib" value="%s">' % order
     if pattern:
         hidden += '<input type="hidden" name="qolip" value="%s">' % html.escape(pattern)
+    if guruh:
+        hidden += '<input type="hidden" name="guruh" value="%s">' % html.escape(guruh)
     if lang != 'uz':
         hidden += '<input type="hidden" name="lang" value="%s">' % lang
     find = ('<form method="get" action="/kollokatsiyalar" class="tc-search" style="max-width:520px;margin-top:16px">'
@@ -864,11 +1053,11 @@ def render_kollokatsiyalar_page(lang='uz', is_admin=False, pattern='', status=''
             % (html.escape(q), T(lang, 'coll_filter_placeholder'), T(lang, 'coll_filter_placeholder'), hidden, T(lang, 'btn_apply')))
     order_note = ('<p class="tc-small tc-muted" style="margin-top:8px">%s</p>' % T(lang, 'coll_order_note')) if order else ''
     body = ('<h1>%s</h1><p class="tc-lead">%s</p>%s<div class="tc-chips" style="margin-top:4px">%s</div>'
-            '<div class="tc-chips" id="qoliplar" style="margin-top:12px">%s</div><div class="tc-chips" style="margin-top:12px">%s</div>%s%s'
+            '<div class="tc-chips" id="qoliplar" style="margin-top:12px">%s</div>%s<div class="tc-chips" style="margin-top:12px">%s</div>%s%s'
             '<p class="tc-muted tc-small tc-num" style="margin-top:14px">%s</p><div class="tc-colls" style="margin-top:6px">%s</div>%s'
             '<p class="tc-section__note" style="margin-top:30px"><a href="%s">%s</a>. %s</p>'
             '<p class="tc-section__note" style="margin-top:10px"><a href="%s">%s</a>. %s</p>'
-            % (T(lang, 'coll_page_title'), T(lang, 'coll_page_lead'), stats, tabs, chips, sorts, order_note, find,
+            % (T(lang, 'coll_page_title'), T(lang, 'coll_page_lead'), stats, tabs, chips, g_chips, sorts, order_note, find,
                html.escape(count_phrase(len(items), 'coll_count_word', lang)), ''.join(collocation_block(c, lang, measure=order) for c in chunk),
                _pager(lang, page_no, total_pages, lambda p: url(page=p)),
                with_lang('/kollokatsiyalar?manba=malumotnoma', lang), T(lang, 'ref_lists_title'), T(lang, 'ref_lists_note'),
@@ -1059,11 +1248,12 @@ def render_collocation_detail(lang, is_admin, item, pairs, inet_eq=None):
     shown_note = ''
     if item.get('freq', 0) > len(pairs):
         shown_note = '<p class="tc-section__note tc-num">%s</p>' % T(lang, 'coll_examples_first').replace('{n}', format_number(len(pairs), lang))
+    tags_sec = render_collocation_tags(lang, item)   # v3.9: automatic tags, after the corpus data and before the sentences
     body = ('<p class="tc-small"><a href="%s">%s</a></p><h1 lang="%s" style="margin-top:8px">%s</h1><p class="tc-lead">%s</p>%s'
-            '%s%s<section class="tc-section"><h2>%s <span class="tc-count tc-num">%s</span></h2>%s%s<div style="margin-top:12px">%s</div></section>'
+            '%s%s%s<section class="tc-section"><h2>%s <span class="tc-count tc-num">%s</span></h2>%s%s<div style="margin-top:12px">%s</div></section>'
             '<section class="tc-section"><h2>%s</h2><p class="tc-panel tc-small" style="margin-top:12px;font-family:var(--serif)">%s</p></section>'
             % (with_lang('/kollokatsiyalar?til=' + q_lang, lang), T(lang, 'coll_page_title'), q_lang, html.escape(item.get('display') or ''),
-               lead, tr_sec, assoc_sec, inet_sec, T(lang, 'sec_sentences'), format_number(len(pairs), lang), shown_note, legend(lang), cards,
+               lead, tr_sec, assoc_sec, inet_sec, tags_sec, T(lang, 'sec_sentences'), format_number(len(pairs), lang), shown_note, legend(lang), cards,
                T(lang, 'perm_citation_page'), html.escape(cite)))
     return page(lang, item.get('display') or '', body, '/kollokatsiyalar', is_admin)
 

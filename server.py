@@ -2323,6 +2323,27 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json({"suggestions": items})
             return
 
+        # 1b. v3.9 — morfologik va semantik teglar (avtomatik, tadqiqotchi tasdig'i kutilmoqda)
+        if parsed.path == '/api/tags':
+            if user != 'admin' and not check_search_rate_limit(get_client_ip(self), limit=120):
+                self.send_json({"error": "rate_limited"}, status=429)
+                return
+            q = params.get('q', [''])[0].strip()[:80]
+            til = params.get('til', [''])[0]
+            try:
+                import tagging
+                words = re.findall(r"[\wʻʼ‘’'`-]+", q)[:6]
+                if til not in ('uz', 'en'):
+                    til = 'en' if words and all(tagging._en_lookup(w.lower()) for w in words) else 'uz'
+                items = [tagging.word_tags(til, w) for w in words]
+                meta = tagging.index_meta()
+                self.send_json({"query": q, "lang": til, "status": "avtomatik — tadqiqotchi tasdig‘i kutilmoqda", "words": items,
+                                "index": {k: meta.get(k) for k in ('version', 'built', 'wordnet', 'semantic_scheme', 'projection')}})
+            except Exception as e:
+                print(f"[!] tags xatosi: {e}")
+                self.send_json({"error": "tagging_failed"}, status=500)
+            return
+
         # 2. Qayta qurilgan Korpus & Leksikografik Qidiruv API (≤ 50 results)
         if parsed.path == '/api/search':
             if user != 'admin' and not check_search_rate_limit(get_client_ip(self)):
@@ -2645,7 +2666,8 @@ class AppRequestHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 html_content = ui_components.render_kollokatsiyalar_page(
                     lang, is_admin=is_admin, pattern=params.get('qolip', [''])[0], page=page, items=collocation_index_items(),
-                    til=params.get('til', ['uz'])[0], q=params.get('q', [''])[0].strip()[:80], order=params.get('tartib', [''])[0])
+                    til=params.get('til', ['uz'])[0], q=params.get('q', [''])[0].strip()[:80], order=params.get('tartib', [''])[0],
+                    guruh=params.get('guruh', [''])[0][:40])
             self.send_page(html_content, lang)
             return
 
