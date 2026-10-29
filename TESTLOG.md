@@ -12,7 +12,9 @@ Har bir bosqichda o‘tkazilgan avtomatlashtirilgan va qo‘lda bajarilgan sinov
 | 2 | Lokal sahifalar (8 ta): /qidiruv?q=chiroq (ro‘yxat, havola, «Molxona», sahifalar 3, 18 …; «Animal Farm», sahifalar 1, 11 …), ko‘p so‘zli so‘rov, yurak, heart (en), tush&til=uz (ru), bahor (col-kvk), /soz/chiroq | ISHLAYDI, 8/8 |
 | 3 | v3.9 tekshiruvi (`verify_v39_pages.py`, lokal): 21/21 | ISHLAYDI |
 | 4 | Oltin testlar: 18/21 (o‘sha 3 ta eski FAIL); 20-so‘rovli test 20/20; locale 445 kalit uch tilda | ISHLAYDI / QISMAN |
-| 5 | tilcor.uz ga joylash | REJADA |
+| 5 | tilcor.uz (VPS, 29.10 16:20): zaxira `/root/tilcor_backups/tilcor_before_v39_20261029_162032.tar.gz`; COMPILE_OK, xizmat active, korpus 10076 jumla; 5 maxfiy yo‘l → 404; 11 sahifa → 200; `verify_v39_pages.py https://tilcor.uz` → 28/28 OK (juftlik sahifalari 0,7–2,7 s) | ISHLAYDI |
+
+v3.9.1 holati: **tilcor.uz da jonli** (29.10.2026).
 
 ## v3.9 Sinovlari — 2026-10-29 (teglash modulining saytga ulanishi; lokal, 8791-port)
 
