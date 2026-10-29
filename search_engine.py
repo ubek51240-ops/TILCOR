@@ -100,6 +100,86 @@ def _clean_reference_example(item: dict):
         "uzbek_label": "AI tarjimasi" if tgt else None,
     }
 
+def is_verified_pair(item: dict) -> bool:
+    """A parallel collocation pair marked by the researcher (KORPUS class; the DOCX lists of
+    «Molxona / Animal Farm» and «Kecha va kunduz / Night and Day»): both sides are researcher data,
+    so the Uzbek side may be searched too. AI-proposed Uzbek variants never are (S-rule)."""
+    return item.get('class') == 'KORPUS' and (item.get('review_status') or '').startswith('Tadqiqotchi')
+
+
+def _reference_entry(item: dict, q: str) -> dict:
+    uz_variants = item.get('uzbek_variants') or []
+    if not uz_variants and item.get('uzbek'):
+        uz_variants = [{
+            "text": item.get('uzbek'),
+            "source_class": item.get('class', 'AI-taklif'),
+            "status": item.get('review_status') if is_verified_pair(item) else "AI-taklif (tekshirilmagan)"
+        }]
+    # book titles of the two sides («Molxona», «Animal Farm») from the entry's own source list (uz first, en second)
+    books = {}
+    srcs = item.get('sources') or []
+    for i, side in enumerate(('uz', 'en')):
+        m = re.search(r'«([^»]+)»', srcs[i]) if i < len(srcs) and isinstance(srcs[i], str) else None
+        if m:
+            books[side] = m.group(1)
+    return {
+        "id": item.get('id'),
+        "books": books,
+        "collocation": item.get('english'),
+        "searched_word": q,
+        "pattern": item.get('pattern') or "—",
+        "source_badge": f"Ma’lumotnoma: {item.get('sourceMeta') or item.get('sourceBook') or 'Akademik ma’lumotnoma'}",
+        "source_book": item.get('sourceBook') or '',
+        "verified_pair": is_verified_pair(item),
+        "pages": item.get('pages') if isinstance(item.get('pages'), dict) else {},
+        # Only real counts from this corpus. The stored "freq"/"miScore" values of the
+        # reference base were not computed from any corpus and are never shown.
+        "corpus_frequency": int(item.get('corpus_occurrences') or 0),
+        "sentences_count": len(item.get('corpus_segments') or []),
+        "occurrences_count": int(item.get('corpus_occurrences') or 0),
+        "uzbek_translation": item.get('uzbek'),
+        "uzbek_variants": uz_variants,
+        "uzbek_label": item.get('review_status') or "AI-taklif (tekshirilmagan)",
+        "example": _clean_reference_example(item)
+    }
+
+
+def match_reference_collocations(q: str, selected_lang: str, active_collocations, require_all: bool = False):
+    """Reference-base entries that contain the query.
+    English query: the English side, by word family (any query word; all of them when require_all).
+    Uzbek query: only researcher-marked parallel pairs, by the Uzbek word family of every query word.
+    Researcher-marked pairs come first."""
+    out = []
+    if selected_lang == 'en':
+        fams = []
+        for qw in [w.lower() for w in TOKEN_EN_RE.findall(q or '')]:
+            fam = {qw} | set(get_wordnet_family(qw))
+            if qw in ENGLISH_IRREGULAR_PAIRS:
+                fam.update(ENGLISH_IRREGULAR_PAIRS[qw])
+            fams.append((qw, fam))
+        if not fams:
+            return out
+        for it in active_collocations:
+            tokens = set(TOKEN_EN_RE.findall((it.get('english') or '').lower()))
+            if not tokens:
+                continue
+            hits = [bool(tokens & fam) or any(match_english_word_family(qw, t) for t in tokens) for qw, fam in fams]
+            if all(hits) if require_all else any(hits):
+                out.append(_reference_entry(it, q))
+    else:
+        q_words = [w for w in TOKEN_UZ_NORM_RE.findall(uz_norm(q or '')) if len(w) >= 2]
+        if not q_words:
+            return out
+        for it in active_collocations:
+            if not is_verified_pair(it):
+                continue
+            toks = TOKEN_UZ_NORM_RE.findall(uz_norm(it.get('uzbek') or ''))
+            if toks and all(any(match_uzbek_word_family(qw, t) for t in toks) for qw in q_words):
+                out.append(_reference_entry(it, q))
+    out.sort(key=lambda r: (not r['verified_pair'], (r.get('collocation') or '').lower()))
+    return out
+
+
 # Proper names blacklist per Section 1.1 / S3
 KNOWN_NAMES = {
     'zebi', 'enaxon', 'razzoq', 'miryoqub', 'akbarali', 'poshshaxon', 'xadichaxon',
@@ -1067,42 +1147,11 @@ def execute_unified_search(
             }
         }]
         admin_candidates = []
-        reference_collocations = []
+        # a multi-word query matches a reference entry only when every query word is in it
+        reference_collocations = match_reference_collocations(q, selected_lang, active_collocations, require_all=True)
     else:
         corpus_candidates, admin_candidates = extract_corpus_collocation_candidates(matched_corpus_sentences, q, selected_lang)
-        reference_collocations = []
-        if selected_lang == 'en':
-            q_low = q.lower()
-            q_family_tokens = {q_low} | set(get_wordnet_family(q_low))
-            if q_low in ENGLISH_IRREGULAR_PAIRS:
-                q_family_tokens.update(ENGLISH_IRREGULAR_PAIRS[q_low])
-            for it in active_collocations:
-                en_colloc = it.get('english', '').lower()
-                tokens = set(TOKEN_EN_RE.findall(en_colloc))
-                if (tokens & q_family_tokens) or any(match_english_word_family(q, t) for t in tokens):
-                    uz_variants = it.get('uzbek_variants') or []
-                    if not uz_variants and it.get('uzbek'):
-                        uz_variants = [{
-                            "text": it.get('uzbek'),
-                            "source_class": it.get('class', 'AI-taklif'),
-                            "status": "AI-taklif (tekshirilmagan)"
-                        }]
-                    ex = _clean_reference_example(it)
-                    reference_collocations.append({
-                        "collocation": it.get('english'),
-                        "searched_word": q,
-                        "pattern": it.get('pattern') or "—",
-                        "source_badge": f"Ma’lumotnoma: {it.get('sourceMeta') or it.get('sourceBook') or 'Akademik ma’lumotnoma'}",
-                        # Only real counts from this corpus. The stored "freq"/"miScore" values of the
-                        # reference base were not computed from any corpus and are never shown.
-                        "corpus_frequency": int(it.get('corpus_occurrences') or 0),
-                        "sentences_count": len(it.get('corpus_segments') or []),
-                        "occurrences_count": int(it.get('corpus_occurrences') or 0),
-                        "uzbek_translation": it.get('uzbek'),
-                        "uzbek_variants": uz_variants,
-                        "uzbek_label": it.get('review_status') or "AI-taklif (tekshirilmagan)",
-                        "example": ex
-                    })
+        reference_collocations = match_reference_collocations(q, selected_lang, active_collocations)
 
     collocations_list = corpus_candidates + reference_collocations
 

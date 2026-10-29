@@ -4,6 +4,16 @@ Har bir bosqichda o‘tkazilgan avtomatlashtirilgan va qo‘lda bajarilgan sinov
 
 ---
 
+## v3.9.1 Sinovlari — 2026-10-29 (tadqiqotchi belgilagan juftliklar qidiruvda; lokal, 8791-port)
+
+| № | Sinov | Natija |
+|---|-------|--------|
+| 1 | `match_reference_collocations`: chiroq → 1 (chiroq o‘chmoq), chiroq o‘chmoq → 1, yurak → 9, tush → 15, bahor → bahor sevinchi; heart → 25 (17 tasi tadqiqotchi juftligi); old man (ko‘p so‘zli) → 1; o‘zbekcha so‘rovda 0,03 s | ISHLAYDI |
+| 2 | Lokal sahifalar (8 ta): /qidiruv?q=chiroq (ro‘yxat, havola, «Molxona», sahifalar 3, 18 …; «Animal Farm», sahifalar 1, 11 …), ko‘p so‘zli so‘rov, yurak, heart (en), tush&til=uz (ru), bahor (col-kvk), /soz/chiroq | ISHLAYDI, 8/8 |
+| 3 | v3.9 tekshiruvi (`verify_v39_pages.py`, lokal): 21/21 | ISHLAYDI |
+| 4 | Oltin testlar: 18/21 (o‘sha 3 ta eski FAIL); 20-so‘rovli test 20/20; locale 445 kalit uch tilda | ISHLAYDI / QISMAN |
+| 5 | tilcor.uz ga joylash | REJADA |
+
 ## v3.9 Sinovlari — 2026-10-29 (teglash modulining saytga ulanishi; lokal, 8791-port)
 
 | № | Sinov | Natija |

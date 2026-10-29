@@ -43,6 +43,14 @@ CHECKS = [
     ('/api/tags?q=qishlog%E2%80%98idan', ['"lemma": "qishloq"', 'chiqish kelishigi']),
     ('/api/tags?q=hearts', ['"lemma": "heart"', 'Number=Plur']),
     ('/api/tags?q=yuraklarida&til=uz', ['Case=Loc']),
+    # v3.9.1 — researcher-marked parallel pairs (Molxona / Animal Farm, Kecha va kunduz / Night and Day) in the search
+    ('/qidiruv?q=chiroq', ['Tadqiqotchi belgilagan parallel juftliklar', 'chiroq o&#x27;chmoq', 'the light goes out',
+                           '/kollokatsiya/col-mol-001', '«Molxona», sahifalar 3, 18', '«Animal Farm», sahifalar 1, 11']),
+    ('/qidiruv?q=' + urllib.parse.quote("chiroq o'chmoq"), ['Tadqiqotchi belgilagan parallel juftliklar', '/kollokatsiya/col-mol-001']),
+    ('/qidiruv?q=bahor', ['Tadqiqotchi belgilagan parallel juftliklar', 'bahor sevinchi', '«Kecha va kunduz», sahifalar 3']),
+    ('/qidiruv?q=heart&lang=en', ['Researcher-marked parallel pairs', 'researcher-marked']),
+    ('/qidiruv?q=tush&til=uz&lang=ru', ['Параллельные пары, отмеченные исследователем']),
+    ('/soz/chiroq', ['Tadqiqotchi belgilagan parallel juftliklar']),
     ('/?lang=uz', ['TILCOR']),
     ('/tagging.py', None), ('/data/tags_index.json', None), ('/server.py', None), ('/scripts/build_tags_index.py', None),
 ]

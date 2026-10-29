@@ -885,6 +885,30 @@ def render_collocations(res, lang):
         out += '<div class="tc-colls">%s</div>' % ''.join(collocation_block(c, lang) for c in colls[:40])
     else:
         out += '<p class="tc-muted">%s</p>' % T(lang, 'coll_none_in_corpus')
+    # Researcher-marked parallel pairs (KORPUS class, DOCX lists): shown open, both sides, with pages and a link
+    pairs = [r for r in refs if r.get('verified_pair')]
+    refs = [r for r in refs if not r.get('verified_pair')]
+    if pairs:
+        q_lang = res.get('selected_lang') or 'uz'
+        items = []
+        for r in pairs[:40]:
+            pg = r.get('pages') or {}
+            bk = r.get('books') or {}
+            pg_txt = '; '.join('%s%s %s' % (('«%s», ' % html.escape(bk[k])) if bk.get(k) else '', T(lang, 'col_pages').lower(), html.escape(str(pg[k])))
+                               for k in ('uz', 'en') if pg.get(k))
+            src = html.escape((r.get('source_book') or '').split(':', 1)[-1].strip())
+            link = with_lang('/kollokatsiya/' + urllib.parse.quote(str(r['id'])), lang) if r.get('id') else ''
+            uz_html = '<span class="tc-serif" lang="uz">%s</span>' % html.escape(r.get('uzbek_translation') or '')
+            en_html = '<span class="tc-serif" lang="en">%s</span>' % html.escape(r.get('collocation') or '')
+            first, second = (uz_html, en_html) if q_lang == 'uz' else (en_html, uz_html)
+            name = '%s &rarr; %s' % (first, second)
+            if link:
+                name = '<a href="%s">%s</a>' % (link, name)
+            items.append('<li>%s <span class="tc-badge tc-badge--tile">%s</span><div class="tc-small tc-muted">%s%s</div></li>'
+                         % (name, T(lang, 'verified_pair_badge'), src, (' · ' + pg_txt) if pg_txt else ''))
+        out += ('<h3 style="margin:22px 0 6px">%s <span class="tc-count tc-num">%s</span></h3><p class="tc-section__note">%s</p>'
+                '<ul class="tc-list" style="margin-top:10px">%s</ul>'
+                % (T(lang, 'verified_pairs_title'), format_number(len(pairs), lang), T(lang, 'verified_pairs_note'), ''.join(items)))
     if refs:
         items = ''.join('<li><span class="tc-serif" lang="en">%s</span> <span class="tc-muted tc-small">%s</span>%s</li>'
                         % (html.escape(r.get('collocation') or ''), html.escape((r.get('source_badge') or '').split(':', 1)[-1].strip()),

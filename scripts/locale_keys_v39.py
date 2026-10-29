@@ -64,6 +64,19 @@ KEYS = {
     'pos_paired': ('juft / takroriy so‘z', 'paired / reduplicated word', 'парное / редуплицированное слово'),
     'pos_prep': ('predlog', 'preposition', 'предлог'),
     'pos_det': ('aniqlovchi (determinativ)', 'determiner', 'детерминатив'),
+    # v3.9.1 — researcher-marked parallel pairs in the search results
+    'verified_pairs_title': ('Tadqiqotchi belgilagan parallel juftliklar', 'Researcher-marked parallel pairs',
+                             'Параллельные пары, отмеченные исследователем'),
+    'verified_pairs_note': ('Asar va uning tarjimasidan tadqiqotchi saralagan kollokatsiya juftliklari, ikki kitobdagi sahifa '
+                            'raqamlari bilan. Ular korpus gaplari bo‘yicha emas, tadqiqotchi ro‘yxati bo‘yicha topiladi; '
+                            'o‘zbekcha va inglizcha tomoni bir xil maqomda.',
+                            'Collocation pairs selected by the researcher from a work and its translation, with the page numbers '
+                            'in both books. They are found through the researcher’s list, not through corpus sentences; the Uzbek '
+                            'and English sides have the same status.',
+                            'Пары коллокаций, отобранные исследователем из произведения и его перевода, с номерами страниц в обеих '
+                            'книгах. Они находятся по списку исследователя, а не по предложениям корпуса; узбекская и английская '
+                            'стороны имеют одинаковый статус.'),
+    'verified_pair_badge': ('tadqiqotchi belgilagan', 'researcher-marked', 'отмечено исследователем'),
 }
 
 

@@ -443,5 +443,8 @@
   "pos_onom": "onomatopoeic word",
   "pos_paired": "paired / reduplicated word",
   "pos_prep": "preposition",
-  "pos_det": "determiner"
+  "pos_det": "determiner",
+  "verified_pairs_title": "Researcher-marked parallel pairs",
+  "verified_pairs_note": "Collocation pairs selected by the researcher from a work and its translation, with the page numbers in both books. They are found through the researcher’s list, not through corpus sentences; the Uzbek and English sides have the same status.",
+  "verified_pair_badge": "researcher-marked"
 }

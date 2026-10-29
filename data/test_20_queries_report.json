@@ -1,29 +1,29 @@
 [
   {
     "query": "yurak",
-    "elapsed_seconds": 1.2942,
+    "elapsed_seconds": 1.3122,
     "total_occurrences": 50,
     "paginated_count": 49,
     "books": [
-      "cholpon",
-      "hemingway"
+      "hemingway",
+      "cholpon"
     ],
     "passed": true
   },
   {
     "query": "yuragi",
-    "elapsed_seconds": 0.0782,
+    "elapsed_seconds": 0.1122,
     "total_occurrences": 50,
     "paginated_count": 49,
     "books": [
-      "cholpon",
-      "hemingway"
+      "hemingway",
+      "cholpon"
     ],
     "passed": true
   },
   {
     "query": "ko‘ngil",
-    "elapsed_seconds": 0.3656,
+    "elapsed_seconds": 0.3911,
     "total_occurrences": 178,
     "paginated_count": 50,
     "books": [
@@ -33,7 +33,7 @@
   },
   {
     "query": "koʻngil",
-    "elapsed_seconds": 0.3488,
+    "elapsed_seconds": 0.3802,
     "total_occurrences": 178,
     "paginated_count": 50,
     "books": [
@@ -43,7 +43,7 @@
   },
   {
     "query": "ko'ngil",
-    "elapsed_seconds": 0.351,
+    "elapsed_seconds": 0.3784,
     "total_occurrences": 178,
     "paginated_count": 50,
     "books": [
@@ -53,7 +53,7 @@
   },
   {
     "query": "ko`ngil",
-    "elapsed_seconds": 0.3489,
+    "elapsed_seconds": 0.3739,
     "total_occurrences": 178,
     "paginated_count": 50,
     "books": [
@@ -63,29 +63,29 @@
   },
   {
     "query": "юрак",
-    "elapsed_seconds": 0.064,
+    "elapsed_seconds": 0.091,
     "total_occurrences": 50,
     "paginated_count": 49,
     "books": [
-      "cholpon",
-      "hemingway"
+      "hemingway",
+      "cholpon"
     ],
     "passed": true
   },
   {
     "query": "qaror",
-    "elapsed_seconds": 0.1613,
+    "elapsed_seconds": 0.1848,
     "total_occurrences": 14,
     "paginated_count": 13,
     "books": [
-      "cholpon",
-      "hemingway"
+      "hemingway",
+      "cholpon"
     ],
     "passed": true
   },
   {
     "query": "qishloq",
-    "elapsed_seconds": 0.0928,
+    "elapsed_seconds": 0.1209,
     "total_occurrences": 112,
     "paginated_count": 50,
     "books": [
@@ -95,18 +95,18 @@
   },
   {
     "query": "chol",
-    "elapsed_seconds": 0.3015,
+    "elapsed_seconds": 0.3239,
     "total_occurrences": 409,
     "paginated_count": 50,
     "books": [
-      "cholpon",
-      "hemingway"
+      "hemingway",
+      "cholpon"
     ],
     "passed": true
   },
   {
     "query": "akula",
-    "elapsed_seconds": 0.0589,
+    "elapsed_seconds": 0.0827,
     "total_occurrences": 82,
     "paginated_count": 50,
     "books": [
@@ -116,7 +116,7 @@
   },
   {
     "query": "Poshshaxon",
-    "elapsed_seconds": 0.0476,
+    "elapsed_seconds": 0.0751,
     "total_occurrences": 79,
     "paginated_count": 50,
     "books": [
@@ -126,7 +126,7 @@
   },
   {
     "query": "heart",
-    "elapsed_seconds": 0.1951,
+    "elapsed_seconds": 0.1954,
     "total_occurrences": 113,
     "paginated_count": 50,
     "books": [
@@ -136,29 +136,29 @@
   },
   {
     "query": "decision",
-    "elapsed_seconds": 0.1352,
+    "elapsed_seconds": 0.1373,
     "total_occurrences": 40,
     "paginated_count": 40,
     "books": [
-      "cholpon",
-      "hemingway"
+      "hemingway",
+      "cholpon"
     ],
     "passed": true
   },
   {
     "query": "decide",
-    "elapsed_seconds": 0.1287,
+    "elapsed_seconds": 0.1312,
     "total_occurrences": 41,
     "paginated_count": 41,
     "books": [
-      "cholpon",
-      "hemingway"
+      "hemingway",
+      "cholpon"
     ],
     "passed": true
   },
   {
     "query": "shark",
-    "elapsed_seconds": 0.1386,
+    "elapsed_seconds": 0.1389,
     "total_occurrences": 64,
     "paginated_count": 50,
     "books": [
@@ -168,51 +168,51 @@
   },
   {
     "query": "old man",
-    "elapsed_seconds": 0.0427,
+    "elapsed_seconds": 0.2454,
     "total_occurrences": 236,
     "paginated_count": 50,
     "books": [
-      "cholpon",
-      "hemingway"
+      "hemingway",
+      "cholpon"
     ],
     "passed": true
   },
   {
     "query": "sea",
-    "elapsed_seconds": 0.1276,
+    "elapsed_seconds": 0.1274,
     "total_occurrences": 72,
     "paginated_count": 50,
     "books": [
-      "cholpon",
-      "hemingway"
+      "hemingway",
+      "cholpon"
     ],
     "passed": true
   },
   {
     "query": "lions",
-    "elapsed_seconds": 0.1219,
+    "elapsed_seconds": 0.1248,
     "total_occurrences": 9,
     "paginated_count": 9,
     "books": [
-      "cholpon",
-      "hemingway"
+      "hemingway",
+      "cholpon"
     ],
     "passed": true
   },
   {
     "query": "made",
-    "elapsed_seconds": 0.1413,
+    "elapsed_seconds": 0.1462,
     "total_occurrences": 125,
     "paginated_count": 50,
     "books": [
-      "cholpon",
-      "hemingway"
+      "hemingway",
+      "cholpon"
     ],
     "passed": true
   },
   {
     "query": "take",
-    "elapsed_seconds": 0.1518,
+    "elapsed_seconds": 0.1515,
     "total_occurrences": 231,
     "paginated_count": 50,
     "books": [

@@ -443,5 +443,8 @@
   "pos_onom": "taqlid so‘z",
   "pos_paired": "juft / takroriy so‘z",
   "pos_prep": "predlog",
-  "pos_det": "aniqlovchi (determinativ)"
+  "pos_det": "aniqlovchi (determinativ)",
+  "verified_pairs_title": "Tadqiqotchi belgilagan parallel juftliklar",
+  "verified_pairs_note": "Asar va uning tarjimasidan tadqiqotchi saralagan kollokatsiya juftliklari, ikki kitobdagi sahifa raqamlari bilan. Ular korpus gaplari bo‘yicha emas, tadqiqotchi ro‘yxati bo‘yicha topiladi; o‘zbekcha va inglizcha tomoni bir xil maqomda.",
+  "verified_pair_badge": "tadqiqotchi belgilagan"
 }

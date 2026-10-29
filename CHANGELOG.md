@@ -4,6 +4,27 @@ Ushbu hujjat doktorlik dissertatsiyasi talablari doirasida har bir bosqichda kir
 
 ---
 
+## [v3.9.1] — Tadqiqotchi belgilagan parallel juftliklar qidiruvda — 2026-10-29
+
+Tadqiqotchi topshirig‘i: «Molxona / Animal Farm» (col-mol-001..356) va «Kecha va kunduz / Night and Day»
+(col-kvk-001..535) DOCX ro‘yxatlaridagi juftliklar oddiy qidiruvda ham chiqsin.
+
+- **Qidiruv (`/qidiruv`, `/soz/`):** «Kollokatsiyalar» bo‘limida yangi ochiq ro‘yxat «Tadqiqotchi belgilagan parallel
+  juftliklar» — o‘zbekcha → inglizcha (so‘rov tilidan boshlab), «tadqiqotchi belgilagan» belgisi, manba va ikki kitobdagi
+  sahifa raqamlari («Molxona», sahifalar 3, 18, 42, 81; «Animal Farm», sahifalar 1, 11, 19, 27, 35), har biri
+  `/kollokatsiya/<id>` sahifasiga havola. Boshqa ma’lumotnoma yozuvlari avvalgidek yig‘ma ro‘yxatda qoladi.
+- **Moslik qoidasi (`search_engine.match_reference_collocations`):** o‘zbekcha so‘rov faqat tadqiqotchi belgilagan
+  (KORPUS sinfi, «Tadqiqotchi belgilagan» maqomi) juftliklarning o‘zbekcha tomoni bo‘yicha, so‘z oilasi orqali
+  (chiroq → chiroq o‘chmoq, yurak → yuragini hovuchla, tush → nazari tushmoq); AI-taklif o‘zbekcha variantlar o‘zbekcha
+  qidiruvga hech qachon kirmaydi (S-qoida). Inglizcha so‘rov avvalgidek inglizcha tomoni bo‘yicha. Ko‘p so‘zli so‘rovda
+  (chiroq o‘chmoq, old man) endi ham ma’lumotnoma tekshiriladi — har bir so‘z mos kelishi shart.
+- **Ma’lumot:** `data/collocations_full.json` o‘zgarmagan; manba fayllari (`sources/Molxona_kollokatsiyalar*.pdf|docx`,
+  `sources/Animal_Farm_kollokatsiyalar.pdf`) 26.10.2026 dan beri loyihada. Korpus gaplari (E-bo‘lim: ikki juft asar)
+  o‘zgarmaydi — juftliklar tadqiqotchi ro‘yxati bo‘yicha topiladi, korpus statistikasiga kirmaydi.
+- Uch tilda 3 ta yangi kalit (`verified_pairs_title`, `verified_pairs_note`, `verified_pair_badge`).
+- Ma’lum chegara: `tush` so‘rovi avtomatik til aniqlashda inglizcha deb olinadi (inglizcha so‘z ham); `til=uz` bilan
+  o‘zbekcha juftliklar chiqadi.
+
 ## [v3.9] — Morfologik va semantik teglash moduli saytga ulandi — 2026-10-29
 
 Modul (`tagging.py`, `data/tags_index.json`, `scripts/build_tags_index.py`, 2026-10-16) 2026-10-29 gacha serverga
